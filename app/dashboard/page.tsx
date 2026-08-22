@@ -1,6 +1,7 @@
 import { getSession, destroySession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 
 export default async function DashboardPage() {
   // Guardrail eksplisit: jika session null atau bukan travel_user -> redirect('/login')
@@ -86,6 +87,19 @@ export default async function DashboardPage() {
               {tenant.status}
             </span>
           </div>
+        </div>
+
+        <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-base font-semibold text-slate-900">Jaringan Agen Umroh</h2>
+            <p className="text-xs text-slate-500">Kelola pendaftaran mitra agen, persetujuan, dan kode referral.</p>
+          </div>
+          <Link
+            href="/dashboard/agents"
+            className="inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors"
+          >
+            Kelola Agen &rarr;
+          </Link>
         </div>
       </div>
     </div>
