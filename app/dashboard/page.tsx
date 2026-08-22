@@ -101,6 +101,19 @@ export default async function DashboardPage() {
             Kelola Agen &rarr;
           </Link>
         </div>
+
+        <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-base font-semibold text-slate-900">Pengaturan Profil Travel</h2>
+            <p className="text-xs text-slate-500">Ubah nama travel, nomor kontak/WhatsApp, dan rekening bank.</p>
+          </div>
+          <Link
+            href="/dashboard/settings"
+            className="inline-flex items-center justify-center px-4 py-2.5 border border-slate-300 text-sm font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 shadow-sm transition-colors"
+          >
+            Pengaturan Travel &rarr;
+          </Link>
+        </div>
       </div>
     </div>
   )
