@@ -47,6 +47,7 @@ model Agent {
   updatedAt         DateTime @updatedAt
 
   @@unique([tenantId, referralCode])
+  @@unique([tenantId, phone])
 }
 
 model PlatformAdmin {
