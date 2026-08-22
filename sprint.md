@@ -37,7 +37,7 @@
 - Laragon: Node.js & MySQL lokal jalan, repo GitHub dibuat dan sudah menerima push pertama
 - Next.js + Prisma tersambung ke MySQL lokal, skema awal (Tenant, TravelUser, Agent, PlatformAdmin)
 - Middleware resolusi domain dasar (root vs subdomain), diuji via `*.localhost` — custom domain belum
-- Auth tiga jenis akun sesuai pemisahan domain login di `agents.md` Bagian 5
+- Auth tiga jenis akun sesuai pemisahan domain login di `AGENTS.md` Bagian 5
 - Prisma Client Extension guardrail tenant + test otomatis isolasi
 
 **Belum disentuh sama sekali**: fitur bisnis apa pun (booking, komisi, billing, dst), dan apa pun yang berbau production/VPS.
@@ -137,7 +137,7 @@
 - Model `Plan`, `Subscription`, `Invoice`
 - Tenant baru otomatis dapat trial period
 - Cron bulanan: generate invoice via Duitku API untuk tenant subscription aktif
-- Webhook Duitku (dengan verifikasi signature, lihat `agents.md` Bagian 6) → update status Invoice & Subscription
+- Webhook Duitku (dengan verifikasi signature, lihat `AGENTS.md` Bagian 6) → update status Invoice & Subscription
 - Cron harian: cek invoice jatuh tempo → set status `past_due` → `suspended` kalau lewat batas
 - TravelUser: dashboard lihat status langganan & riwayat invoice
 - Enforcement: tenant `suspended` → microsite/dashboard masuk mode terbatas
@@ -159,7 +159,7 @@
 - Setup DNS domain asli (`syiar.link`) lewat Cloudflare
 - Konfigurasi PM2 + Nginx reverse proxy
 - Migrasi skema database dari MySQL lokal ke MySQL production (struktur, bukan data dummy)
-- Setup `.env` production (kredensial Duitku production — bukan sandbox lagi, `DATABASE_URL`, dst — lihat daftar di `agents.md` Bagian 8)
+- Setup `.env` production (kredensial Duitku production — bukan sandbox lagi, `DATABASE_URL`, dst — lihat daftar di `AGENTS.md` Bagian 8)
 - Deploy aplikasi penuh (bukan lagi hello world — ini pertama kalinya kode sebanyak 7 sprint jalan di luar mesin kamu)
 - Wildcard SSL `*.syiar.link` via `acme.sh` + Cloudflare DNS API
 - Jadwalkan backup: `mysqldump` otomatis via aaPanel + upload ke Cloudflare R2, terpisah dari snapshot VPS

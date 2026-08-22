@@ -1,4 +1,4 @@
-# agents.md — SyiarLink
+# AGENTS.md — SyiarLink
 
 > File ini WAJIB dibaca coding agent (Antigravity atau agent lain) sebelum mengerjakan task apa pun di project ini. Isinya konteks yang tidak boleh diasumsikan sendiri oleh agent — terutama aturan bisnis dan guardrail keamanan yang kalau salah interpretasi, dampaknya ke kebocoran data atau konflik komisi nyata antar pengguna.
 
