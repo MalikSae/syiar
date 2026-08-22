@@ -30,13 +30,15 @@ Dokumen referensi lain di project ini (baca kalau butuh konteks lebih dalam sebe
 
 ## 3. Struktur Folder (konvensi yang harus diikuti)
 
+> **Catatan koreksi (Sprint 1)**: struktur di bawah ini sudah diperbaiki dari versi awal berdasarkan temuan implementasi nyata — bukan lagi rencana di atas kertas. Next.js 16 me-rename `middleware.ts` → `proxy.ts` (fungsi `middleware()` → `proxy()`), dan file ini **wajib di root project, sejajar dengan `/app`, BUKAN di dalamnya** — itu syarat teknis Next.js, bukan preferensi. Struktur route tenant juga berubah dari rencana awal `(tenant)` route group menjadi `tenant-route/[slug]/` yang eksplisit — route group tidak cocok jadi target rewrite dinamis dari proxy.
+
 ```
+/proxy.ts                     → (ROOT project, bukan di /app) resolusi domain: root vs subdomain vs custom domain
 /app
-  /middleware.ts              → resolusi domain: root vs {slug}.syiar.link vs custom domain
-  /(platform)/                → route di ROOT domain saja
-    /login/                   → login TravelUser & PlatformAdmin
-    /admin/                   → dashboard superadmin
-  /(tenant)/                  → route di subdomain/custom domain travel
+  /page.tsx                   → ROOT domain (marketing/landing)
+  /login/                     → login TravelUser & PlatformAdmin (ROOT domain saja)
+  /admin/                     → dashboard superadmin
+  /tenant-route/[slug]/       → SEMUA route tenant, target rewrite dari proxy.ts untuk {slug}.syiar.link
     /login/                   → login Agent
     /page.tsx                 → microsite publik (daftar paket)
     /[kode]/                  → resolusi link referral
@@ -47,11 +49,15 @@ Dokumen referensi lain di project ini (baca kalau butuh konteks lebih dalam sebe
   /extensions/tenant-scope.ts → guardrail wajib, lihat Bagian 4
 /lib
   /duitku.ts                  → wrapper API Duitku, termasuk verifikasi signature webhook
-  /domain-resolver.ts         → helper dipakai middleware.ts
+  /domain-resolver.ts         → helper resolusi hostname, dipakai proxy.ts — baca hostname dari
+                                 header x-forwarded-host/host, BUKAN request.url (Turbopack dev
+                                 server tidak meneruskan hostname asli ke request.url)
 /scripts                      → dieksekusi via cron aaPanel, DI LUAR request lifecycle Next.js
   /domain-worker.ts           → cek DNS pending → terbitkan SSL → generate config Nginx → reload
   /billing-cron.ts            → generate invoice bulanan, cek jatuh tempo
 ```
+
+**Aturan folder penting lainnya**: JANGAN pakai prefix underscore (`_nama`) untuk folder apa pun di dalam `/app` yang perlu diakses lewat URL — Next.js App Router memperlakukan folder ber-prefix underscore sebagai *Private Folder* dan otomatis di-exclude dari routing (ini yang bikin `_tenant` gagal di awal, sebelum diganti `tenant-route`).
 
 Kalau agent menganggap ada struktur lain yang lebih idiomatik Next.js, **usulkan dulu ke user sebelum mengubah** — jangan restrukturisasi folder secara sepihak di tengah task lain.
 
@@ -77,7 +83,7 @@ Aturan keras:
 | `Agent` | `Agent` | Subdomain/custom domain travel: `{slug}.syiar.link/login` | Satu tenant, login independen — SATU orang bisa punya banyak akun `Agent` terpisah di travel berbeda, sistem TIDAK menyatukan identitas mereka |
 | `PlatformAdmin` | `PlatformAdmin` | Root domain | Lintas semua tenant |
 
-**Kenapa TravelUser login SELALU di root domain, tidak ikut custom domain**: keamanan — custom domain dikontrol DNS oleh travel sendiri, akses admin sensitif (approve komisi, ubah harga) tidak boleh bergantung pada infrastruktur pihak ketiga yang di luar kendali platform. Jangan pernah pindahkan rute login TravelUser ke bawah `(tenant)/`.
+**Kenapa TravelUser login SELALU di root domain, tidak ikut custom domain**: keamanan — custom domain dikontrol DNS oleh travel sendiri, akses admin sensitif (approve komisi, ubah harga) tidak boleh bergantung pada infrastruktur pihak ketiga yang di luar kendali platform. Jangan pernah pindahkan rute login TravelUser ke bawah `tenant-route/`.
 
 ---
 
