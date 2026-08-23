@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import { updatePaymentSettings, PaymentFormState } from './actions'
 import {
   CreditCard,
@@ -30,6 +30,12 @@ export function PembayaranForm({ initialData }: PembayaranFormProps) {
     updatePaymentSettings,
     null
   )
+
+  useEffect(() => {
+    if (state) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [state])
 
   return (
     <form action={formAction} className="space-y-6">

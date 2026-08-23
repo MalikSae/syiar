@@ -3,41 +3,21 @@
 import { useState } from 'react'
 import { ChevronDown, HelpCircle } from 'lucide-react'
 
-interface FAQItem {
+export interface FAQItem {
   question: string
   answer: string
 }
 
-const FAQ_DATA: FAQItem[] = [
-  {
-    question: 'Apa saja persyaratan utama untuk mendaftar paket umroh?',
-    answer:
-      'Persyaratan dokumen meliputi paspor dengan masa berlaku minimal 8 bulan sebelum keberangkatan, KTP & Kartu Keluarga, buku nikah (bagi pasangan suami istri), pas foto terbaru dengan latar belakang putih, serta sertifikat vaksinasi sesuai ketentuan otoritas Arab Saudi.',
-  },
-  {
-    question: 'Bagaimana bimbingan manasik umroh sebelum keberangkatan?',
-    answer:
-      'Kami menyelenggarakan sesi manasik umroh secara intensif sebelum keberangkatan, mencakup teori tata cara ibadah sesuai sunnah, panduan praktis tawaf dan sai, serta pembekalan fisik dan kesehatan selama di tanah suci.',
-  },
-  {
-    question: 'Berapa jarak hotel penginapan ke Masjidil Haram dan Masjid Nabawi?',
-    answer:
-      'Hotel yang kami sediakan dipilih secara cermat di area strategis ring utama agar memudahkan jamaah menjangkau masjid dengan berjalan kaki secara nyaman untuk seluruh waktu sholat fardhu.',
-  },
-  {
-    question: 'Apakah ada pendampingan khusus untuk jamaah lansia atau pengguna kursi roda?',
-    answer:
-      'Ya, tim muthawif dan pembimbing kami siap mendampingi jamaah lansia. Kami juga dapat memfasilitasi layanan kursi roda resmi beserta pendorong di Masjidil Haram dan Masjid Nabawi.',
-  },
-  {
-    question: 'Bagaimana skema pembayaran dan pelunasan paket umroh?',
-    answer:
-      'Pendaftaran dapat diawali dengan pembayaran uang muka (DP) untuk mengamankan tiket pesawat dan kuota kamar. Pelunasan dapat diselesaikan sesuai jadwal termin yang disepakati sebelum tanggal keberangkatan.',
-  },
-]
+interface FAQAccordionProps {
+  items?: FAQItem[]
+}
 
-export function FAQAccordion() {
+export function FAQAccordion({ items = [] }: FAQAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+
+  if (!items || items.length === 0) {
+    return null
+  }
 
   const toggle = (idx: number) => {
     setOpenIndex(openIndex === idx ? null : idx)
@@ -45,7 +25,7 @@ export function FAQAccordion() {
 
   return (
     <div className="space-y-3 max-w-3xl mx-auto">
-      {FAQ_DATA.map((item, idx) => {
+      {items.map((item, idx) => {
         const isOpen = openIndex === idx
         return (
           <div
@@ -82,7 +62,7 @@ export function FAQAccordion() {
 
             {isOpen && (
               <div className="px-4 pb-5 sm:px-5 sm:pb-6 pt-1 text-xs sm:text-sm text-site-text-muted leading-relaxed border-t border-stone-100">
-                <div className="pl-10">{item.answer}</div>
+                <div className="pl-10 whitespace-pre-line">{item.answer}</div>
               </div>
             )}
           </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import Link from 'next/link'
 import { registerAgent, AgentRegisterState } from './actions'
 
@@ -20,6 +20,12 @@ export default function AgentRegisterForm({
     registerWithSlug,
     null
   )
+
+  useEffect(() => {
+    if (state) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [state])
 
   if (state?.success) {
     return (

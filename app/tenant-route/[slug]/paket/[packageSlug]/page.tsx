@@ -101,7 +101,11 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
   return (
     <div className="min-h-screen bg-site-bg text-site-text flex flex-col font-sans selection:bg-brand-500 selection:text-white">
       {/* Header Navigation */}
-      <TenantNavbar tenantName={tenant.name} />
+      <TenantNavbar
+        tenantName={tenant.name}
+        logoUrl={tenant.logoUrl}
+        iconUrl={tenant.iconUrl}
+      />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
         {/* Breadcrumb Navigation */}

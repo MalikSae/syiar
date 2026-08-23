@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --site-accent: #F38020;
 }
 
 @theme inline {
@@ -12,9 +13,9 @@
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-fraunces), Georgia, serif;
   --color-brand-50: #FFF4EC;
-  --color-brand-500: #FAAE40;
-  --color-brand-600: #F38020;
-  --color-brand: #F38020;
+  --color-brand-500: var(--site-accent, #FAAE40);
+  --color-brand-600: var(--site-accent, #F38020);
+  --color-brand: var(--site-accent, #F38020);
   --color-site-bg: #F7F3EC;
   --color-site-text: #2A2521;
   --color-site-text-muted: #6B6058;

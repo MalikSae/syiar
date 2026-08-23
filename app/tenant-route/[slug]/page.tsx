@@ -5,15 +5,17 @@ import { TenantNavbar } from './components/tenant-navbar'
 import { TenantFooter } from './components/tenant-footer'
 import { PackageSearchBar } from './components/package-search-bar'
 import { PackageCard } from './components/package-card'
-import { TestimonialsSection } from './components/testimonials-section'
-import { FAQAccordion } from './components/faq-accordion'
+import { TestimonialsSection, TestimonialItem } from './components/testimonials-section'
+import { FAQAccordion, FAQItem } from './components/faq-accordion'
 import { getAvailableDepartureMonths, formatIndonesianDate } from '@/lib/package-helpers'
+import { getTravelIconComponent } from '@/lib/travel-icons'
+import {
+  getDefaultHeroHeadline,
+  DEFAULT_HERO_SUBHEADLINE,
+  DEFAULT_FEATURES,
+} from '@/lib/tenant-defaults'
 import {
   Compass,
-  ShieldCheck,
-  Building2,
-  HeartHandshake,
-  FileCheck2,
   ArrowRight,
   PackageOpen,
   Calendar,
@@ -26,6 +28,12 @@ import {
 
 interface TenantHomePageProps {
   params: Promise<{ slug: string }>
+}
+
+interface FeatureItem {
+  icon: string
+  title: string
+  description: string
 }
 
 export default async function TenantHomePage({ params }: TenantHomePageProps) {
@@ -134,115 +142,159 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
       nearestDepartureDate: packageNearestDateMap.get(pkg.id) || null,
     }))
 
+  // 5. Resolusi Dynamic Data Tenant
+  const heroHeadline = tenant.heroHeadline || getDefaultHeroHeadline(tenant.name)
+  const heroSubheadline = tenant.heroSubheadline || DEFAULT_HERO_SUBHEADLINE
+  const customAccent = tenant.primaryColor || '#F38020'
+
+  const features: FeatureItem[] =
+    Array.isArray(tenant.features) && tenant.features.length > 0
+      ? (tenant.features as any[])
+      : DEFAULT_FEATURES
+
+  const faqs: FAQItem[] =
+    Array.isArray(tenant.faqs) && tenant.faqs.length > 0
+      ? (tenant.faqs as any[])
+      : []
+
+  const testimonials: TestimonialItem[] =
+    Array.isArray(tenant.testimonials) && tenant.testimonials.length > 0
+      ? (tenant.testimonials as any[])
+      : []
+
   return (
-    <div className="min-h-screen bg-site-bg text-site-text flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+    <div
+      className="min-h-screen bg-site-bg text-site-text flex flex-col font-sans selection:bg-brand-500 selection:text-white"
+      style={
+        {
+          '--site-accent': customAccent,
+          '--color-brand-600': 'var(--site-accent)',
+          '--color-brand-500': 'var(--site-accent)',
+          '--color-brand': 'var(--site-accent)',
+        } as React.CSSProperties
+      }
+    >
       {/* Header Navigation */}
-      <TenantNavbar tenantName={tenant.name} />
+      <TenantNavbar
+        tenantName={tenant.name}
+        logoUrl={tenant.logoUrl}
+        iconUrl={tenant.iconUrl}
+      />
 
       <main className="flex-1">
-        {/* HERO SECTION — 2 Kolom Asimetris */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 sm:pt-16 sm:pb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Kiri: Headline & CTA (7 Kolom) */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-site-text leading-[1.15]">
-                Wujudkan Ibadah Umroh Bersama{' '}
-                <span className="text-brand-600 underline decoration-brand-500/30">
-                  {tenant.name}
-                </span>
-              </h1>
-
-              <p className="text-sm sm:text-base lg:text-lg text-site-text-muted max-w-xl font-normal leading-relaxed">
-                Menghadirkan perjalanan ibadah ke tanah suci yang nyaman, khusyuk, dan amanah bersama bimbingan tim berpengalaman.
-              </p>
-
-              <div className="pt-2 flex flex-wrap items-center gap-3.5">
-                <Link
-                  href="/paket"
-                  className="px-6 py-3.5 bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white text-xs sm:text-sm font-bold rounded-lg sm:rounded-xl transition-all shadow-xs flex items-center gap-2"
-                >
-                  <Compass className="w-4 h-4" />
-                  <span>Lihat Paket Kami</span>
-                </Link>
-                <Link
-                  href="/gabung-agen"
-                  className="px-6 py-3.5 bg-white hover:bg-stone-100 text-site-text border border-stone-300 text-xs sm:text-sm font-bold rounded-lg sm:rounded-xl transition-all shadow-xs"
-                >
-                  Gabung Jadi Agen
-                </Link>
-              </div>
+        {/* HERO SECTION — 2 Kolom Asimetris dengan Background Banner Dinamis */}
+        <section className="relative overflow-hidden">
+          {tenant.heroBackgroundUrl && (
+            <div className="absolute inset-0 z-0 pointer-events-none">
+              <img
+                src={tenant.heroBackgroundUrl}
+                alt=""
+                className="w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-[#F7F3EC]/92 backdrop-blur-[2px]" />
             </div>
+          )}
 
-            {/* Kanan: Card "Keberangkatan Terdekat" (5 Kolom) */}
-            <div className="lg:col-span-5">
-              <div className="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-7 shadow-xs space-y-5">
-                <div className="flex items-center justify-between gap-3 pb-3 border-b border-stone-100">
-                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-600">
-                    <Calendar className="w-4 h-4 text-brand-500" />
-                    <span>Keberangkatan Terdekat</span>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 sm:pt-16 sm:pb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              {/* Kiri: Headline & CTA (7 Kolom) */}
+              <div className="lg:col-span-7 space-y-6 text-left">
+                <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-site-text leading-[1.15]">
+                  {heroHeadline}
+                </h1>
+
+                <p className="text-sm sm:text-base lg:text-lg text-site-text-muted max-w-xl font-normal leading-relaxed">
+                  {heroSubheadline}
+                </p>
+
+                <div className="pt-2 flex flex-wrap items-center gap-3.5">
+                  <Link
+                    href="/paket"
+                    className="px-6 py-3.5 bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white text-xs sm:text-sm font-bold rounded-lg sm:rounded-xl transition-all shadow-xs flex items-center gap-2"
+                  >
+                    <Compass className="w-4 h-4" />
+                    <span>Lihat Paket Kami</span>
+                  </Link>
+                  <Link
+                    href="/gabung-agen"
+                    className="px-6 py-3.5 bg-white hover:bg-stone-100 text-site-text border border-stone-300 text-xs sm:text-sm font-bold rounded-lg sm:rounded-xl transition-all shadow-xs"
+                  >
+                    Gabung Jadi Agen
+                  </Link>
+                </div>
+              </div>
+
+              {/* Kanan: Card "Keberangkatan Terdekat" (5 Kolom) */}
+              <div className="lg:col-span-5">
+                <div className="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+                  <div className="flex items-center justify-between gap-3 pb-3 border-b border-stone-100">
+                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-600">
+                      <Calendar className="w-4 h-4 text-brand-500" />
+                      <span>Keberangkatan Terdekat</span>
+                    </div>
+                    {overallNearestDeparture && daysUntilNearest !== null && (
+                      <span className="px-2.5 py-1 rounded-full bg-brand-50 border border-brand-200 text-[11px] font-black text-brand-600">
+                        {daysUntilNearest === 0 ? 'Hari Ini' : `H-${daysUntilNearest} hari`}
+                      </span>
+                    )}
                   </div>
-                  {overallNearestDeparture && daysUntilNearest !== null && (
-                    <span className="px-2.5 py-1 rounded-full bg-brand-50 border border-brand-200 text-[11px] font-black text-brand-600">
-                      {daysUntilNearest === 0 ? 'Hari Ini' : `H-${daysUntilNearest} hari`}
-                    </span>
+
+                  {overallNearestDeparture ? (
+                    <div className="space-y-4">
+                      <div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block mb-1">
+                          Paket Pilihan
+                        </span>
+                        <h3 className="font-serif text-lg sm:text-xl font-bold text-site-text leading-snug">
+                          {overallNearestDeparture.package.name}
+                        </h3>
+                      </div>
+
+                      <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200/80 space-y-2 text-xs text-site-text-muted">
+                        <div className="flex items-center gap-2 font-bold text-site-text">
+                          <Calendar className="w-4 h-4 text-brand-500 shrink-0" />
+                          <span>
+                            {formatIndonesianDate(overallNearestDeparture.date, {
+                              includeWeekday: true,
+                            })}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-4 text-[11px] pt-1">
+                          <div className="flex items-center gap-1.5">
+                            <Plane className="w-3.5 h-3.5 text-stone-400" />
+                            <span>{overallNearestDeparture.package.airline}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-stone-400" />
+                            <span>{overallNearestDeparture.package.duration}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Link
+                        href={`/paket/${overallNearestDeparture.package.slug}`}
+                        className="w-full py-2.5 px-4 bg-site-dark hover:bg-brand-600 text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5"
+                      >
+                        <span>Lihat Rincian Paket</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="py-6 text-center space-y-3">
+                      <div className="w-12 h-12 rounded-xl bg-stone-100 text-stone-400 mx-auto flex items-center justify-center">
+                        <CalendarOff className="w-6 h-6 text-stone-400" />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-bold text-site-text">
+                          Jadwal Belum Tersedia
+                        </h4>
+                        <p className="text-xs text-site-text-muted leading-relaxed max-w-xs mx-auto">
+                          Jadwal keberangkatan akan segera diumumkan. Silakan cek berkala atau hubungi pihak travel.
+                        </p>
+                      </div>
+                    </div>
                   )}
                 </div>
-
-                {overallNearestDeparture ? (
-                  <div className="space-y-4">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block mb-1">
-                        Paket Pilihan
-                      </span>
-                      <h3 className="font-serif text-lg sm:text-xl font-bold text-site-text leading-snug">
-                        {overallNearestDeparture.package.name}
-                      </h3>
-                    </div>
-
-                    <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200/80 space-y-2 text-xs text-site-text-muted">
-                      <div className="flex items-center gap-2 font-bold text-site-text">
-                        <Calendar className="w-4 h-4 text-brand-500 shrink-0" />
-                        <span>
-                          {formatIndonesianDate(overallNearestDeparture.date, {
-                            includeWeekday: true,
-                          })}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4 text-[11px] pt-1">
-                        <div className="flex items-center gap-1.5">
-                          <Plane className="w-3.5 h-3.5 text-stone-400" />
-                          <span>{overallNearestDeparture.package.airline}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-stone-400" />
-                          <span>{overallNearestDeparture.package.duration}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Link
-                      href={`/paket/${overallNearestDeparture.package.slug}`}
-                      className="w-full py-2.5 px-4 bg-site-dark hover:bg-brand-600 text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5"
-                    >
-                      <span>Lihat Rincian Paket</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="py-6 text-center space-y-3">
-                    <div className="w-12 h-12 rounded-xl bg-stone-100 text-stone-400 mx-auto flex items-center justify-center">
-                      <CalendarOff className="w-6 h-6 text-stone-400" />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-bold text-site-text">
-                        Jadwal Belum Tersedia
-                      </h4>
-                      <p className="text-xs text-site-text-muted leading-relaxed max-w-xs mx-auto">
-                        Jadwal keberangkatan akan segera diumumkan. Silakan cek berkala atau hubungi pihak travel.
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -253,60 +305,32 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
           <PackageSearchBar months={availableMonths} />
         </section>
 
-        {/* FEATURE STRIP */}
+        {/* FEATURE STRIP (Keunggulan 4 Slot Dinamis) */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            <div className="bg-white p-6 rounded-xl border border-stone-200/80 shadow-xs space-y-3">
-              <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-site-text">
-                Pembimbing Berpengalaman
-              </h3>
-              <p className="text-xs text-site-text-muted leading-relaxed">
-                Muthawif terpercaya yang membimbing tata cara ibadah sesuai sunnah dengan penuh dedikasi.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl border border-stone-200/80 shadow-xs space-y-3">
-              <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
-                <Building2 className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-site-text">
-                Hotel Terpilih
-              </h3>
-              <p className="text-xs text-site-text-muted leading-relaxed">
-                Akomodasi berkualitas dengan jarak strategis ke Masjidil Haram dan Masjid Nabawi.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl border border-stone-200/80 shadow-xs space-y-3">
-              <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
-                <HeartHandshake className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-site-text">
-                Pendampingan Penuh
-              </h3>
-              <p className="text-xs text-site-text-muted leading-relaxed">
-                Pelayanan jamaah yang responsif dan siap mendampingi sejak keberangkatan hingga kepulangan.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl border border-stone-200/80 shadow-xs space-y-3">
-              <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
-                <FileCheck2 className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-site-text">
-                Proses Transparan
-              </h3>
-              <p className="text-xs text-site-text-muted leading-relaxed">
-                Rincian fasilitas, paket, dan jadwal jelas tanpa ada biaya tersembunyi.
-              </p>
-            </div>
+            {features.map((feat, idx) => {
+              const IconComponent = getTravelIconComponent(feat.icon)
+              return (
+                <div
+                  key={idx}
+                  className="bg-white p-6 rounded-xl border border-stone-200/80 shadow-xs space-y-3"
+                >
+                  <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+                    <IconComponent className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-sm sm:text-base font-bold text-site-text">
+                    {feat.title}
+                  </h3>
+                  <p className="text-xs text-site-text-muted leading-relaxed">
+                    {feat.description}
+                  </p>
+                </div>
+              )
+            })}
           </div>
         </section>
 
-        {/* SECTION PAKET TERSEDIA (Heading Rata Kiri dengan Fraunces & Real Count) */}
+        {/* SECTION PAKET TERSEDIA */}
         <section className="py-12 sm:py-16 border-t border-stone-200/80">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div className="text-left space-y-1.5">
@@ -352,45 +376,49 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
           </div>
         </section>
 
-        {/* SECTION TESTIMONI JAMAAH */}
-        <section className="py-14 sm:py-20 border-t border-stone-200/80 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-            <div className="text-left space-y-1.5 max-w-2xl">
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-600 flex items-center gap-1.5">
-                <MessageSquareQuote className="w-3.5 h-3.5" />
-                <span>Pengalaman & Cerita</span>
-              </span>
-              <h2 className="font-serif text-2xl sm:text-4xl font-bold text-site-text tracking-tight">
-                Testimoni Jamaah
-              </h2>
-              <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed">
-                Kesan dan pengalaman jamaah yang telah mempercayakan perjalanan ibadah ke tanah suci bersama {tenant.name}.
-              </p>
+        {/* SECTION TESTIMONI JAMAAH (Hanya Tampil Jika Testimoni > 0) */}
+        {testimonials.length > 0 && (
+          <section className="py-14 sm:py-20 border-t border-stone-200/80 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+              <div className="text-left space-y-1.5 max-w-2xl">
+                <span className="text-xs font-bold uppercase tracking-wider text-brand-600 flex items-center gap-1.5">
+                  <MessageSquareQuote className="w-3.5 h-3.5" />
+                  <span>Pengalaman & Cerita</span>
+                </span>
+                <h2 className="font-serif text-2xl sm:text-4xl font-bold text-site-text tracking-tight">
+                  Testimoni Jamaah
+                </h2>
+                <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed">
+                  Kesan dan pengalaman jamaah yang telah mempercayakan perjalanan ibadah ke tanah suci bersama {tenant.name}.
+                </p>
+              </div>
+
+              <TestimonialsSection items={testimonials} />
             </div>
+          </section>
+        )}
 
-            <TestimonialsSection />
-          </div>
-        </section>
+        {/* SECTION FAQ (Hanya Tampil Jika FAQ > 0) */}
+        {faqs.length > 0 && (
+          <section className="py-14 sm:py-20 border-t border-stone-200/80 bg-[#F7F3EC]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+              <div className="text-center space-y-2 max-w-2xl mx-auto">
+                <span className="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 border border-brand-200/60 px-3 py-1 rounded-full inline-flex items-center gap-1.5 mx-auto">
+                  <HelpCircle className="w-3.5 h-3.5" />
+                  <span>Informasi Penting</span>
+                </span>
+                <h2 className="font-serif text-2xl sm:text-4xl font-bold text-site-text tracking-tight">
+                  Pertanyaan yang Sering Diajukan
+                </h2>
+                <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed">
+                  Jawaban seputar persyaratan pendaftaran, jadwal manasik, fasilitas hotel, dan skema pembayaran paket umroh.
+                </p>
+              </div>
 
-        {/* SECTION FAQ (TANYA JAWAB) */}
-        <section className="py-14 sm:py-20 border-t border-stone-200/80 bg-[#F7F3EC]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-            <div className="text-center space-y-2 max-w-2xl mx-auto">
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 border border-brand-200/60 px-3 py-1 rounded-full inline-flex items-center gap-1.5 mx-auto">
-                <HelpCircle className="w-3.5 h-3.5" />
-                <span>Informasi Penting</span>
-              </span>
-              <h2 className="font-serif text-2xl sm:text-4xl font-bold text-site-text tracking-tight">
-                Pertanyaan yang Sering Diajukan
-              </h2>
-              <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed">
-                Jawaban seputar persyaratan pendaftaran, jadwal manasik, fasilitas hotel, dan skema pembayaran paket umroh.
-              </p>
+              <FAQAccordion items={faqs} />
             </div>
-
-            <FAQAccordion />
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* CALL TO ACTION BAND (site-dark #133433) */}
         <section className="bg-site-dark py-14 sm:py-20 text-white border-t border-teal-900/50">

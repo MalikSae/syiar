@@ -6,9 +6,11 @@ import { Sparkles, Menu, X, Compass, UserPlus, LogIn } from 'lucide-react'
 
 interface TenantNavbarProps {
   tenantName: string
+  logoUrl?: string | null
+  iconUrl?: string | null
 }
 
-export function TenantNavbar({ tenantName }: TenantNavbarProps) {
+export function TenantNavbar({ tenantName, logoUrl, iconUrl }: TenantNavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -17,17 +19,35 @@ export function TenantNavbar({ tenantName }: TenantNavbarProps) {
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo / Brand Name */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-lg bg-brand-500 text-white flex items-center justify-center shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="font-serif text-base sm:text-lg font-bold text-site-text tracking-tight block leading-tight">
-                {tenantName}
-              </span>
-              <span className="text-[10px] font-semibold text-brand-600 tracking-wider uppercase block">
-                Official Travel Partner
-              </span>
-            </div>
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={tenantName}
+                className="h-8 sm:h-10 w-auto max-w-[200px] object-contain"
+              />
+            ) : (
+              <>
+                <div className="w-10 h-10 rounded-lg bg-brand-500 text-white flex items-center justify-center shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform overflow-hidden">
+                  {iconUrl ? (
+                    <img
+                      src={iconUrl}
+                      alt={tenantName}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Sparkles className="w-5 h-5" />
+                  )}
+                </div>
+                <div>
+                  <span className="font-serif text-base sm:text-lg font-bold text-site-text tracking-tight block leading-tight">
+                    {tenantName}
+                  </span>
+                  <span className="text-[10px] font-semibold text-brand-600 tracking-wider uppercase block">
+                    Official Travel Partner
+                  </span>
+                </div>
+              </>
+            )}
           </Link>
 
           {/* Desktop Navigation */}
@@ -67,7 +87,7 @@ export function TenantNavbar({ tenantName }: TenantNavbarProps) {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-site-text hover:bg-stone-200/50 transition-colors"
+              className="p-2 rounded-lg text-site-text hover:bg-stone-200/50 transition-colors cursor-pointer"
               aria-label="Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

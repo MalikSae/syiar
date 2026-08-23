@@ -198,6 +198,13 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
     }
   }, [state])
 
+  // Auto-scroll ke atas begitu ada feedback state (sukses atau gagal)
+  useEffect(() => {
+    if (state || fileError) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [state, fileError])
+
   // Handler Icon Upload (1:1 Square Crop)
   const handleIconChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFileError(null)

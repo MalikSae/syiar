@@ -3,67 +3,29 @@
 import { useState, useEffect, useCallback } from 'react'
 import { MessageSquareQuote, ChevronLeft, ChevronRight } from 'lucide-react'
 
-interface TestimonialItem {
+export interface TestimonialItem {
   name: string
-  role: string
-  city: string
-  content: string
-  initials: string
+  roleOrLocation?: string
+  role?: string
+  city?: string
+  quote?: string
+  content?: string
 }
 
-const TESTIMONIALS: TestimonialItem[] = [
-  {
-    name: 'H. Bambang Sudirman',
-    role: 'Jamaah Umroh Reguler',
-    city: 'Jakarta Selatan',
-    content:
-      'Alhamdulillah perjalanan ibadah kami sekeluarga sangat berkesan. Pembimbing muthawif sangat sabar dan menguasai sunnah. Hotel di Makkah dan Madinah benar-benar dekat sehingga orang tua kami tidak kelelahan saat berangkat ke masjid.',
-    initials: 'BS',
-  },
-  {
-    name: 'Hj. Siti Rahmawati',
-    role: 'Jamaah Umroh Ramadhan',
-    city: 'Bandung',
-    content:
-      'Pelayanan dari awal pendaftaran hingga kepulangan sangat transparan dan teratur. Jadwal penerbangan tepat waktu, fasilitas makanan cocok di lidah, dan koordinasi tim di tanah suci sangat sigap.',
-    initials: 'SR',
-  },
-  {
-    name: 'dr. Hendra Kurniawan',
-    role: 'Jamaah Umroh Plus Turki',
-    city: 'Surabaya',
-    content:
-      'Bimbingan manasik sebelum berangkat sangat membantu persiapan mental dan fisik. Rasa kekeluargaan antar sesama jamaah dan kehangatan tim pendamping membuat ibadah terasa sangat khusyuk dan nyaman.',
-    initials: 'HK',
-  },
-  {
-    name: 'H. Ahmad Zulkarnain',
-    role: 'Jamaah Umroh Syawal',
-    city: 'Medan',
-    content:
-      'Proses pengurusan visa dan paspor sangat dibantu oleh tim travel. Fasilitas bus eksekutif selama ziarah kota Madinah dan Makkah sangat nyaman dan bersih untuk seluruh rombongan.',
-    initials: 'AZ',
-  },
-  {
-    name: 'Hj. Nurul Hidayati',
-    role: 'Jamaah Umroh Akhir Tahun',
-    city: 'Yogyakarta',
-    content:
-      'Kajian rutin dan bimbingan doa selama di hotel maupun masjid sangat menambah wawasan dan kekhusyukan kami. Muthawif selalu siap menjawab pertanyaan jamaah dengan ramah dan santun.',
-    initials: 'NH',
-  },
-  {
-    name: 'Ir. Ridwan Hakim',
-    role: 'Jamaah Umroh Keluarga',
-    city: 'Semarang',
-    content:
-      'Sangat puas dengan fasilitas kamar hotel yang luas dan bersih. Pelayanan katering makanan Indonesia sangat terjaga kualitasnya. Insya Allah akan merekomendasikan travel ini ke keluarga besar.',
-    initials: 'RH',
-  },
-]
+interface TestimonialsSectionProps {
+  items?: TestimonialItem[]
+}
 
-export function TestimonialsSection() {
-  const isCarousel = TESTIMONIALS.length > 3
+function getInitials(name: string): string {
+  if (!name) return 'J'
+  const parts = name.trim().split(/\s+/)
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+}
+
+export function TestimonialsSection({ items = [] }: TestimonialsSectionProps) {
+  const testimonials = items
+  const isCarousel = testimonials.length > 3
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const [visibleCount, setVisibleCount] = useState(3)
@@ -85,7 +47,7 @@ export function TestimonialsSection() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const maxIndex = Math.max(0, TESTIMONIALS.length - visibleCount)
+  const maxIndex = Math.max(0, testimonials.length - visibleCount)
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1))
@@ -113,11 +75,15 @@ export function TestimonialsSection() {
     }
   }, [maxIndex, currentIndex])
 
+  if (!testimonials || testimonials.length === 0) {
+    return null
+  }
+
   if (!isCarousel) {
     // Tampilan statis jika <= 3 item
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
-        {TESTIMONIALS.map((item, idx) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
+        {testimonials.map((item, idx) => (
           <TestimonialCard key={idx} item={item} />
         ))}
       </div>
@@ -139,7 +105,7 @@ export function TestimonialsSection() {
             transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
           }}
         >
-          {TESTIMONIALS.map((item, idx) => (
+          {testimonials.map((item, idx) => (
             <div
               key={idx}
               className="px-3 shrink-0"
@@ -195,6 +161,10 @@ export function TestimonialsSection() {
 }
 
 function TestimonialCard({ item }: { item: TestimonialItem }) {
+  const quoteText = item.quote || item.content || ''
+  const subtitle = item.roleOrLocation || (item.role && item.city ? `${item.role} · ${item.city}` : item.role || item.city || 'Jamaah Umroh')
+  const initials = getInitials(item.name)
+
   return (
     <div className="bg-white rounded-2xl p-6 sm:p-7 border border-stone-200/90 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-6 h-full select-none">
       {/* Quote Content */}
@@ -203,21 +173,21 @@ function TestimonialCard({ item }: { item: TestimonialItem }) {
           <MessageSquareQuote className="w-5 h-5" />
         </div>
         <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed italic line-clamp-4 font-sans">
-          &quot;{item.content}&quot;
+          &quot;{quoteText}&quot;
         </p>
       </div>
 
       {/* User Profile */}
       <div className="pt-4 border-t border-stone-100 flex items-center gap-3 text-left">
         <div className="w-10 h-10 rounded-full bg-site-dark text-white font-black text-xs flex items-center justify-center tracking-wider shrink-0 shadow-xs">
-          {item.initials}
+          {initials}
         </div>
         <div className="min-w-0">
           <h4 className="font-serif text-xs sm:text-sm font-bold text-site-text truncate">
             {item.name}
           </h4>
-          <p className="text-[11px] text-site-text-muted truncate">
-            {item.role} · {item.city}
+          <p className="text-[11px] text-site-text-muted truncate font-medium">
+            {subtitle}
           </p>
         </div>
       </div>

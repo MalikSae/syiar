@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import { updateTenantProfile, ProfileFormState } from './actions'
 import {
   Building2,
@@ -33,6 +33,12 @@ export function ProfilForm({ initialData }: ProfilFormProps) {
     updateTenantProfile,
     null
   )
+
+  useEffect(() => {
+    if (state) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [state])
 
   return (
     <form action={formAction} className="space-y-6">

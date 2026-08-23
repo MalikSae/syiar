@@ -2,26 +2,6 @@
 
 import { useState } from 'react'
 import {
-  Shield,
-  Building2,
-  Heart,
-  FileText,
-  Users,
-  Clock,
-  MapPin,
-  Award,
-  Sparkles,
-  Plane,
-  Compass,
-  CheckCircle2,
-  Headphones,
-  Briefcase,
-  Utensils,
-  BadgePercent,
-  Star,
-  Hotel,
-  Luggage,
-  CalendarCheck,
   Plus,
   Trash2,
   ChevronUp,
@@ -29,33 +9,9 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react'
+import { TRAVEL_ICONS, getTravelIconComponent } from '@/lib/travel-icons'
 
-export const TRAVEL_ICONS: Record<string, { label: string; icon: LucideIcon }> = {
-  Shield: { label: 'Keamanan / Terpercaya', icon: Shield },
-  Building2: { label: 'Hotel Bintang 5', icon: Building2 },
-  Hotel: { label: 'Akomodasi Dekat Masjid', icon: Hotel },
-  Heart: { label: 'Pelayanan Ramah & Amanah', icon: Heart },
-  FileText: { label: 'Legalitas & Izin Kemenag', icon: FileText },
-  Users: { label: 'Pembimbing Berpengalaman', icon: Users },
-  Clock: { label: 'Kepastian Jadwal', icon: Clock },
-  CalendarCheck: { label: 'Jadwal Keberangkatan Pasti', icon: CalendarCheck },
-  MapPin: { label: 'Lokasi Strategis Dekat Masjid', icon: MapPin },
-  Award: { label: 'Kualitas Pelayanan Terbaik', icon: Award },
-  Sparkles: { label: 'Fasilitas Istimewa', icon: Sparkles },
-  Plane: { label: 'Penerbangan Nyaman / Direct', icon: Plane },
-  Compass: { label: 'Bimbingan Sesuai Sunnah', icon: Compass },
-  CheckCircle2: { label: 'Pasti Berangkat', icon: CheckCircle2 },
-  Headphones: { label: 'Customer Service 24/7', icon: Headphones },
-  Briefcase: { label: 'Handling & Perlengkapan', icon: Briefcase },
-  Luggage: { label: 'Handling Bagasi Lengkap', icon: Luggage },
-  Utensils: { label: 'Menu Makanan Halal Fullboard', icon: Utensils },
-  BadgePercent: { label: 'Harga Transparan', icon: BadgePercent },
-  Star: { label: 'Reputasi Unggul', icon: Star },
-}
-
-export function getTravelIconComponent(iconName: string): LucideIcon {
-  return TRAVEL_ICONS[iconName]?.icon || Sparkles
-}
+export { TRAVEL_ICONS, getTravelIconComponent }
 
 export interface ListEditorField {
   key: string
