@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 
 interface TenantPageProps {
@@ -74,9 +75,10 @@ export default async function TenantRecruitmentPage({ params }: TenantPageProps)
         <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
           <Link
             href="/register"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-7 py-3 sm:py-3.5 text-sm sm:text-base font-bold rounded-xl text-white bg-brand-600 hover:bg-brand-500 shadow-md sm:shadow-lg shadow-brand-600/20 hover:shadow-brand-600/30 transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 sm:px-7 py-3 sm:py-3.5 text-sm sm:text-base font-bold rounded-xl text-white bg-brand-600 hover:bg-brand-500 shadow-md sm:shadow-lg shadow-brand-600/20 hover:shadow-brand-600/30 transition-all"
           >
-            Daftar Jadi Agen Sekarang &rarr;
+            <span>Daftar Jadi Agen Sekarang</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             href="/login"

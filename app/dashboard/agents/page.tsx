@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getTenantScopedClient } from '@/prisma/extensions/tenant-scope'
+import { ArrowLeft, Users } from 'lucide-react'
 import AgentActionButtons from './agent-action-buttons'
 
 export default async function AgentsManagementPage() {
@@ -45,9 +46,10 @@ export default async function AgentsManagementPage() {
             <div className="flex items-center space-x-2 mb-2">
               <Link
                 href="/dashboard"
-                className="text-xs font-semibold text-brand-600 hover:text-brand-500 transition-colors"
+                className="text-xs font-semibold text-brand-600 hover:text-brand-500 transition-colors inline-flex items-center space-x-1"
               >
-                &larr; Dashboard Travel
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Dashboard Travel</span>
               </Link>
               <span className="text-slate-300">/</span>
               <span className="text-xs font-medium text-slate-500">Kelola Agen</span>

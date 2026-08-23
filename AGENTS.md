@@ -24,7 +24,7 @@ Dokumen referensi lain di project ini (baca kalau butuh konteks lebih dalam sebe
 - **Payment gateway**: Duitku (untuk billing SaaS travel→platform; pembayaran jamaah→travel tetap manual, BUKAN lewat Duitku)
 - **DNS**: Cloudflare (wajib untuk domain `syiar.link` — dipakai untuk wildcard SSL otomatis)
 - **SSL**: `acme.sh` — wildcard untuk `*.syiar.link`, per-domain otomatis untuk custom domain travel
-- **Object storage**: Cloudflare R2 (bukti transfer, backup database)
+- **File upload/storage**: disk lokal project selama development, mengikuti struktur yang niru cara kerja di VPS nanti (folder `/uploads` di luar `/public`, disajikan lewat route handler sendiri — BUKAN Cloudflare R2, itu keputusan awal yang direvisi). Migrasi ke penyimpanan permanen di VPS terjadi natural di Sprint 8 tanpa ubah struktur folder/logic upload, cuma pindah lokasi fisik foldernya.
 
 ---
 
@@ -129,7 +129,7 @@ Selama development (Sprint 1-7, belum ada VPS), semua domain di atas (`syiar.lin
 
 ## 8c. Konvensi UI — Tidak Ada Emoji
 
-JANGAN PERNAH pakai karakter emoji di UI aplikasi — baik di teks statis, label, status indicator, maupun elemen dekoratif apa pun. Selalu pakai icon component (lucide-react — install kalau belum ada, konsisten dipakai di seluruh project, jangan campur beberapa icon library berbeda). Ini berlaku permanen ke semua halaman, existing maupun baru — kalau nemu emoji yang kelewat di kode yang sudah ada, perbaiki jadi icon component saat menyentuh area itu, meski tidak diminta eksplisit di task tersebut.
+**JANGAN PERNAH** pakai karakter emoji (✅❌📅🎉💰 dst) di UI aplikasi — baik di teks statis, label, status indicator, maupun elemen dekoratif apa pun. Selalu pakai icon component (lucide-react — install kalau belum ada, konsisten dipakai di seluruh project, jangan campur beberapa icon library berbeda). Ini berlaku permanen ke semua halaman, existing maupun baru — kalau nemu emoji yang kelewat di kode yang sudah ada, perbaiki jadi icon component saat menyentuh area itu, meski tidak diminta eksplisit di task tersebut.
 
 ## 9. Command Umum
 
