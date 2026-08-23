@@ -1,0 +1,17 @@
+-- AlterTable
+ALTER TABLE `Tenant` DROP COLUMN `bankAccount`,
+    ADD COLUMN `about` TEXT NULL,
+    ADD COLUMN `alamat` TEXT NULL,
+    ADD COLUMN `bankAccountHolder` VARCHAR(191) NULL,
+    ADD COLUMN `bankAccountNumber` VARCHAR(191) NULL,
+    ADD COLUMN `bankName` VARCHAR(191) NULL,
+    ADD COLUMN `features` JSON NULL,
+    ADD COLUMN `heroBackgroundUrl` VARCHAR(191) NULL,
+    ADD COLUMN `heroHeadline` VARCHAR(191) NULL,
+    ADD COLUMN `heroSubheadline` VARCHAR(191) NULL,
+    ADD COLUMN `iconUrl` VARCHAR(191) NULL,
+    ADD COLUMN `legalitas` VARCHAR(191) NULL,
+    ADD COLUMN `logoUrl` VARCHAR(191) NULL,
+    ADD COLUMN `primaryColor` VARCHAR(191) NULL,
+    ADD COLUMN `tagline` VARCHAR(191) NULL,
+    ADD COLUMN `termsAndConditions` TEXT NULL;

@@ -10,10 +10,15 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-fraunces), Georgia, serif;
   --color-brand-50: #FFF4EC;
   --color-brand-500: #FAAE40;
   --color-brand-600: #F38020;
   --color-brand: #F38020;
+  --color-site-bg: #F7F3EC;
+  --color-site-text: #2A2521;
+  --color-site-text-muted: #6B6058;
+  --color-site-dark: #133433;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -8,17 +8,31 @@ datasource db {
 }
 
 model Tenant {
-  id                 String   @id @default(cuid())
-  name               String
-  slug               String   @unique
-  phone              String?
-  bankAccount        String?
-  customDomain       String?  @unique
-  customDomainStatus String   @default("none")
-  subscriptionId     String?
-  status             String   @default("active")
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                  String   @id @default(cuid())
+  name                String
+  slug                String   @unique
+  phone               String?
+  iconUrl             String?
+  logoUrl             String?
+  primaryColor        String?   // hex, null = fallback ke oranye Cloudflare default di kode
+  heroHeadline        String?
+  heroSubheadline     String?
+  heroBackgroundUrl   String?
+  features            Json?     // array maksimal 4 objek {icon, title, description}
+  tagline             String?
+  about               String?   @db.Text
+  legalitas           String?
+  alamat              String?   @db.Text
+  bankName            String?
+  bankAccountNumber   String?
+  bankAccountHolder   String?
+  termsAndConditions  String?   @db.Text
+  customDomain        String?  @unique
+  customDomainStatus  String   @default("none")
+  subscriptionId      String?
+  status              String   @default("active")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model TravelUser {

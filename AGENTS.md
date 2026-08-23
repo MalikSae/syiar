@@ -131,6 +131,17 @@ Selama development (Sprint 1-7, belum ada VPS), semua domain di atas (`syiar.lin
 
 **JANGAN PERNAH** pakai karakter emoji (✅❌📅🎉💰 dst) di UI aplikasi — baik di teks statis, label, status indicator, maupun elemen dekoratif apa pun. Selalu pakai icon component (lucide-react — install kalau belum ada, konsisten dipakai di seluruh project, jangan campur beberapa icon library berbeda). Ini berlaku permanen ke semua halaman, existing maupun baru — kalau nemu emoji yang kelewat di kode yang sudah ada, perbaiki jadi icon component saat menyentuh area itu, meski tidak diminta eksplisit di task tersebut.
 
+## 8d. Migrasi Prisma yang Destruktif (drop/rename kolom) di Shell Non-Interactive
+
+`npx prisma migrate dev` akan memunculkan prompt konfirmasi interaktif kalau mendeteksi potensi data loss (drop kolom yang masih ada isinya, dst). Shell agent bersifat non-interactive (tanpa TTY), jadi prompt ini SELALU gagal dengan error "environment is non-interactive". JANGAN coba workaround pakai `echo y | ...` atau `db push --accept-data-loss` sebagai langkah pertama — itu langsung mengeksekusi tanpa membuat migration file, bikin riwayat migrasi drift dari skema database.
+
+Alur yang benar kalau tau di depan bakal ada perubahan destruktif (drop/rename kolom):
+1. `npx prisma migrate dev --create-only --name {nama}` — generate migration file TANPA apply, bisa direview dulu
+2. Baca isi migration.sql yang dihasilkan, pastikan cuma perubahan yang dimaksud (tidak ada drop kolom lain yang tidak diminta)
+3. `npx prisma migrate deploy` — apply migration file itu, tidak akan nanya prompt interaktif karena sudah dalam bentuk file, bukan mode dev
+
+Kalau terlanjur ke-block dan skema database sudah kadung berubah lewat cara lain (mis. db push tanpa sengaja): buat migration file yang sesuai lewat `migrate dev --create-only`, lalu `npx prisma migrate resolve --applied {nama}` untuk mendaftarkan migration itu ke riwayat TANPA re-run SQL-nya (karena skemanya sudah sesuai duluan). Selalu tutup dengan `npx prisma migrate status` untuk konfirmasi tidak ada drift.
+
 ## 9. Command Umum
 
 ```bash
@@ -140,13 +151,3 @@ npx prisma studio              # lihat data lewat GUI
 npx prisma generate            # regenerate Prisma client setelah ubah schema
 npm run build && npm start     # build & jalankan production-mode lokal (simulasi sebelum deploy)
 ```
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->

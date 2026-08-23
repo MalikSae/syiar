@@ -1,9 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { logoutTravelUser } from './actions'
+import {
+  LayoutDashboard,
+  Package,
+  Users,
+  Settings,
+  ChevronDown,
+  ChevronRight,
+  Globe,
+  Building2,
+  CreditCard,
+  LogOut,
+  Bell,
+  Search,
+  Menu,
+  X,
+} from 'lucide-react'
 
 interface DashboardShellProps {
   tenantName: string
@@ -20,73 +36,52 @@ export default function DashboardShell({
 }: DashboardShellProps) {
   const pathname = usePathname()
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const isSettingsActive = pathname.startsWith('/dashboard/settings')
+  const [isSettingsOpen, setIsSettingsOpen] = useState(isSettingsActive)
 
-  const navItems = [
+  // Otomatis expand grup Pengaturan jika berada di salah satu sub-halamannya
+  useEffect(() => {
+    if (isSettingsActive) {
+      setIsSettingsOpen(true)
+    }
+  }, [isSettingsActive, pathname])
+
+  const mainNavItems = [
     {
       label: 'Dashboard',
       href: '/dashboard',
       exact: true,
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-          />
-        </svg>
-      ),
+      icon: <LayoutDashboard className="w-5 h-5" />,
     },
     {
       label: 'Paket Umroh',
       href: '/dashboard/packages',
       exact: false,
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-          />
-        </svg>
-      ),
+      icon: <Package className="w-5 h-5" />,
     },
     {
       label: 'Kelola Agen',
       href: '/dashboard/agents',
       exact: false,
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-          />
-        </svg>
-      ),
+      icon: <Users className="w-5 h-5" />,
+    },
+  ]
+
+  const settingsSubItems = [
+    {
+      label: 'Website',
+      href: '/dashboard/settings/website',
+      icon: <Globe className="w-4 h-4" />,
     },
     {
-      label: 'Pengaturan Travel',
-      href: '/dashboard/settings',
-      exact: false,
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-        </svg>
-      ),
+      label: 'Profil',
+      href: '/dashboard/settings/profil',
+      icon: <Building2 className="w-4 h-4" />,
+    },
+    {
+      label: 'Pembayaran',
+      href: '/dashboard/settings/pembayaran',
+      icon: <CreditCard className="w-4 h-4" />,
     },
   ]
 
@@ -127,13 +122,19 @@ export default function DashboardShell({
       )
     }
     if (pathname.startsWith('/dashboard/settings')) {
+      let sublabel = 'Profil'
+      if (pathname === '/dashboard/settings/website') sublabel = 'Website'
+      if (pathname === '/dashboard/settings/pembayaran') sublabel = 'Pembayaran'
+
       return (
         <div className="flex items-center space-x-1.5 text-xs sm:text-sm">
           <Link href="/dashboard" className="text-slate-400 hover:text-slate-700 transition-colors">
             Dashboard
           </Link>
           <span className="text-slate-300">/</span>
-          <span className="font-semibold text-slate-800">Pengaturan Travel</span>
+          <span className="text-slate-400">Pengaturan</span>
+          <span className="text-slate-300">/</span>
+          <span className="font-semibold text-slate-800">{sublabel}</span>
         </div>
       )
     }
@@ -185,9 +186,7 @@ export default function DashboardShell({
               className="md:hidden p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-50"
               onClick={() => setIsMobileOpen(false)}
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X className="w-5 h-5" />
             </button>
           </div>
 
@@ -196,7 +195,9 @@ export default function DashboardShell({
             <div className="px-3 pb-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
               Menu Utama
             </div>
-            {navItems.map((item) => {
+
+            {/* Main Nav Links */}
+            {mainNavItems.map((item) => {
               const isActive = item.exact
                 ? pathname === item.href
                 : pathname.startsWith(item.href)
@@ -219,6 +220,60 @@ export default function DashboardShell({
                 </Link>
               )
             })}
+
+            {/* Expandable Group: Pengaturan */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors cursor-pointer ${
+                  isSettingsActive
+                    ? 'text-brand-600 font-semibold bg-brand-50/50'
+                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50 font-medium'
+                }`}
+                aria-expanded={isSettingsOpen}
+              >
+                <div className="flex items-center space-x-3">
+                  <span className={`${isSettingsActive ? 'text-brand-600' : 'text-slate-400'}`}>
+                    <Settings className="w-5 h-5" />
+                  </span>
+                  <span>Pengaturan</span>
+                </div>
+                <span className="text-slate-400">
+                  {isSettingsOpen ? (
+                    <ChevronDown className="w-4 h-4 transition-transform duration-200" />
+                  ) : (
+                    <ChevronRight className="w-4 h-4 transition-transform duration-200" />
+                  )}
+                </span>
+              </button>
+
+              {/* Sub-items */}
+              {isSettingsOpen && (
+                <div className="pl-6 pr-2 py-1 space-y-1 mt-0.5 border-l-2 border-slate-100 ml-4">
+                  {settingsSubItems.map((sub) => {
+                    const isSubActive = pathname === sub.href
+                    return (
+                      <Link
+                        key={sub.href}
+                        href={sub.href}
+                        onClick={() => setIsMobileOpen(false)}
+                        className={`flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                          isSubActive
+                            ? 'bg-brand-50 text-brand-600 font-bold shadow-2xs'
+                            : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span className={`${isSubActive ? 'text-brand-600' : 'text-slate-400'}`}>
+                          {sub.icon}
+                        </span>
+                        <span>{sub.label}</span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
           </nav>
         </div>
 
@@ -245,16 +300,9 @@ export default function DashboardShell({
                 logoutTravelUser()
               }}
               title="Logout dari Akun"
-              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -268,13 +316,11 @@ export default function DashboardShell({
           <div className="flex items-center space-x-3">
             <button
               type="button"
-              className="md:hidden p-2 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-50"
+              className="md:hidden p-2 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-50 cursor-pointer"
               onClick={() => setIsMobileOpen(true)}
               aria-label="Open Sidebar"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              <Menu className="w-5 h-5" />
             </button>
             {getBreadcrumb()}
           </div>
@@ -284,14 +330,7 @@ export default function DashboardShell({
             {/* Search Input (Visual Mockup) */}
             <div className="relative hidden sm:block w-48 lg:w-64">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
+                <Search className="w-4 h-4" />
               </div>
               <input
                 type="text"
@@ -305,16 +344,9 @@ export default function DashboardShell({
             <button
               type="button"
               aria-label="Notifikasi"
-              className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-50 relative transition-colors"
+              className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-50 relative transition-colors cursor-pointer"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.75"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
+              <Bell className="w-5 h-5" />
               <span className="w-2 h-2 rounded-full bg-brand-600 absolute top-2 right-2 ring-2 ring-white"></span>
             </button>
 
