@@ -127,6 +127,10 @@ SESSION_SECRET=
 
 Selama development (Sprint 1-7, belum ada VPS), semua domain di atas (`syiar.link`, `{slug}.syiar.link`) itu target **production**. Untuk testing lokal, dipakai **`*.localhost`** (mis. `alhijrah.localhost:3000`) — BUKAN domain `.test` ala Laragon. Domain `.test` Laragon tidak mendukung wildcard subdomain (dikonfirmasi langsung oleh maintainer Laragon — tiap subdomain perlu ditambah manual ke hosts file), sementara `*.localhost` otomatis resolve ke `127.0.0.1` di browser modern tanpa setup apa pun, cocok untuk tenant yang dibuat dinamis lewat aplikasi (bukan didaftar manual satu-satu). Middleware resolusi domain tetap logic yang sama di kedua environment — cuma `.env` yang beda (base domain lokal vs production), jangan hardcode `syiar.link` di kode, selalu baca dari environment variable.
 
+## 8c. Konvensi UI — Tidak Ada Emoji
+
+JANGAN PERNAH pakai karakter emoji di UI aplikasi — baik di teks statis, label, status indicator, maupun elemen dekoratif apa pun. Selalu pakai icon component (lucide-react — install kalau belum ada, konsisten dipakai di seluruh project, jangan campur beberapa icon library berbeda). Ini berlaku permanen ke semua halaman, existing maupun baru — kalau nemu emoji yang kelewat di kode yang sudah ada, perbaiki jadi icon component saat menyentuh area itu, meski tidak diminta eksplisit di task tersebut.
+
 ## 9. Command Umum
 
 ```bash
