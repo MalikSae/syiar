@@ -4,6 +4,13 @@ import { prisma } from '@/lib/prisma'
 import { hashPassword, createSession } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 
+import {
+  getDefaultHeroHeadline,
+  DEFAULT_HERO_SUBHEADLINE,
+  DEFAULT_FEATURES,
+  DEFAULT_FAQS,
+} from '@/lib/tenant-defaults'
+
 export interface RegisterState {
   error?: string
   fieldErrors?: {
@@ -93,6 +100,11 @@ export async function registerTravel(
         data: {
           name: travelName,
           slug,
+          heroHeadline: getDefaultHeroHeadline(travelName),
+          heroSubheadline: DEFAULT_HERO_SUBHEADLINE,
+          features: DEFAULT_FEATURES,
+          faqs: DEFAULT_FAQS,
+          testimonials: [],
           status: 'active',
         },
       })
