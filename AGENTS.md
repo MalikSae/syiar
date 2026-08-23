@@ -142,6 +142,10 @@ Alur yang benar kalau tau di depan bakal ada perubahan destruktif (drop/rename k
 
 Kalau terlanjur ke-block dan skema database sudah kadung berubah lewat cara lain (mis. db push tanpa sengaja): buat migration file yang sesuai lewat `migrate dev --create-only`, lalu `npx prisma migrate resolve --applied {nama}` untuk mendaftarkan migration itu ke riwayat TANPA re-run SQL-nya (karena skemanya sudah sesuai duluan). Selalu tutup dengan `npx prisma migrate status` untuk konfirmasi tidak ada drift.
 
+## 8e. Konvensi UI — Auto-Scroll ke Atas Setelah Submit Form
+
+SETIAP form yang menampilkan pesan sukses/error setelah submit (Server Action, useTransition, dst) WAJIB auto-scroll ke posisi paling atas begitu hasil submit diketahui (sukses ATAU gagal) — supaya user langsung lihat feedback-nya, tidak perlu scroll manual ke atas sendiri. Berlaku untuk SEMUA form di project ini, existing maupun baru. Kalau menyentuh form yang belum punya perilaku ini, tambahkan saat itu juga meski tidak diminta eksplisit di task tersebut.
+
 ## 9. Command Umum
 
 ```bash
@@ -151,13 +155,3 @@ npx prisma studio              # lihat data lewat GUI
 npx prisma generate            # regenerate Prisma client setelah ubah schema
 npm run build && npm start     # build & jalankan production-mode lokal (simulasi sebelum deploy)
 ```
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
