@@ -38,6 +38,21 @@ export default function DashboardShell({
       ),
     },
     {
+      label: 'Paket Umroh',
+      href: '/dashboard/packages',
+      exact: false,
+      icon: (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.75"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+          />
+        </svg>
+      ),
+    },
+    {
       label: 'Kelola Agen',
       href: '/dashboard/agents',
       exact: false,
@@ -77,6 +92,29 @@ export default function DashboardShell({
 
   // Breadcrumb Helper
   const getBreadcrumb = () => {
+    if (pathname.startsWith('/dashboard/packages')) {
+      return (
+        <div className="flex items-center space-x-1.5 text-xs sm:text-sm">
+          <Link href="/dashboard" className="text-slate-400 hover:text-slate-700 transition-colors">
+            Dashboard
+          </Link>
+          <span className="text-slate-300">/</span>
+          {pathname === '/dashboard/packages' ? (
+            <span className="font-semibold text-slate-800">Paket Umroh</span>
+          ) : (
+            <>
+              <Link href="/dashboard/packages" className="text-slate-400 hover:text-slate-700 transition-colors">
+                Paket Umroh
+              </Link>
+              <span className="text-slate-300">/</span>
+              <span className="font-semibold text-slate-800">
+                {pathname === '/dashboard/packages/new' ? 'Tambah Paket' : 'Kelola Paket'}
+              </span>
+            </>
+          )}
+        </div>
+      )
+    }
     if (pathname.startsWith('/dashboard/agents')) {
       return (
         <div className="flex items-center space-x-1.5 text-xs sm:text-sm">
@@ -201,22 +239,23 @@ export default function DashboardShell({
               </div>
             </div>
 
-            <form action={logoutTravelUser} className="shrink-0">
-              <button
-                type="submit"
-                title="Logout dari Akun"
-                className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-              </button>
-            </form>
+            <button
+              type="button"
+              onClick={() => {
+                logoutTravelUser()
+              }}
+              title="Logout dari Akun"
+              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </aside>

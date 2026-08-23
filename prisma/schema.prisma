@@ -57,3 +57,34 @@ model PlatformAdmin {
   password  String
   createdAt DateTime @default(now())
 }
+
+model Package {
+  id               String   @id @default(cuid())
+  tenantId         String
+  name             String   // Nama Paket
+  duration         String   // Durasi, format bebas mis. "9 Hari 7 Malam"
+  airline          String   // Maskapai
+  hotelMakkah      String
+  hotelMadinah     String
+  include          String   @db.Text
+  exclude          String   @db.Text
+  itinerary        String   @db.Text
+  priceQuad        Int?     // nullable — minimal SALAH SATU dari 3 harga ini wajib diisi
+  priceTriple      Int?
+  priceDouble      Int?
+  commissionAmount Int      // FLAT SAJA, tidak ada opsi persen
+  featuredImageUrl String?  // Gambar unggulan (opsional)
+  status           String   @default("draft") // "draft" | "active" | "inactive" — TIDAK ADA hapus permanen
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model PackageDeparture {
+  id         String   @id @default(cuid())
+  tenantId   String   // denormalisasi, konsisten dengan pola Agent/Package — bukan lewat join
+  packageId  String
+  date       DateTime
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
