@@ -7,6 +7,7 @@ import {
   addPackageDeparture,
   toggleDepartureStatus,
 } from './actions'
+import { processSquareImage } from '@/lib/image-processing'
 import Link from 'next/link'
 import {
   Calendar,
@@ -95,96 +96,23 @@ export default function PackageForm({
   // =========================================================================
   // CLIENT-SIDE CANVAS IMAGE PROCESSING (Center-Crop 1:1 & Convert to WebP)
   // =========================================================================
-  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null)
     const file = e.target.files?.[0]
     if (!file) return
 
-    if (!file.type.startsWith('image/')) {
-      setError('File yang dipilih harus berupa file gambar (JPG, PNG, WebP).')
-      return
-    }
-
-    // Validasi ukuran asli maksimal 10MB sebelum diproses
-    if (file.size > 10 * 1024 * 1024) {
-      setError('Ukuran file gambar asli terlalu besar (maksimal 10MB).')
-      return
-    }
-
     setIsProcessingImage(true)
-    const reader = new FileReader()
-
-    reader.onload = (event) => {
-      const img = new Image()
-      img.onload = () => {
-        try {
-          // 1. Center Crop 1:1 otomatis dari sisi terpendek
-          const minDim = Math.min(img.width, img.height)
-          const sx = (img.width - minDim) / 2
-          const sy = (img.height - minDim) / 2
-
-          // 2. Resize ke ukuran wajar (maksimal 1200x1200px)
-          const targetSize = Math.min(minDim, 1200)
-
-          const canvas = document.createElement('canvas')
-          canvas.width = targetSize
-          canvas.height = targetSize
-          const ctx = canvas.getContext('2d')
-
-          if (!ctx) {
-            setError('Gagal memproses gambar pada browser.')
-            setIsProcessingImage(false)
-            return
-          }
-
-          ctx.imageSmoothingEnabled = true
-          ctx.imageSmoothingQuality = 'high'
-          ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, targetSize, targetSize)
-
-          // 3. Konversi ke WebP kualitas ~0.85 dengan fallback ke JPEG
-          canvas.toBlob(
-            (blob) => {
-              if (!blob) {
-                // Fallback jika WebP tidak didukung
-                canvas.toBlob(
-                  (jpegBlob) => {
-                    if (jpegBlob) {
-                      const processedFile = new File([jpegBlob], 'featured.jpg', {
-                        type: 'image/jpeg',
-                      })
-                      setSelectedImageFile(processedFile)
-                      setImagePreviewUrl(URL.createObjectURL(jpegBlob))
-                      setIsImageRemoved(false)
-                    }
-                    setIsProcessingImage(false)
-                  },
-                  'image/jpeg',
-                  0.85
-                )
-                return
-              }
-
-              const processedFile = new File([blob], 'featured.webp', {
-                type: 'image/webp',
-              })
-              setSelectedImageFile(processedFile)
-              setImagePreviewUrl(URL.createObjectURL(blob))
-              setIsImageRemoved(false)
-              setIsProcessingImage(false)
-            },
-            'image/webp',
-            0.85
-          )
-        } catch (err) {
-          console.error('Error cropping image:', err)
-          setError('Gagal memotong gambar.')
-          setIsProcessingImage(false)
-        }
-      }
-      img.src = event.target?.result as string
+    try {
+      const result = await processSquareImage(file, 1200)
+      setSelectedImageFile(result.file)
+      setImagePreviewUrl(result.previewUrl)
+      setIsImageRemoved(false)
+    } catch (err: any) {
+      console.error('Error processing package image:', err)
+      setError(err?.message || 'Gagal memproses gambar.')
+    } finally {
+      setIsProcessingImage(false)
     }
-
-    reader.readAsDataURL(file)
   }
 
   const handleRemoveImage = () => {

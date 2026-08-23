@@ -3,33 +3,41 @@ import path from 'path'
 import fs from 'fs'
 
 interface RouteProps {
-  params: Promise<{ filename: string }>
+  params: Promise<{ category: string; filename: string }>
 }
+
+const ALLOWED_CATEGORIES = ['packages', 'tenants']
 
 export async function GET(request: NextRequest, { params }: RouteProps) {
   try {
-    const { filename } = await params
+    const { category, filename } = await params
 
-    if (!filename || typeof filename !== 'string') {
-      return NextResponse.json({ error: 'Filename parameter is required' }, { status: 400 })
+    if (!category || !filename || typeof category !== 'string' || typeof filename !== 'string') {
+      return NextResponse.json({ error: 'Category and filename parameters are required' }, { status: 400 })
     }
 
-    // Guardrail Keamanan: Cegah Path Traversal
-    if (
-      filename.includes('..') ||
-      filename.includes('/') ||
-      filename.includes('\\') ||
-      filename.includes('%2e%2e') ||
-      filename.includes('%2f') ||
-      filename.includes('%5c')
-    ) {
+    // Guardrail Keamanan: Validasi Whitelist Category
+    if (!ALLOWED_CATEGORIES.includes(category)) {
+      return NextResponse.json({ error: 'Invalid upload category' }, { status: 400 })
+    }
+
+    // Guardrail Keamanan: Cegah Path Traversal pada category maupun filename
+    const hasTraversal = (str: string) =>
+      str.includes('..') ||
+      str.includes('/') ||
+      str.includes('\\') ||
+      str.includes('%2e%2e') ||
+      str.includes('%2f') ||
+      str.includes('%5c')
+
+    if (hasTraversal(category) || hasTraversal(filename)) {
       return NextResponse.json({ error: 'Invalid filename or path traversal detected' }, { status: 400 })
     }
 
-    const uploadsDir = path.resolve(process.cwd(), 'uploads', 'packages')
+    const uploadsDir = path.resolve(process.cwd(), 'uploads', category)
     const filePath = path.resolve(uploadsDir, filename)
 
-    // Pastikan path target berada persis di dalam folder uploads/packages
+    // Pastikan path target berada persis di dalam folder uploads/{category}
     if (!filePath.startsWith(uploadsDir)) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
@@ -45,6 +53,7 @@ export async function GET(request: NextRequest, { params }: RouteProps) {
     if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg'
     else if (ext === '.png') contentType = 'image/png'
     else if (ext === '.webp') contentType = 'image/webp'
+    else if (ext === '.svg') contentType = 'image/svg+xml'
 
     return new NextResponse(fileBuffer, {
       status: 200,
@@ -54,7 +63,7 @@ export async function GET(request: NextRequest, { params }: RouteProps) {
       },
     })
   } catch (err: any) {
-    console.error('Error serving package image upload:', err)
+    console.error('Error serving upload file:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

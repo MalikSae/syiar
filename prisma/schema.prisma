@@ -19,6 +19,8 @@ model Tenant {
   heroSubheadline     String?
   heroBackgroundUrl   String?
   features            Json?     // array maksimal 4 objek {icon, title, description}
+  faqs                Json?     // array of {question: string, answer: string}
+  testimonials        Json?     // array of {name: string, roleOrLocation: string, quote: string}
   tagline             String?
   about               String?   @db.Text
   legalitas           String?
