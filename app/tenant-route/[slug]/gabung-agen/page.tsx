@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
+import { getRecruitReferral } from '@/lib/referral-cookie'
 import AgentRegisterForm from './agent-register-form'
 
 interface AgentRegisterPageProps {
@@ -16,6 +17,23 @@ export default async function AgentRegisterPage({ params }: AgentRegisterPagePro
 
   if (!tenant || tenant.status !== 'active') {
     notFound()
+  }
+
+  // 2. Baca cookie referral rekrutmen jika ada & validasi milik tenant ini
+  const recruitCookieCode = await getRecruitReferral()
+  let validReferralCode = ''
+
+  if (recruitCookieCode) {
+    const agent = await prisma.agent.findFirst({
+      where: {
+        tenantId: tenant.id,
+        referralCode: recruitCookieCode,
+        status: 'approved',
+      },
+    })
+    if (agent) {
+      validReferralCode = agent.referralCode
+    }
   }
 
   return (
@@ -36,7 +54,11 @@ export default async function AgentRegisterPage({ params }: AgentRegisterPagePro
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <AgentRegisterForm tenantSlug={tenant.slug} tenantName={tenant.name} />
+        <AgentRegisterForm
+          tenantSlug={tenant.slug}
+          tenantName={tenant.name}
+          initialReferralCode={validReferralCode}
+        />
       </div>
     </div>
   )

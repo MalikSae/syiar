@@ -109,6 +109,7 @@ async function runTenantIsolationTests() {
       data: {
         tenantId: tenantA.id,
         name: 'Paket Umroh Reguler A',
+        slug: 'paket-umroh-reguler-a',
         duration: '9 Hari',
         airline: 'Garuda Indonesia',
         hotelMakkah: 'Pullman Zamzam',
@@ -129,6 +130,7 @@ async function runTenantIsolationTests() {
       data: {
         tenantId: tenantB.id,
         name: 'Paket Umroh Reguler B',
+        slug: 'paket-umroh-reguler-b',
         duration: '12 Hari',
         airline: 'Saudia Airlines',
         hotelMakkah: 'Swissotel Makkah',

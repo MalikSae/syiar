@@ -134,6 +134,40 @@ function validatePackageInput(formData: FormData) {
   }
 }
 
+import { slugify } from '@/lib/slugify'
+
+/**
+ * Helper untuk generate slug unik per tenant (menghindari duplikasi dengan menambahkan angka)
+ */
+async function generateUniquePackageSlug(
+  tenantId: string,
+  name: string,
+  currentPackageId?: string
+): Promise<string> {
+  const baseSlug = slugify(name) || 'paket-umroh'
+  let slug = baseSlug
+  let counter = 1
+
+  const scopedPrisma = getTenantScopedClient(tenantId)
+
+  while (true) {
+    const existing = await scopedPrisma.package.findFirst({
+      where: {
+        slug,
+        ...(currentPackageId ? { id: { not: currentPackageId } } : {}),
+      },
+      select: { id: true },
+    })
+
+    if (!existing) {
+      return slug
+    }
+
+    counter++
+    slug = `${baseSlug}-${counter}`
+  }
+}
+
 /**
  * Server Action: Buat Paket Umroh Baru (Atomic Transaction dengan Tanggal Keberangkatan & Upload Gambar)
  */
@@ -154,6 +188,9 @@ export async function createPackage(
   // Status paket dari pilihan user ("draft" | "active")
   const requestedStatus = (formData.get('status') as string)?.trim()
   const status = requestedStatus === 'active' ? 'active' : 'draft'
+
+  // Generate slug unik per tenant
+  const slug = await generateUniquePackageSlug(session.tenantId!, validation.data.name)
 
   // Parse optional departure dates dari form
   const parsedDepartures: Date[] = []
@@ -176,10 +213,11 @@ export async function createPackage(
 
   try {
     const newPackage = await prisma.$transaction(async (tx) => {
-      // 1. Buat Package dengan tenantId sesi dan status pilihan
+      // 1. Buat Package dengan tenantId sesi, slug unik, dan status pilihan
       const pkg = await tx.package.create({
         data: {
           ...validation.data,
+          slug,
           tenantId: session.tenantId!,
           status,
         },
@@ -304,10 +342,17 @@ export async function updatePackage(
       nextFeaturedImageUrl = null
     }
 
+    // Generate/update slug jika nama berubah atau slug belum ada
+    let nextSlug = existing.slug
+    if (!nextSlug || existing.name !== validation.data.name) {
+      nextSlug = await generateUniquePackageSlug(session.tenantId!, validation.data.name, packageId)
+    }
+
     await scopedPrisma.package.update({
       where: { id: packageId },
       data: {
         ...validation.data,
+        slug: nextSlug,
         status: nextStatus,
         featuredImageUrl: nextFeaturedImageUrl,
       },

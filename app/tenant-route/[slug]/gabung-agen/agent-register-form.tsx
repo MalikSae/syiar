@@ -7,9 +7,14 @@ import { registerAgent, AgentRegisterState } from './actions'
 interface AgentRegisterFormProps {
   tenantSlug: string
   tenantName: string
+  initialReferralCode?: string
 }
 
-export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegisterFormProps) {
+export default function AgentRegisterForm({
+  tenantSlug,
+  tenantName,
+  initialReferralCode = '',
+}: AgentRegisterFormProps) {
   const registerWithSlug = registerAgent.bind(null, tenantSlug)
   const [state, formAction, isPending] = useActionState<AgentRegisterState | null, FormData>(
     registerWithSlug,
@@ -133,6 +138,22 @@ export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegis
           {state?.fieldErrors?.password && (
             <p className="mt-1 text-xs text-red-600 font-medium">{state.fieldErrors.password}</p>
           )}
+        </div>
+
+        <div>
+          <label htmlFor="referralCode" className="block text-sm font-medium text-slate-700">
+            Kode Referral Pengajak <span className="text-xs text-slate-400 font-normal">(opsional)</span>
+          </label>
+          <div className="mt-1">
+            <input
+              id="referralCode"
+              name="referralCode"
+              type="text"
+              defaultValue={initialReferralCode}
+              placeholder="Contoh: AGEN1234"
+              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm font-mono uppercase"
+            />
+          </div>
         </div>
 
         <div className="pt-2">

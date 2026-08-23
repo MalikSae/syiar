@@ -62,6 +62,7 @@ model Package {
   id               String   @id @default(cuid())
   tenantId         String
   name             String   // Nama Paket
+  slug             String   // URL slug unik per tenant
   duration         String   // Durasi, format bebas mis. "9 Hari 7 Malam"
   airline          String   // Maskapai
   hotelMakkah      String
@@ -77,6 +78,8 @@ model Package {
   status           String   @default("draft") // "draft" | "active" | "inactive" — TIDAK ADA hapus permanen
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+
+  @@unique([tenantId, slug])
 }
 
 model PackageDeparture {

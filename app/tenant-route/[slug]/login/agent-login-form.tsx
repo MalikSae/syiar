@@ -71,7 +71,7 @@ export default function AgentLoginForm({ tenantSlug }: AgentLoginFormProps) {
         <p className="text-sm text-slate-600">
           Belum terdaftar sebagai agen?{' '}
           <Link
-            href="/register"
+            href="/gabung-agen"
             className="font-medium text-brand-600 hover:text-brand-500 underline"
           >
             Daftar di sini
