@@ -124,7 +124,7 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
         {/* Top Header Card */}
         <div className="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-xs space-y-4 text-left">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-xs font-bold text-brand-600">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-600/10 border border-brand-600/30 text-xs font-bold text-brand-600">
               <Clock className="w-3.5 h-3.5 text-brand-500" />
               <span>{pkg.duration}</span>
             </div>
@@ -217,7 +217,7 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
                   {departures.map((dep) => (
                     <div
                       key={dep.id}
-                      className="p-4 rounded-xl bg-stone-50 border border-stone-200 flex items-center gap-3 hover:bg-brand-50/40 hover:border-brand-200 transition-colors"
+                      className="p-4 rounded-xl bg-stone-50 border border-stone-200 flex items-center gap-3 hover:bg-brand-600/10 hover:border-brand-600/30 transition-colors"
                     >
                       <div className="w-10 h-10 rounded-lg bg-white text-brand-600 shadow-2xs flex items-center justify-center font-bold text-xs shrink-0">
                         <Calendar className="w-4 h-4" />

@@ -239,7 +239,7 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
                       <span>Keberangkatan Terdekat</span>
                     </div>
                     {overallNearestDeparture && daysUntilNearest !== null && (
-                      <span className="px-2.5 py-1 rounded-full bg-brand-50 border border-brand-200 text-[11px] font-black text-brand-600">
+                      <span className="px-2.5 py-1 rounded-full bg-brand-600/10 border border-brand-600/30 text-[11px] font-black text-brand-600">
                         {daysUntilNearest === 0 ? 'Hari Ini' : `H-${daysUntilNearest} hari`}
                       </span>
                     )}
@@ -321,7 +321,7 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
                   key={idx}
                   className="bg-white p-6 rounded-xl border border-stone-200/80 shadow-xs space-y-3"
                 >
-                  <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+                  <div className="w-11 h-11 rounded-xl bg-brand-600/10 border border-brand-600/20 text-brand-600 flex items-center justify-center">
                     <IconComponent className="w-5 h-5" />
                   </div>
                   <h3 className="text-sm sm:text-base font-bold text-site-text">
@@ -371,7 +371,7 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
                 <div className="pt-4 text-left">
                   <Link
                     href="/paket"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-stone-50 border border-stone-300 hover:border-brand-400 text-site-text hover:text-brand-600 text-xs sm:text-sm font-bold rounded-lg transition-all shadow-xs"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-stone-50 border border-stone-300 hover:border-brand-600/40 text-site-text hover:text-brand-600 text-xs sm:text-sm font-bold rounded-lg transition-all shadow-xs"
                   >
                     <span>Lihat Semua Paket</span>
                     <ArrowRight className="w-4 h-4" />
@@ -409,7 +409,7 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
           <section className="py-14 sm:py-20 border-t border-stone-200/80 bg-site-bg">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
               <div className="text-center space-y-2 max-w-2xl mx-auto">
-                <span className="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 border border-brand-200/60 px-3 py-1 rounded-full inline-flex items-center gap-1.5 mx-auto">
+                <span className="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-600/10 border border-brand-600/30 px-3 py-1 rounded-full inline-flex items-center gap-1.5 mx-auto">
                   <HelpCircle className="w-3.5 h-3.5" />
                   <span>Informasi Penting</span>
                 </span>

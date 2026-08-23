@@ -30,7 +30,7 @@ export default function AgentRegisterForm({
   if (state?.success) {
     return (
       <div className="bg-white py-8 px-6 shadow-xl rounded-2xl sm:px-10 border border-brand-500/30 text-center">
-        <div className="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-brand-50 mb-4">
+        <div className="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-brand-600/10 border border-brand-600/20 mb-4">
           <svg
             className="h-8 w-8 text-brand-600"
             fill="none"

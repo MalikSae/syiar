@@ -37,9 +37,9 @@ export default async function AgentRegisterPage({ params }: AgentRegisterPagePro
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-50/40 via-slate-50 to-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-brand-600/10 via-slate-50 to-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-600 border border-brand-500/20 mb-3">
+        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-600/10 text-brand-600 border border-brand-600/30 mb-3">
           Portal Agen Resmi
         </span>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">

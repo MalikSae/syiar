@@ -26,7 +26,7 @@ export function PackageCard({ pkg }: PackageCardProps) {
   const lowestPrice = getLowestPrice(pkg)
 
   return (
-    <div className="group bg-white rounded-xl sm:rounded-2xl border border-stone-200/90 hover:border-brand-300 shadow-xs hover:shadow-lg hover:shadow-brand-500/5 transition-all duration-300 flex flex-col overflow-hidden">
+    <div className="group bg-white rounded-xl sm:rounded-2xl border border-stone-200/90 hover:border-brand-600/40 shadow-xs hover:shadow-lg hover:shadow-brand-500/5 transition-all duration-300 flex flex-col overflow-hidden">
       {/* Thumbnail Section (1:1 Ratio) */}
       <div className="relative aspect-square bg-stone-100 overflow-hidden">
         {pkg.featuredImageUrl ? (
@@ -51,7 +51,7 @@ export function PackageCard({ pkg }: PackageCardProps) {
         <div className="space-y-2.5">
           {/* Nearest Departure Tag (HANYA tampil jika punya jadwal aktif) */}
           {pkg.nearestDepartureDate && (
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-brand-600 bg-brand-50 border border-brand-200/60 px-2.5 py-0.5 rounded-md">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-brand-600 bg-brand-600/10 border border-brand-600/30 px-2.5 py-0.5 rounded-md">
               <Calendar className="w-3 h-3 text-brand-500 shrink-0" />
               <span className="truncate">
                 Keberangkatan terdekat: {formatIndonesianDate(pkg.nearestDepartureDate, { includeWeekday: false })}

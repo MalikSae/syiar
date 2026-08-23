@@ -151,16 +151,16 @@ export default async function PackageListPage({ params, searchParams }: PackageL
 
         {/* Filter Indicator / Active Tags */}
         {isFiltered && (
-          <div className="flex items-center justify-between gap-4 bg-brand-50/80 border border-brand-200/70 px-4 py-3 rounded-xl text-xs">
+          <div className="flex items-center justify-between gap-4 bg-brand-600/10 border border-brand-600/30 px-4 py-3 rounded-xl text-xs">
             <div className="flex flex-wrap items-center gap-2 text-site-text">
-              <span className="font-bold text-brand-700">Hasil Pencarian:</span>
+              <span className="font-bold text-brand-600">Hasil Pencarian:</span>
               {q && (
-                <span className="bg-white px-2.5 py-1 rounded-md border border-brand-200 font-medium">
+                <span className="bg-white px-2.5 py-1 rounded-md border border-brand-600/20 font-medium">
                   Kata kunci: &quot;{q}&quot;
                 </span>
               )}
               {month && (
-                <span className="bg-white px-2.5 py-1 rounded-md border border-brand-200 font-medium">
+                <span className="bg-white px-2.5 py-1 rounded-md border border-brand-600/20 font-medium">
                   Bulan: {availableMonths.find((m) => m.value === month)?.label || month}
                 </span>
               )}
@@ -168,7 +168,7 @@ export default async function PackageListPage({ params, searchParams }: PackageL
             </div>
             <Link
               href="/paket"
-              className="inline-flex items-center gap-1.5 font-bold text-brand-600 hover:text-brand-700 hover:underline shrink-0"
+              className="inline-flex items-center gap-1.5 font-bold text-brand-600 hover:opacity-80 hover:underline shrink-0"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Filter</span>
@@ -179,7 +179,7 @@ export default async function PackageListPage({ params, searchParams }: PackageL
         {/* Packages Grid / Empty State */}
         {packagesWithDates.length === 0 ? (
           <div className="bg-white p-10 sm:p-16 rounded-2xl border border-stone-200 text-center shadow-xs space-y-4 max-w-lg mx-auto my-12">
-            <div className="w-14 h-14 rounded-xl bg-amber-50 text-amber-500 mx-auto flex items-center justify-center">
+            <div className="w-14 h-14 rounded-xl bg-stone-100 text-stone-400 mx-auto flex items-center justify-center">
               {isFiltered ? <SearchX className="w-7 h-7" /> : <PackageOpen className="w-7 h-7" />}
             </div>
             <div className="space-y-2">

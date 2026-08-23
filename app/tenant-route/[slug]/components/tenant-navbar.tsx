@@ -75,7 +75,7 @@ export function TenantNavbar({ tenantName, logoUrl, iconUrl }: TenantNavbarProps
             <div className="h-5 w-px bg-stone-300/80 mx-1" />
             <Link
               href="/login"
-              className="px-4 py-2 text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200/60 rounded-lg transition-colors flex items-center gap-1.5"
+              className="px-4 py-2 text-xs font-bold text-brand-600 bg-brand-600/10 hover:bg-brand-600/20 border border-brand-600/30 rounded-lg transition-colors flex items-center gap-1.5"
             >
               <LogIn className="w-3.5 h-3.5" />
               Login Agen
@@ -126,7 +126,7 @@ export function TenantNavbar({ tenantName, logoUrl, iconUrl }: TenantNavbarProps
             <Link
               href="/login"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-sm font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 border border-brand-200/60 transition-colors"
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-sm font-bold text-brand-600 bg-brand-600/10 hover:bg-brand-600/20 border border-brand-600/30 transition-colors"
             >
               <LogIn className="w-4 h-4" />
               Login Agen

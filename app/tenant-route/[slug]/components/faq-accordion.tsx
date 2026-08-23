@@ -32,7 +32,7 @@ export function FAQAccordion({ items = [] }: FAQAccordionProps) {
             key={idx}
             className={`rounded-xl border transition-all duration-200 overflow-hidden ${
               isOpen
-                ? 'bg-white border-brand-300 shadow-sm'
+                ? 'bg-white border-brand-600/40 shadow-sm'
                 : 'bg-white/80 border-stone-200/90 hover:border-stone-300 hover:bg-white'
             }`}
           >
@@ -44,7 +44,7 @@ export function FAQAccordion({ items = [] }: FAQAccordionProps) {
               <div className="flex items-center gap-3">
                 <div
                   className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 transition-colors ${
-                    isOpen ? 'bg-brand-50 text-brand-600' : 'bg-stone-100 text-stone-500'
+                    isOpen ? 'bg-brand-600/10 border border-brand-600/20 text-brand-600' : 'bg-stone-100 text-stone-500'
                   }`}
                 >
                   <HelpCircle className="w-4 h-4" />

@@ -169,7 +169,7 @@ function TestimonialCard({ item }: { item: TestimonialItem }) {
     <div className="bg-white rounded-2xl p-6 sm:p-7 border border-stone-200/90 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-6 h-full select-none">
       {/* Quote Content */}
       <div className="space-y-4 text-left">
-        <div className="w-10 h-10 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-lg bg-brand-600/10 border border-brand-600/20 text-brand-600 flex items-center justify-center">
           <MessageSquareQuote className="w-5 h-5" />
         </div>
         <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed italic line-clamp-4 font-sans">

@@ -121,7 +121,7 @@ export function PackageSearchBar({
                     onClick={() => handleSelect('')}
                     className={`w-full px-3.5 py-2.5 text-left text-xs sm:text-sm flex items-center justify-between transition-colors cursor-pointer ${
                       selectedMonth === ''
-                        ? 'bg-brand-50 text-brand-600 font-bold'
+                        ? 'bg-brand-600/10 text-brand-600 font-bold'
                         : 'text-site-text hover:bg-stone-50 font-medium'
                     }`}
                   >
@@ -141,7 +141,7 @@ export function PackageSearchBar({
                         onClick={() => handleSelect(m.value)}
                         className={`w-full px-3.5 py-2.5 text-left text-xs sm:text-sm flex items-center justify-between transition-colors cursor-pointer ${
                           isSelected
-                            ? 'bg-brand-50 text-brand-600 font-bold'
+                            ? 'bg-brand-600/10 text-brand-600 font-bold'
                             : 'text-site-text hover:bg-stone-50 font-medium'
                         }`}
                       >

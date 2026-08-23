@@ -32,7 +32,7 @@ export function BookingButton({ packageName }: BookingButtonProps) {
               <X className="w-5 h-5" />
             </button>
 
-            <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 mx-auto flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-brand-600/10 border border-brand-600/20 text-brand-600 mx-auto flex items-center justify-center">
               <Info className="w-6 h-6" />
             </div>
 

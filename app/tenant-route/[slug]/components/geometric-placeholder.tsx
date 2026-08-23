@@ -1,6 +1,6 @@
 export function GeometricPlaceholder({ name }: { name?: string }) {
   return (
-    <div className="w-full h-full bg-[#F2EDE4] relative flex items-center justify-center overflow-hidden">
+    <div className="w-full h-full bg-site-bg relative flex items-center justify-center overflow-hidden">
       {/* SVG Geometric Pattern with Brand-500 thin lines */}
       <svg
         className="absolute inset-0 w-full h-full text-brand-500 opacity-20"
