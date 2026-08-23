@@ -47,7 +47,7 @@ export default function LoginPage() {
                   type="email"
                   required
                   placeholder="owner@travel.com"
-                  className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
                 />
               </div>
             </div>
@@ -66,7 +66,7 @@ export default function LoginPage() {
                   type="password"
                   required
                   placeholder="••••••••"
-                  className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
                 />
               </div>
             </div>
@@ -75,7 +75,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPending ? 'Sedang Masuk...' : 'Masuk ke Dashboard'}
               </button>
@@ -87,7 +87,7 @@ export default function LoginPage() {
               Belum memiliki akun travel?{' '}
               <Link
                 href="/register"
-                className="font-medium text-emerald-600 hover:text-emerald-500 underline"
+                className="font-medium text-brand-600 hover:text-brand-500 underline"
               >
                 Daftar sekarang
               </Link>

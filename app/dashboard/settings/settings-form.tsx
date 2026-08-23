@@ -51,7 +51,7 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
               required
               defaultValue={initialData.name}
               placeholder="Contoh: Alhijrah Tour & Travel"
-              className="appearance-none block w-full px-3.5 py-2.5 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-slate-900"
+              className="appearance-none block w-full px-3.5 py-2.5 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm text-slate-900"
             />
           </div>
           {state?.fieldErrors?.name && (
@@ -95,7 +95,7 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
               type="text"
               defaultValue={initialData.phone}
               placeholder="Contoh: 081234567890"
-              className="appearance-none block w-full px-3.5 py-2.5 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-slate-900 font-mono"
+              className="appearance-none block w-full px-3.5 py-2.5 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm text-slate-900 font-mono"
             />
           </div>
           {state?.fieldErrors?.phone && (
@@ -115,7 +115,7 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
               type="text"
               defaultValue={initialData.bankAccount}
               placeholder="Contoh: Bank Syariah Indonesia (BSI) 7123456789 a.n PT Alhijrah Utama"
-              className="appearance-none block w-full px-3.5 py-2.5 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-slate-900"
+              className="appearance-none block w-full px-3.5 py-2.5 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm text-slate-900"
             />
           </div>
           <p className="mt-1 text-xs text-slate-400">
@@ -128,7 +128,7 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
         </button>

@@ -18,10 +18,10 @@ export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegis
 
   if (state?.success) {
     return (
-      <div className="bg-white py-8 px-6 shadow-xl rounded-2xl sm:px-10 border border-emerald-200 text-center">
-        <div className="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-emerald-100 mb-4">
+      <div className="bg-white py-8 px-6 shadow-xl rounded-2xl sm:px-10 border border-brand-500/30 text-center">
+        <div className="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-brand-50 mb-4">
           <svg
-            className="h-8 w-8 text-emerald-600"
+            className="h-8 w-8 text-brand-600"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="2"
@@ -42,7 +42,7 @@ export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegis
         <div className="mt-6 pt-5 border-t border-slate-100">
           <Link
             href="/login"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors w-full"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-lg text-brand-600 bg-brand-50 hover:bg-brand-500/10 transition-colors w-full"
           >
             Kembali ke Halaman Login Agen
           </Link>
@@ -71,7 +71,7 @@ export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegis
               type="text"
               required
               placeholder="Contoh: Fulan bin Fulan"
-              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
             />
           </div>
           {state?.fieldErrors?.name && (
@@ -90,7 +90,7 @@ export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegis
               type="tel"
               required
               placeholder="Contoh: 081234567890"
-              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm font-mono"
+              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm font-mono"
             />
           </div>
           {state?.fieldErrors?.phone && (
@@ -108,7 +108,7 @@ export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegis
               name="email"
               type="email"
               placeholder="agen@email.com"
-              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
             />
           </div>
           {state?.fieldErrors?.email && (
@@ -127,7 +127,7 @@ export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegis
               type="password"
               required
               placeholder="Minimal 8 karakter"
-              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
             />
           </div>
           {state?.fieldErrors?.password && (
@@ -139,7 +139,7 @@ export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegis
           <button
             type="submit"
             disabled={isPending}
-            className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPending ? 'Mendaftarkan...' : 'Daftar Sebagai Agen'}
           </button>
@@ -151,7 +151,7 @@ export default function AgentRegisterForm({ tenantSlug, tenantName }: AgentRegis
           Sudah terdaftar sebagai agen?{' '}
           <Link
             href="/login"
-            className="font-medium text-emerald-600 hover:text-emerald-500 underline"
+            className="font-medium text-brand-600 hover:text-brand-500 underline"
           >
             Login di sini
           </Link>

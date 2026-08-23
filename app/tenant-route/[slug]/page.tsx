@@ -25,7 +25,7 @@ export default async function TenantRecruitmentPage({ params }: TenantPageProps)
       <header className="bg-white border-b border-slate-200/80 sticky top-0 z-10 w-full">
         <div className="max-w-5xl mx-auto px-3.5 sm:px-6 h-16 flex items-center justify-between gap-2">
           <div className="flex items-center space-x-2 min-w-0">
-            <span className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
+            <span className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
               {tenant.name.charAt(0)}
             </span>
             <span className="font-bold text-sm sm:text-lg text-slate-900 truncate max-w-[130px] sm:max-w-xs">
@@ -36,13 +36,13 @@ export default async function TenantRecruitmentPage({ params }: TenantPageProps)
           <div className="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
             <Link
               href="/login"
-              className="text-xs sm:text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors px-1.5 sm:px-2 py-1"
+              className="text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors px-1.5 sm:px-2 py-1"
             >
               Login
             </Link>
             <Link
               href="/register"
-              className="inline-flex items-center justify-center px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors"
+              className="inline-flex items-center justify-center px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg text-white bg-brand-600 hover:bg-brand-500 shadow-sm transition-colors"
             >
               Daftar Agen
             </Link>
@@ -53,15 +53,15 @@ export default async function TenantRecruitmentPage({ params }: TenantPageProps)
       {/* Hero Section */}
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-20 flex flex-col items-center text-center w-full">
         {/* Badge Program */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 mb-6 max-w-full truncate">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-600 border border-brand-500/20 mb-6 max-w-full truncate">
+          <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse shrink-0"></span>
           <span className="truncate">Program Kemitraan — {tenant.name}</span>
         </div>
 
         {/* Headline */}
         <h1 className="text-2xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-snug sm:leading-tight max-w-3xl">
           Raih Berkah & Penghasilan dengan Menjadi{' '}
-          <span className="text-emerald-600">Mitra Agen Syiar Umroh</span>
+          <span className="text-brand-600">Mitra Agen Syiar Umroh</span>
         </h1>
 
         {/* Subtitle */}
@@ -74,7 +74,7 @@ export default async function TenantRecruitmentPage({ params }: TenantPageProps)
         <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
           <Link
             href="/register"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-7 py-3 sm:py-3.5 text-sm sm:text-base font-bold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 shadow-md sm:shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/30 transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-7 py-3 sm:py-3.5 text-sm sm:text-base font-bold rounded-xl text-white bg-brand-600 hover:bg-brand-500 shadow-md sm:shadow-lg shadow-brand-600/20 hover:shadow-brand-600/30 transition-all"
           >
             Daftar Jadi Agen Sekarang &rarr;
           </Link>
@@ -90,8 +90,15 @@ export default async function TenantRecruitmentPage({ params }: TenantPageProps)
         <div className="mt-12 sm:mt-20 grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 text-left w-full">
           {/* Card 1 */}
           <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg mb-3 sm:mb-4">
-              💰
+            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-3 sm:mb-4">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.75"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
             </div>
             <h3 className="text-sm sm:text-base font-bold text-slate-900 mb-1.5 sm:mb-2">Komisi Menarik Per Jamaah</h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -101,8 +108,15 @@ export default async function TenantRecruitmentPage({ params }: TenantPageProps)
 
           {/* Card 2 */}
           <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg mb-3 sm:mb-4">
-              📊
+            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-3 sm:mb-4">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.75"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
             </div>
             <h3 className="text-sm sm:text-base font-bold text-slate-900 mb-1.5 sm:mb-2">Dashboard Pantau Real-Time</h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -112,8 +126,15 @@ export default async function TenantRecruitmentPage({ params }: TenantPageProps)
 
           {/* Card 3 */}
           <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg mb-3 sm:mb-4">
-              🤝
+            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-3 sm:mb-4">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.75"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
             </div>
             <h3 className="text-sm sm:text-base font-bold text-slate-900 mb-1.5 sm:mb-2">Dukungan Travel Resmi</h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -129,7 +150,7 @@ export default async function TenantRecruitmentPage({ params }: TenantPageProps)
           <p>
             &copy; {new Date().getFullYear()}{' '}
             <span className="font-semibold text-slate-700">{tenant.name}</span>. Didukung oleh{' '}
-            <span className="font-semibold text-emerald-700">SyiarLink Platform</span>.
+            <span className="font-semibold text-brand-600">SyiarLink Platform</span>.
           </p>
         </div>
       </footer>

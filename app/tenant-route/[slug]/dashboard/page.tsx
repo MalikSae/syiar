@@ -54,7 +54,7 @@ export default async function AgentDashboardPage({ params }: AgentDashboardPageP
       <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
           <div>
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 mb-2">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-600 border border-brand-500/20 mb-2">
               Mitra Agen — {tenant.name}
             </span>
             <h1 className="text-2xl font-bold text-slate-900">Dashboard Agen</h1>
@@ -69,9 +69,12 @@ export default async function AgentDashboardPage({ params }: AgentDashboardPageP
           </form>
         </div>
 
-        <div className="mt-6 bg-emerald-50/70 rounded-xl p-5 border border-emerald-200/80">
+        <div className="mt-6 bg-brand-50/70 rounded-xl p-5 border border-brand-500/30">
           <p className="text-lg font-medium text-slate-800">
-            Selamat datang, <span className="text-emerald-800 font-semibold">{agent.name}</span> — kode referral kamu: <span className="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-900 font-bold">{agent.referralCode}</span>
+            Selamat datang, <span className="text-brand-600 font-semibold">{agent.name}</span> — kode referral kamu:{' '}
+            <span className="font-mono bg-white px-2 py-0.5 rounded border border-brand-500/40 text-brand-600 font-bold">
+              {agent.referralCode}
+            </span>
           </p>
         </div>
 
@@ -92,7 +95,7 @@ export default async function AgentDashboardPage({ params }: AgentDashboardPageP
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider block mb-1">
               Poin Reward
             </span>
-            <span className="font-semibold text-emerald-700 text-base">{agent.pointsBalance} Poin</span>
+            <span className="font-semibold text-brand-600 text-base">{agent.pointsBalance} Poin</span>
           </div>
           <div className="p-4 bg-slate-50/50 rounded-lg border border-slate-100">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider block mb-1">

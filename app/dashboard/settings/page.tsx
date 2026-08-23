@@ -28,7 +28,7 @@ export default async function TravelSettingsPage() {
           <div className="flex items-center space-x-2 mb-2">
             <Link
               href="/dashboard"
-              className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
+              className="text-xs font-semibold text-brand-600 hover:text-brand-500 transition-colors"
             >
               &larr; Dashboard Travel
             </Link>

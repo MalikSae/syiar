@@ -44,7 +44,7 @@ export default function AgentActionButtons({ agentId, agentName }: AgentActionBu
           type="button"
           onClick={handleApprove}
           disabled={isPending}
-          className="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-md shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-md shadow-sm text-white bg-brand-600 hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-brand-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPending ? 'Memproses...' : 'Approve'}
         </button>
