@@ -4,6 +4,9 @@
   --background: #ffffff;
   --foreground: #171717;
   --site-accent: #F38020;
+  --site-accent-soft: #FAAE40;
+  --site-bg: #F7F3EC;
+  --site-dark: #133433;
 }
 
 @theme inline {
@@ -13,13 +16,13 @@
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-fraunces), Georgia, serif;
   --color-brand-50: #FFF4EC;
-  --color-brand-500: var(--site-accent, #FAAE40);
+  --color-brand-500: var(--site-accent-soft, #FAAE40);
   --color-brand-600: var(--site-accent, #F38020);
   --color-brand: var(--site-accent, #F38020);
-  --color-site-bg: #F7F3EC;
+  --color-site-bg: var(--site-bg, #F7F3EC);
   --color-site-text: #2A2521;
   --color-site-text-muted: #6B6058;
-  --color-site-dark: #133433;
+  --color-site-dark: var(--site-dark, #133433);
 }
 
 @media (prefers-color-scheme: dark) {

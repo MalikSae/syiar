@@ -9,6 +9,7 @@ import { TestimonialsSection, TestimonialItem } from './components/testimonials-
 import { FAQAccordion, FAQItem } from './components/faq-accordion'
 import { getAvailableDepartureMonths, formatIndonesianDate } from '@/lib/package-helpers'
 import { getTravelIconComponent } from '@/lib/travel-icons'
+import { getSitePalette } from '@/lib/color-utils'
 import {
   getDefaultHeroHeadline,
   DEFAULT_HERO_SUBHEADLINE,
@@ -142,10 +143,10 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
       nearestDepartureDate: packageNearestDateMap.get(pkg.id) || null,
     }))
 
-  // 5. Resolusi Dynamic Data Tenant
+  // 5. Resolusi Dynamic Data Tenant & Palet Warna
   const heroHeadline = tenant.heroHeadline || getDefaultHeroHeadline(tenant.name)
   const heroSubheadline = tenant.heroSubheadline || DEFAULT_HERO_SUBHEADLINE
-  const customAccent = tenant.primaryColor || '#F38020'
+  const palette = getSitePalette(tenant.primaryColor)
 
   const features: FeatureItem[] =
     Array.isArray(tenant.features) && tenant.features.length > 0
@@ -167,10 +168,15 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
       className="min-h-screen bg-site-bg text-site-text flex flex-col font-sans selection:bg-brand-500 selection:text-white"
       style={
         {
-          '--site-accent': customAccent,
+          '--site-accent': palette.accent,
+          '--site-accent-soft': palette.accentSoft,
+          '--site-bg': palette.bg,
+          '--site-dark': palette.dark,
           '--color-brand-600': 'var(--site-accent)',
-          '--color-brand-500': 'var(--site-accent)',
+          '--color-brand-500': 'var(--site-accent-soft)',
           '--color-brand': 'var(--site-accent)',
+          '--color-site-bg': 'var(--site-bg)',
+          '--color-site-dark': 'var(--site-dark)',
         } as React.CSSProperties
       }
     >
@@ -191,7 +197,7 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
                 alt=""
                 className="w-full h-full object-cover object-center"
               />
-              <div className="absolute inset-0 bg-[#F7F3EC]/92 backdrop-blur-[2px]" />
+              <div className="absolute inset-0 bg-site-bg/92 backdrop-blur-[2px]" />
             </div>
           )}
 
@@ -400,7 +406,7 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
 
         {/* SECTION FAQ (Hanya Tampil Jika FAQ > 0) */}
         {faqs.length > 0 && (
-          <section className="py-14 sm:py-20 border-t border-stone-200/80 bg-[#F7F3EC]">
+          <section className="py-14 sm:py-20 border-t border-stone-200/80 bg-site-bg">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
               <div className="text-center space-y-2 max-w-2xl mx-auto">
                 <span className="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 border border-brand-200/60 px-3 py-1 rounded-full inline-flex items-center gap-1.5 mx-auto">
@@ -420,14 +426,14 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
           </section>
         )}
 
-        {/* CALL TO ACTION BAND (site-dark #133433) */}
-        <section className="bg-site-dark py-14 sm:py-20 text-white border-t border-teal-900/50">
+        {/* CALL TO ACTION BAND (site-dark) */}
+        <section className="bg-site-dark py-14 sm:py-20 text-white border-t border-white/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <div className="max-w-2xl mx-auto space-y-3">
               <h3 className="font-serif text-2xl sm:text-4xl font-bold tracking-tight text-white">
                 Siap Mewujudkan Niat Suci ke Baitullah?
               </h3>
-              <p className="text-xs sm:text-sm text-teal-100/80 leading-relaxed">
+              <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
                 Daftarkan diri dan keluarga Anda sekarang untuk mendapatkan kepastian jadwal keberangkatan serta bimbingan ibadah yang khusyuk bersama {tenant.name}.
               </p>
             </div>

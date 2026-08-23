@@ -14,7 +14,7 @@ export function TenantNavbar({ tenantName, logoUrl, iconUrl }: TenantNavbarProps
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-40 bg-[#F7F3EC]/90 backdrop-blur-md border-b border-stone-200/80 shadow-xs">
+    <header className="sticky top-0 z-40 bg-site-bg/90 backdrop-blur-md border-b border-stone-200/80 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo / Brand Name */}
@@ -98,7 +98,7 @@ export function TenantNavbar({ tenantName, logoUrl, iconUrl }: TenantNavbarProps
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-stone-200 bg-[#F7F3EC] px-4 pt-3 pb-5 space-y-2 shadow-lg">
+        <div className="md:hidden border-t border-stone-200 bg-site-bg px-4 pt-3 pb-5 space-y-2 shadow-lg">
           <Link
             href="/"
             onClick={() => setMobileMenuOpen(false)}

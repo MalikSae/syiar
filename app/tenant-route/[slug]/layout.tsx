@@ -1,6 +1,7 @@
 import { Fraunces } from 'next/font/google'
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
+import { getSitePalette } from '@/lib/color-utils'
 
 const fraunces = Fraunces({
   variable: '--font-fraunces',
@@ -44,17 +45,22 @@ export default async function TenantLayout({
     select: { primaryColor: true },
   })
 
-  const customAccent = tenant?.primaryColor || '#F38020'
+  const palette = getSitePalette(tenant?.primaryColor)
 
   return (
     <div
       className={`${fraunces.variable} font-sans bg-site-bg text-site-text min-h-screen flex flex-col`}
       style={
         {
-          '--site-accent': customAccent,
+          '--site-accent': palette.accent,
+          '--site-accent-soft': palette.accentSoft,
+          '--site-bg': palette.bg,
+          '--site-dark': palette.dark,
           '--color-brand-600': 'var(--site-accent)',
-          '--color-brand-500': 'var(--site-accent)',
+          '--color-brand-500': 'var(--site-accent-soft)',
           '--color-brand': 'var(--site-accent)',
+          '--color-site-bg': 'var(--site-bg)',
+          '--color-site-dark': 'var(--site-dark)',
         } as React.CSSProperties
       }
     >

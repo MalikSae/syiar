@@ -10,6 +10,7 @@ import {
 } from './actions'
 import { processSquareImage, processLogoImage, processHeroImage } from '@/lib/image-processing'
 import { RepeatableListEditor, ListEditorField } from '@/components/repeatable-list-editor'
+import { getSitePalette } from '@/lib/color-utils'
 import {
   Globe,
   Palette,
@@ -636,25 +637,85 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
             )}
           </div>
 
-          {/* Live Preview Box */}
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <span className="text-xs font-bold text-slate-800 block">
-                Pratinjau Tombol Aksen
-              </span>
-              <p className="text-[11px] text-slate-400 mt-0.5">
-                Tombol dan aksen pada microsite publik akan otomatis mengikuti warna ini.
-              </p>
-            </div>
+          {/* Live Preview Box & Full Palette Derivation */}
+          {(() => {
+            const livePalette = getSitePalette(primaryColor)
+            return (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
+                    Pratinjau Palet Harmonik Microsite
+                  </span>
+                  <span className="text-[11px] text-slate-400">
+                    Otomatis diderivasi secara harmonis
+                  </span>
+                </div>
 
-            <button
-              type="button"
-              style={{ backgroundColor: activeColorHex }}
-              className="px-6 py-2.5 rounded-xl text-white font-bold text-xs sm:text-sm shadow-xs transition-colors cursor-default select-none shrink-0"
-            >
-              Contoh Tombol
-            </button>
-          </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {/* 1. Accent Utama */}
+                  <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-600">Aksen Utama</span>
+                      <span className="font-mono text-[10px] text-slate-400">{livePalette.accent}</span>
+                    </div>
+                    <button
+                      type="button"
+                      style={{ backgroundColor: livePalette.accent }}
+                      className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs transition-transform active:scale-95 cursor-default select-none flex items-center justify-center gap-1.5"
+                    >
+                      <span>Tombol CTA</span>
+                    </button>
+                    <span className="text-[10px] text-slate-400 block text-center">Tombol aksi & highlight</span>
+                  </div>
+
+                  {/* 2. Accent Soft */}
+                  <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-600">Aksen Sekunder</span>
+                      <span className="font-mono text-[10px] text-slate-400">{livePalette.accentSoft}</span>
+                    </div>
+                    <div
+                      style={{ backgroundColor: livePalette.accentSoft }}
+                      className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 select-none"
+                    >
+                      <span>Badge / Tag</span>
+                    </div>
+                    <span className="text-[10px] text-slate-400 block text-center">Hover & elemen aksen soft</span>
+                  </div>
+
+                  {/* 3. Site Background */}
+                  <div
+                    style={{ backgroundColor: livePalette.bg }}
+                    className="p-3.5 rounded-xl border border-stone-300/80 shadow-2xs space-y-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-800">Latar Belakang</span>
+                      <span className="font-mono text-[10px] text-slate-600">{livePalette.bg}</span>
+                    </div>
+                    <div className="bg-white/90 p-2 rounded-lg border border-stone-200 shadow-2xs text-center">
+                      <span className="text-[11px] font-semibold text-slate-800 block">Kartu Konten</span>
+                    </div>
+                    <span className="text-[10px] text-slate-600 block text-center">Background utama halaman</span>
+                  </div>
+
+                  {/* 4. Site Dark */}
+                  <div
+                    style={{ backgroundColor: livePalette.dark }}
+                    className="p-3.5 rounded-xl border border-slate-800 shadow-2xs space-y-2 text-white"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-200">Area Gelap</span>
+                      <span className="font-mono text-[10px] text-slate-400">{livePalette.dark}</span>
+                    </div>
+                    <div className="bg-white/10 p-2 rounded-lg border border-white/15 text-center">
+                      <span className="text-[11px] font-semibold text-white block">Footer / Banner Gelap</span>
+                    </div>
+                    <span className="text-[10px] text-slate-300 block text-center">Section gelap & footer</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
 
           <p className="text-[11px] text-slate-400">
             Nilai <code className="text-slate-600 bg-slate-100 px-1 py-0.5 rounded">null</code> pada database akan otomatis fallback ke warna oranye default (<code className="text-slate-600 bg-slate-100 px-1 py-0.5 rounded">#F38020</code>) di microsite.
