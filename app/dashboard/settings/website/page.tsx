@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { getSession } from '@/lib/auth'
 import { WebsiteForm } from './website-form'
+import { FeatureItem, FaqItem, TestimonialItem } from './actions'
 import { Globe } from 'lucide-react'
 
 export default async function WebsiteSettingsPage() {
@@ -26,6 +27,9 @@ export default async function WebsiteSettingsPage() {
       heroHeadline: true,
       heroSubheadline: true,
       heroBackgroundUrl: true,
+      features: true,
+      faqs: true,
+      testimonials: true,
     },
   })
 
@@ -42,10 +46,10 @@ export default async function WebsiteSettingsPage() {
           <span>Pengaturan Website</span>
         </div>
         <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-          Domain Kustom, Identitas Visual & Hero Banner
+          Website & Identitas Visual
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">
-          Atur nama domain kustom, favicon & logo, warna aksen, serta headline dan gambar banner pembuka microsite Anda.
+          Atur nama domain kustom, favicon & logo, warna aksen, banner hero, poin keunggulan, FAQ, dan testimoni microsite Anda.
         </p>
       </div>
 
@@ -59,6 +63,9 @@ export default async function WebsiteSettingsPage() {
           heroHeadline: tenant.heroHeadline || '',
           heroSubheadline: tenant.heroSubheadline || '',
           heroBackgroundUrl: tenant.heroBackgroundUrl || '',
+          features: Array.isArray(tenant.features) ? (tenant.features as unknown as FeatureItem[]) : [],
+          faqs: Array.isArray(tenant.faqs) ? (tenant.faqs as unknown as FaqItem[]) : [],
+          testimonials: Array.isArray(tenant.testimonials) ? (tenant.testimonials as unknown as TestimonialItem[]) : [],
         }}
       />
     </div>

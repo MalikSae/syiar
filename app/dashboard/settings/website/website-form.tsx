@@ -1,8 +1,15 @@
 'use client'
 
 import { useState, useActionState, useRef, useEffect, startTransition } from 'react'
-import { updateWebsiteSettings, WebsiteFormState } from './actions'
+import {
+  updateWebsiteSettings,
+  WebsiteFormState,
+  FeatureItem,
+  FaqItem,
+  TestimonialItem,
+} from './actions'
 import { processSquareImage, processLogoImage, processHeroImage } from '@/lib/image-processing'
+import { RepeatableListEditor, ListEditorField } from '@/components/repeatable-list-editor'
 import {
   Globe,
   Palette,
@@ -17,6 +24,9 @@ import {
   RotateCcw,
   Sparkles,
   LayoutTemplate,
+  Award,
+  HelpCircle,
+  MessageSquareQuote,
 } from 'lucide-react'
 
 interface WebsiteFormProps {
@@ -28,7 +38,94 @@ interface WebsiteFormProps {
     heroHeadline: string
     heroSubheadline: string
     heroBackgroundUrl: string
+    features: FeatureItem[]
+    faqs: FaqItem[]
+    testimonials: TestimonialItem[]
   }
+}
+
+const FEATURE_FIELDS: ListEditorField[] = [
+  {
+    key: 'icon',
+    label: 'Icon Tema Keunggulan',
+    type: 'icon-picker',
+  },
+  {
+    key: 'title',
+    label: 'Judul Keunggulan',
+    type: 'text',
+    placeholder: 'Contoh: Hotel Bintang 5 Dekat Masjid',
+    maxLength: 40,
+  },
+  {
+    key: 'description',
+    label: 'Deskripsi Singkat',
+    type: 'textarea',
+    placeholder: 'Contoh: Berjarak hanya 50 meter dari pelataran Masjidil Haram untuk kenyamanan ibadah Anda.',
+    maxLength: 120,
+    rows: 2,
+  },
+]
+
+const FAQ_FIELDS: ListEditorField[] = [
+  {
+    key: 'question',
+    label: 'Pertanyaan',
+    type: 'text',
+    placeholder: 'Contoh: Apakah ada bimbingan manasik sebelum keberangkatan?',
+    maxLength: 150,
+  },
+  {
+    key: 'answer',
+    label: 'Jawaban',
+    type: 'textarea',
+    placeholder: 'Contoh: Ya, kami menyediakan bimbingan manasik lengkap tatap muka dan materi digital eksklusif.',
+    maxLength: 800,
+    rows: 3,
+  },
+]
+
+const TESTIMONIAL_FIELDS: ListEditorField[] = [
+  {
+    key: 'name',
+    label: 'Nama Jamaah',
+    type: 'text',
+    placeholder: 'Contoh: H. Agus Sulistyo',
+    maxLength: 60,
+  },
+  {
+    key: 'roleOrLocation',
+    label: 'Peran / Lokasi',
+    type: 'text',
+    placeholder: 'Contoh: Jamaah Umroh Reguler, Jakarta',
+    maxLength: 80,
+  },
+  {
+    key: 'quote',
+    label: 'Kutipan Testimoni',
+    type: 'textarea',
+    placeholder: 'Contoh: Alhamdulillah perjalanan sangat berkesan. Muthawwif ramah, hotel nyaman, dan bimbingan ibadahnya sangat membimbing.',
+    maxLength: 600,
+    rows: 3,
+  },
+]
+
+function ensureFourFeatures(initialFeatures: FeatureItem[] | null | undefined): FeatureItem[] {
+  const defaults: FeatureItem[] = [
+    { icon: 'Building2', title: '', description: '' },
+    { icon: 'Compass', title: '', description: '' },
+    { icon: 'Clock', title: '', description: '' },
+    { icon: 'Shield', title: '', description: '' },
+  ]
+  if (!initialFeatures || !Array.isArray(initialFeatures) || initialFeatures.length === 0) {
+    return defaults
+  }
+  const result = [...initialFeatures]
+  while (result.length < 4) {
+    const defaultItem = defaults[result.length] || { icon: 'Shield', title: '', description: '' }
+    result.push(defaultItem)
+  }
+  return result.slice(0, 4)
 }
 
 export function WebsiteForm({ initialData }: WebsiteFormProps) {
@@ -76,6 +173,13 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
   const [isHeroRemoved, setIsHeroRemoved] = useState<boolean>(false)
   const [isProcessingHero, setIsProcessingHero] = useState<boolean>(false)
   const heroInputRef = useRef<HTMLInputElement>(null)
+
+  // 5. Repeatable Sections State (Features WAJIB 4, FAQs, Testimonials)
+  const [features, setFeatures] = useState<FeatureItem[]>(() =>
+    ensureFourFeatures(initialData.features)
+  )
+  const [faqs, setFaqs] = useState<FaqItem[]>(initialData.faqs || [])
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(initialData.testimonials || [])
 
   const [fileError, setFileError] = useState<string | null>(null)
 
@@ -212,6 +316,11 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
     if (isHeroRemoved) {
       formData.set('removeHeroBackground', 'true')
     }
+
+    // Repeatable Sections (Features, FAQs, Testimonials)
+    formData.set('features', JSON.stringify(features))
+    formData.set('faqs', JSON.stringify(faqs))
+    formData.set('testimonials', JSON.stringify(testimonials))
 
     startTransition(() => {
       formAction(formData)
@@ -705,27 +814,135 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
             </p>
           </div>
         </div>
+      </div>
 
-        {/* Footer Aksi */}
-        <div className="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
-          <button
-            type="submit"
-            disabled={isPending}
-            className="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-sm flex items-center gap-2 cursor-pointer"
-          >
-            {isPending ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Menyimpan...</span>
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4" />
-                <span>Simpan Pengaturan Website</span>
-              </>
-            )}
-          </button>
+      {/* SECTION 5: Keunggulan Travel (features, WAJIB TEPAT 4) */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+        <div className="p-6 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+              <Award className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-slate-900">Keunggulan & Nilai Lebih Travel</h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Wajib 4 poin keunggulan utama travel Anda (mis. hotel dekat masjid, pembimbing sunnah, kepastian jadwal). Keempat slot wajib diisi lengkap.
+              </p>
+            </div>
+          </div>
         </div>
+
+        <div className="p-6">
+          <RepeatableListEditor<FeatureItem>
+            items={features}
+            fields={FEATURE_FIELDS}
+            onChange={setFeatures}
+            maxItems={4}
+            minItems={4}
+            addButtonLabel="Tambah Keunggulan"
+            emptyMessage="Keunggulan wajib memiliki tepat 4 slot."
+            itemTitlePrefix="Keunggulan"
+            idPrefix="features"
+          />
+        </div>
+      </div>
+
+      {/* SECTION 6: FAQ (Pertanyaan yang Sering Diajukan, MIN 0, MAX 15) */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+        <div className="p-6 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+              <HelpCircle className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-slate-900">Pertanyaan yang Sering Diajukan (FAQ)</h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Daftar tanya jawab umum untuk membantu calon jamaah memahami syarat pendaftaran, dokumen, dan fasilitas perjalanan.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6">
+          <RepeatableListEditor<FaqItem>
+            items={faqs}
+            fields={FAQ_FIELDS}
+            onChange={setFaqs}
+            maxItems={15}
+            minItems={0}
+            addButtonLabel="Tambah FAQ"
+            emptyMessage="Belum ada daftar FAQ yang ditambahkan. Tambahkan FAQ untuk memudahkan calon jamaah menemukan jawaban cepat."
+            itemTitlePrefix="FAQ"
+            idPrefix="faqs"
+          />
+        </div>
+      </div>
+
+      {/* SECTION 7: Testimoni Jamaah (MIN 0, MAX 12) */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+        <div className="p-6 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+              <MessageSquareQuote className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-slate-900">Testimoni Jamaah</h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Kutipan pengalaman langsung dari jamaah yang telah berangkat bersama travel Anda.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-4">
+          {/* Informational Nudge Text */}
+          <div className="p-3.5 bg-blue-50/80 rounded-xl border border-blue-200/70 text-xs text-blue-900 flex items-start gap-2.5">
+            <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+            <p className="leading-relaxed">
+              Sebaiknya gunakan testimoni asli dari jamaah yang pernah berangkat bersama travel kamu — ini yang akan dilihat calon jamaah lain sebagai bahan pertimbangan.
+            </p>
+          </div>
+
+          <RepeatableListEditor<TestimonialItem>
+            items={testimonials}
+            fields={TESTIMONIAL_FIELDS}
+            onChange={setTestimonials}
+            maxItems={12}
+            minItems={0}
+            addButtonLabel="Tambah Testimoni"
+            emptyMessage="Belum ada testimoni jamaah. Tambahkan testimoni untuk membangun kepercayaan calon jamaah."
+            itemTitlePrefix="Testimoni"
+            idPrefix="testimonials"
+          />
+        </div>
+      </div>
+
+      {/* Sticky Save Action Card / Footer */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 className="text-sm font-bold text-slate-900">Simpan Seluruh Pengaturan Website</h3>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Menyimpan domain, identitas visual, warna, hero banner, keunggulan, FAQ, dan testimoni sekaligus.
+          </p>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isPending}
+          className="px-6 py-3 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer shrink-0"
+        >
+          {isPending ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>Menyimpan Semua Data...</span>
+            </>
+          ) : (
+            <>
+              <Save className="w-4 h-4" />
+              <span>Simpan Pengaturan Website</span>
+            </>
+          )}
+        </button>
       </div>
     </form>
   )
