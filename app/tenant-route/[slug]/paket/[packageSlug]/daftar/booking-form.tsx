@@ -11,7 +11,7 @@ import {
   Mail,
   BedDouble,
   Calendar,
-  Ticket,
+  UserCheck,
   AlertCircle,
   Loader2,
   ArrowLeft,
@@ -21,7 +21,6 @@ import {
   ChevronDown,
   Check,
   Lock,
-  Tag,
 } from 'lucide-react'
 
 interface DepartureOption {
@@ -434,14 +433,14 @@ export function BookingForm({
               onClick={() => setShowReferralInput(true)}
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-700 transition-colors cursor-pointer"
             >
-              <Tag className="w-3.5 h-3.5" />
+              <UserCheck className="w-3.5 h-3.5" />
               <span>Punya kode referral agen?</span>
             </button>
           ) : (
             <div className="space-y-2 animate-in fade-in duration-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Ticket className="w-4 h-4 text-brand-600" />
+                  <UserCheck className="w-4 h-4 text-brand-600" />
                   <h3 className="font-jakarta text-sm font-bold text-site-text">
                     Kode Referral Agen
                   </h3>
