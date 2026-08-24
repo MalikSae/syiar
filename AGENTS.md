@@ -100,6 +100,7 @@ Aturan keras:
 ## 7. Prinsip Kerja untuk Setiap Task (ikuti pola dari skill Antigravity)
 
 - **Batasi scope eksplisit** tiap prompt — kerjakan HANYA yang diminta, jangan sekalian "improve" bagian lain
+- **Laporkan SEMUA file yang disentuh di luar scope yang diminta di LAPORAN AWAL, sekecil apa pun** (mis. fix TypeScript error di file lain yang ditemukan pas tsc check, dst) — JANGAN tunggu ditanya eksplisit baru diungkap. Sebutkan file-nya, isi perubahannya, dan alasannya, meskipun perubahannya cuma satu baris.
 - **Gate & validasi ditulis eksplisit** di kode (`abort`/`throw` dengan kondisi jelas), jangan cuma dijelaskan sebagai maksud
 - **Verifikasi bertahap** — test satu-satu, stop dan laporkan kalau ada yang gagal, jangan lanjut ke langkah berikutnya sebelum yang sebelumnya beres
 - **Bug fix**: investigasi dulu, laporkan root cause, baru fix — jangan langsung tembak solusi
