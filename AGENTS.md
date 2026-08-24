@@ -147,6 +147,14 @@ Kalau terlanjur ke-block dan skema database sudah kadung berubah lewat cara lain
 
 SETIAP form yang menampilkan pesan sukses/error setelah submit (Server Action, useTransition, dst) WAJIB auto-scroll ke posisi paling atas begitu hasil submit diketahui (sukses ATAU gagal) — supaya user langsung lihat feedback-nya, tidak perlu scroll manual ke atas sendiri. Berlaku untuk SEMUA form di project ini, existing maupun baru. Kalau menyentuh form yang belum punya perilaku ini, tambahkan saat itu juga meski tidak diminta eksplisit di task tersebut.
 
+## 8f. Mutasi Data Langsung ke Database Lewat Script — WAJIB Dilaporkan & Dibersihkan
+
+Kalau task verifikasi memerlukan data test dibuat/diubah langsung lewat script (bukan lewat Server Action aplikasi sebenarnya) — terutama kalau itu mengubah data TENANT YANG SUDAH ADA dan dipakai berulang sebagai acuan (contoh: Alhijrah):
+
+1. WAJIB dilaporkan eksplisit di laporan awal, disamakan levelnya dengan "file di luar scope" — sebutkan data apa yang dimutasi, nilai sebelum & sesudah, dan alasan kenapa perlu mutasi manual.
+2. Kalau mutasi itu cuma buat kebutuhan SEMENTARA verifikasi (bukan perubahan permanen yang diminta) — data WAJIB dikembalikan ke kondisi semula setelah verifikasi selesai. JANGAN dibiarkan menggantung dalam kondisi "tercemar" sampai ketahuan tidak sengaja di task lain nanti.
+3. Kalau butuh tenant/entity BARU untuk verifikasi (bukan mengubah yang existing) — utamakan dibuat lewat ALUR APLIKASI SEBENARNYA (mis. lewat /register), bukan raw prisma.create() langsung, supaya entity itu punya semua data pendamping yang seharusnya ada (TravelUser, seed default, dst) — kecuali memang tidak relevan untuk task yang sedang diverifikasi, dan itu pun harus disebutkan eksplisit ("tenant ini sengaja parsial, tidak ada TravelUser").
+
 ## 9. Command Umum
 
 ```bash
