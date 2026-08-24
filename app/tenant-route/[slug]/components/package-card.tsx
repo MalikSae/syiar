@@ -32,7 +32,10 @@ export function PackageCard({ pkg }: PackageCardProps) {
       : pkg.hotelMakkah || pkg.hotelMadinah || '-'
 
   return (
-    <div className="group bg-white rounded-xl sm:rounded-2xl border border-stone-200/90 hover:border-brand-600/40 shadow-xs hover:shadow-lg hover:shadow-brand-500/5 transition-all duration-300 flex flex-row sm:flex-col overflow-hidden">
+    <Link
+      href={`/paket/${pkg.slug}`}
+      className="group bg-white rounded-xl sm:rounded-2xl border border-stone-200/90 hover:border-brand-600/40 shadow-xs hover:shadow-lg hover:shadow-brand-500/5 transition-all duration-300 flex flex-row sm:flex-col overflow-hidden cursor-pointer"
+    >
       {/* Thumbnail Section (1:1 Ratio — Kiri di Mobile, Atas di Desktop) */}
       <div className="w-[125px] xs:w-[140px] sm:w-full shrink-0 aspect-square relative bg-stone-100 overflow-hidden">
         {pkg.featuredImageUrl ? (
@@ -89,15 +92,12 @@ export function PackageCard({ pkg }: PackageCardProps) {
             </span>
           </div>
 
-          <Link
-            href={`/paket/${pkg.slug}`}
-            className="inline-flex items-center justify-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-site-dark hover:bg-brand-600 text-white text-[11px] sm:text-xs font-bold rounded-lg transition-all shadow-xs group-hover:bg-brand-600 shrink-0"
-          >
-            <span>Lihat Detail</span>
-            <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-          </Link>
+          <div className="w-7 h-7 xs:w-8 xs:h-8 sm:w-auto sm:h-auto sm:px-4 sm:py-2 bg-site-dark group-hover:bg-brand-600 text-white text-xs font-bold rounded-lg transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0">
+            <span className="hidden sm:inline">Lihat Detail</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
