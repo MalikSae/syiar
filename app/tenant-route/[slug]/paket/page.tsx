@@ -170,7 +170,7 @@ export default async function PackageListPage({ params, searchParams }: PackageL
           <div className="absolute inset-0 bg-gradient-to-b from-site-dark/85 via-site-dark/75 to-site-dark/95" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10 sm:pt-12 sm:pb-14 space-y-3 text-left">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-14 sm:pt-12 sm:pb-20 space-y-3 text-left">
           {/* Page Title & Breadcrumb */}
           <div className="flex items-center gap-2 text-xs font-semibold text-white/70">
             <Link href="/" className="hover:text-white transition-colors">
@@ -191,13 +191,13 @@ export default async function PackageListPage({ params, searchParams }: PackageL
         </div>
       </section>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
-        {/* Search & Filter Bar (Full Width) */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 space-y-8 relative z-20">
+        {/* Search & Filter Bar (Full Width Overlapping Header) */}
         <PackageSearchBar
           months={availableMonths}
           initialQuery={q}
           initialMonth={month}
-          className="shadow-lg border-stone-200/90"
+          className="-mt-9 sm:-mt-14 shadow-xl border-stone-200"
         />
 
         {/* Filter Indicator / Active Tags */}
