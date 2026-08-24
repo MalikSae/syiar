@@ -127,10 +127,30 @@ export default async function PackageListPage({ params, searchParams }: PackageL
     nearestDepartureDate: packageNearestDateMap.get(pkg.id) || null,
   }))
 
+  const siteAccent = tenant.primaryColor ?? '#F38020'
+  const siteAccentSoft = tenant.secondaryColor ?? '#FAAE40'
+  const siteBg = tenant.backgroundColor ?? '#F7F3EC'
+  const siteDark = tenant.darkColor ?? '#133433'
+
   const isFiltered = Boolean(q.trim() || month)
 
   return (
-    <div className="min-h-screen bg-site-bg text-site-text flex flex-col font-inter selection:bg-brand-500 selection:text-white">
+    <div
+      className="min-h-screen bg-site-bg text-site-text flex flex-col font-inter selection:bg-brand-500 selection:text-white"
+      style={
+        {
+          '--site-accent': siteAccent,
+          '--site-accent-soft': siteAccentSoft,
+          '--site-bg': siteBg,
+          '--site-dark': siteDark,
+          '--color-brand-600': 'var(--site-accent)',
+          '--color-brand-500': 'var(--site-accent-soft)',
+          '--color-brand': 'var(--site-accent)',
+          '--color-site-bg': 'var(--site-bg)',
+          '--color-site-dark': 'var(--site-dark)',
+        } as React.CSSProperties
+      }
+    >
       {/* Header Navigation */}
       <TenantNavbar
         tenantName={tenant.name}
@@ -138,29 +158,46 @@ export default async function PackageListPage({ params, searchParams }: PackageL
         iconUrl={tenant.iconUrl}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-        {/* Page Title & Breadcrumb */}
-        <div className="space-y-2 text-left">
-          <div className="flex items-center gap-2 text-xs font-semibold text-site-text-muted">
-            <Link href="/" className="hover:text-brand-600 transition-colors">
-              Beranda
-            </Link>
-            <span>/</span>
-            <span className="text-site-text font-bold">Paket Umroh</span>
-          </div>
-          <h1 className="font-jakarta text-2xl sm:text-4xl font-bold text-site-text tracking-tight">
-            Pilihan Paket Umroh — {tenant.name}
-          </h1>
-          <p className="text-xs sm:text-sm text-site-text-muted max-w-2xl leading-relaxed">
-            Temukan berbagai pilihan paket ibadah umroh terbaik dengan jadwal keberangkatan terencana dan fasilitas unggulan.
-          </p>
+      {/* Header Page Section with Background Image & Dark Transparent Overlay */}
+      <section className="relative overflow-hidden bg-site-dark text-white">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img
+            src="/header-page.png"
+            alt=""
+            className="w-full h-full object-cover object-center opacity-65"
+          />
+          {/* Dark transparent gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-site-dark/85 via-site-dark/75 to-site-dark/95" />
         </div>
 
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10 sm:pt-12 sm:pb-14 space-y-3 text-left">
+          {/* Page Title & Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs font-semibold text-white/70">
+            <Link href="/" className="hover:text-white transition-colors">
+              Beranda
+            </Link>
+            <span className="text-white/40">/</span>
+            <span className="text-white font-bold">Paket Umroh</span>
+          </div>
+
+          <div className="space-y-1.5">
+            <h1 className="font-jakarta text-2xl sm:text-4xl font-bold text-white tracking-tight">
+              Pilihan Paket Umroh — {tenant.name}
+            </h1>
+            <p className="text-xs sm:text-sm text-white/80 max-w-2xl leading-relaxed">
+              Temukan berbagai pilihan paket ibadah umroh terbaik dengan jadwal keberangkatan terencana dan fasilitas unggulan.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
         {/* Search & Filter Bar (Full Width) */}
         <PackageSearchBar
           months={availableMonths}
           initialQuery={q}
           initialMonth={month}
+          className="shadow-lg border-stone-200/90"
         />
 
         {/* Filter Indicator / Active Tags */}
