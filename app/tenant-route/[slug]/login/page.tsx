@@ -19,7 +19,7 @@ export default async function AgentLoginPage({ params }: AgentLoginPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-600/10 via-slate-50 to-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-brand-600/10 via-slate-50 to-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-inter">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-600/10 text-brand-600 border border-brand-600/30 mb-3">
           Portal Agen Resmi

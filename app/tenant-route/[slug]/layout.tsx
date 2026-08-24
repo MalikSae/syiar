@@ -1,10 +1,15 @@
-import { Fraunces } from 'next/font/google'
+import { Plus_Jakarta_Sans, Inter } from 'next/font/google'
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
-import { getSitePalette } from '@/lib/color-utils'
 
-const fraunces = Fraunces({
-  variable: '--font-fraunces',
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: '--font-jakarta',
+  subsets: ['latin'],
+  display: 'swap',
+})
+
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
   display: 'swap',
 })
@@ -42,20 +47,29 @@ export default async function TenantLayout({
   const { slug } = await params
   const tenant = await prisma.tenant.findUnique({
     where: { slug },
-    select: { primaryColor: true },
+    select: {
+      primaryColor: true,
+      secondaryColor: true,
+      backgroundColor: true,
+      darkColor: true,
+    },
   })
 
-  const palette = getSitePalette(tenant?.primaryColor)
+  const siteAccent = tenant?.primaryColor ?? '#F38020'
+  const siteAccentSoft = tenant?.secondaryColor ?? '#FAAE40'
+  const siteBg = tenant?.backgroundColor ?? '#F7F3EC'
+  const siteDark = tenant?.darkColor ?? '#133433'
 
   return (
     <div
-      className={`${fraunces.variable} font-sans bg-site-bg text-site-text min-h-screen flex flex-col`}
+      className={`${plusJakartaSans.variable} ${inter.variable} font-inter bg-site-bg text-site-text min-h-screen flex flex-col`}
       style={
         {
-          '--site-accent': palette.accent,
-          '--site-accent-soft': palette.accentSoft,
-          '--site-bg': palette.bg,
-          '--site-dark': palette.dark,
+          fontFamily: 'var(--font-inter), sans-serif',
+          '--site-accent': siteAccent,
+          '--site-accent-soft': siteAccentSoft,
+          '--site-bg': siteBg,
+          '--site-dark': siteDark,
           '--color-brand-600': 'var(--site-accent)',
           '--color-brand-500': 'var(--site-accent-soft)',
           '--color-brand': 'var(--site-accent)',

@@ -38,12 +38,16 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h1 className="text-center text-3xl font-extrabold text-slate-900 tracking-tight">
-          SyiarLink
-        </h1>
-        <h2 className="mt-2 text-center text-xl font-medium text-slate-600">
-          Daftarkan Travel Umroh Anda
+      <div className="sm:mx-auto sm:w-full sm:max-w-md flex flex-col items-center">
+        <Link href="/" className="inline-block mb-4">
+          <img
+            src="/syiarlink-logo.png"
+            alt="SyiarLink"
+            className="h-11 sm:h-12 w-auto object-contain mx-auto"
+          />
+        </Link>
+        <h2 className="text-center text-xl font-medium text-slate-600">
+          Daftarkan Travel Umroh
         </h2>
         <p className="mt-1 text-center text-sm text-slate-500">
           Kelola jaringan agen & afiliasi umroh dalam satu platform terpadu

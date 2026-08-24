@@ -222,14 +222,21 @@ export async function updateWebsiteSettings(
       .trim()
   }
 
-  // 5. Ekstrak Data Section 3: Warna Aksen
-  const rawPrimaryColor = (formData.get('primaryColor') as string)?.trim() || ''
-  let primaryColor: string | null = null
-  if (rawPrimaryColor && rawPrimaryColor !== 'default') {
-    if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(rawPrimaryColor)) {
-      primaryColor = rawPrimaryColor.toUpperCase()
+  // 5. Ekstrak Data Section 3: Skema Warna Brand (4 Warna Independen)
+  const parseColor = (raw: unknown): string | null => {
+    if (typeof raw !== 'string') return null
+    const trimmed = raw.trim()
+    if (!trimmed || trimmed === 'default') return null
+    if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(trimmed)) {
+      return trimmed.toUpperCase()
     }
+    return null
   }
+
+  const primaryColor = parseColor(formData.get('primaryColor'))
+  const secondaryColor = parseColor(formData.get('secondaryColor'))
+  const backgroundColor = parseColor(formData.get('backgroundColor'))
+  const darkColor = parseColor(formData.get('darkColor'))
 
   // 6. Ekstrak Data Section 2: Icon & Logo
   const removeIcon = formData.get('removeIcon') === 'true'
@@ -308,6 +315,9 @@ export async function updateWebsiteSettings(
       data: {
         customDomain,
         primaryColor,
+        secondaryColor,
+        backgroundColor,
+        darkColor,
         iconUrl: nextIconUrl,
         logoUrl: nextLogoUrl,
         heroHeadline,

@@ -5,7 +5,9 @@ import { TenantNavbar } from '../../components/tenant-navbar'
 import { TenantFooter } from '../../components/tenant-footer'
 import { BookingButton } from '../../components/booking-button'
 import { GeometricPlaceholder } from '../../components/geometric-placeholder'
-import { formatRupiah, formatIndonesianDate, getLowestPrice } from '@/lib/package-helpers'
+import { DepartureChips } from '../../components/departure-chips'
+import { MobileStickyBooking } from '../../components/mobile-sticky-booking'
+import { formatRupiah, getLowestPrice } from '@/lib/package-helpers'
 import {
   Clock,
   Plane,
@@ -13,7 +15,6 @@ import {
   CheckCircle2,
   XCircle,
   Calendar,
-  CalendarOff,
   ArrowLeft,
   MapPin,
 } from 'lucide-react'
@@ -99,7 +100,7 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
   const excludeItems = parseList(pkg.exclude)
 
   return (
-    <div className="min-h-screen bg-site-bg text-site-text flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+    <div className="min-h-screen bg-site-bg text-site-text flex flex-col font-inter selection:bg-brand-500 selection:text-white">
       {/* Header Navigation */}
       <TenantNavbar
         tenantName={tenant.name}
@@ -108,199 +109,168 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-        {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 text-xs font-semibold text-site-text-muted text-left">
-          <Link href="/" className="hover:text-brand-600 transition-colors">
+        {/* Breadcrumb Navigation (Single Line) */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 sm:gap-2 text-xs font-semibold text-site-text-muted text-left min-w-0 overflow-hidden whitespace-nowrap">
+          <Link href="/" className="hover:text-brand-600 transition-colors shrink-0">
             Beranda
           </Link>
-          <span>/</span>
-          <Link href="/paket" className="hover:text-brand-600 transition-colors">
+          <span className="text-stone-300 shrink-0">/</span>
+          <Link href="/paket" className="hover:text-brand-600 transition-colors shrink-0">
             Paket Umroh
           </Link>
-          <span>/</span>
-          <span className="text-site-text font-bold truncate max-w-xs">{pkg.name}</span>
-        </div>
-
-        {/* Top Header Card */}
-        <div className="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-xs space-y-4 text-left">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-600/10 border border-brand-600/30 text-xs font-bold text-brand-600">
-              <Clock className="w-3.5 h-3.5 text-brand-500" />
-              <span>{pkg.duration}</span>
-            </div>
-            <span className="text-xs font-semibold text-site-text-muted">
-              Diselenggarakan oleh <strong className="text-site-text font-bold">{tenant.name}</strong>
-            </span>
-          </div>
-
-          <h1 className="font-serif text-2xl sm:text-4xl font-bold text-site-text tracking-tight leading-tight">
+          <span className="text-stone-300 shrink-0">/</span>
+          <span className="text-site-text font-bold truncate min-w-0">
             {pkg.name}
-          </h1>
+          </span>
+        </nav>
 
-          {/* Quick Facility Strip */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-stone-100">
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-stone-50 border border-stone-200/70 text-xs">
-              <div className="w-8 h-8 rounded-lg bg-white shadow-2xs flex items-center justify-center text-brand-500 shrink-0">
-                <Plane className="w-4 h-4" />
-              </div>
-              <div className="min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block">
-                  Maskapai Penerbangan
-                </span>
-                <span className="font-bold text-site-text truncate block">{pkg.airline}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-stone-50 border border-stone-200/70 text-xs">
-              <div className="w-8 h-8 rounded-lg bg-white shadow-2xs flex items-center justify-center text-brand-500 shrink-0">
-                <Building className="w-4 h-4" />
-              </div>
-              <div className="min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block">
-                  Hotel Makkah
-                </span>
-                <span className="font-bold text-site-text truncate block">{pkg.hotelMakkah}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-stone-50 border border-stone-200/70 text-xs">
-              <div className="w-8 h-8 rounded-lg bg-white shadow-2xs flex items-center justify-center text-brand-500 shrink-0">
-                <Building className="w-4 h-4" />
-              </div>
-              <div className="min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block">
-                  Hotel Madinah
-                </span>
-                <span className="font-bold text-site-text truncate block">{pkg.hotelMadinah}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 2-Column Main Content & Pricing Layout */}
+        {/* 2-Column Main Content & Pricing Layout (Left column first on mobile, sticky on desktop) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start text-left">
-          {/* Left Column (Details, Facilities, Itinerary) */}
-          <div className="lg:col-span-8 space-y-8">
-            {/* Featured Image */}
-            {pkg.featuredImageUrl ? (
-              <div className="rounded-2xl overflow-hidden border border-stone-200/80 shadow-xs bg-stone-100 aspect-16/9">
-                <img
-                  src={pkg.featuredImageUrl}
-                  alt={pkg.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ) : (
-              <div className="rounded-2xl overflow-hidden border border-stone-200/80 shadow-xs aspect-16/8 relative">
-                <GeometricPlaceholder name={pkg.name} />
-              </div>
-            )}
-
-            {/* Jadwal Keberangkatan */}
-            <div className="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-xs space-y-4">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-stone-100">
-                <Calendar className="w-5 h-5 text-brand-500" />
-                <h2 className="font-serif text-lg sm:text-xl font-bold text-site-text">
-                  Jadwal Keberangkatan
-                </h2>
-              </div>
-
-              {departures.length === 0 ? (
-                <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-50/70 border border-amber-200/60 text-amber-800 text-xs sm:text-sm">
-                  <CalendarOff className="w-5 h-5 text-amber-600 shrink-0" />
-                  <p className="font-medium">
-                    Jadwal keberangkatan akan segera diumumkan. Hubungi customer service untuk informasi estimasi kuota.
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {departures.map((dep) => (
-                    <div
-                      key={dep.id}
-                      className="p-4 rounded-xl bg-stone-50 border border-stone-200 flex items-center gap-3 hover:bg-brand-600/10 hover:border-brand-600/30 transition-colors"
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-white text-brand-600 shadow-2xs flex items-center justify-center font-bold text-xs shrink-0">
-                        <Calendar className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block">
-                          Tanggal Berangkat
-                        </span>
-                        <span className="text-xs sm:text-sm font-bold text-site-text block">
-                          {formatIndonesianDate(dep.date, { includeWeekday: true })}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Fasilitas Termasuk & Tidak Termasuk */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Include */}
-              <div className="bg-white rounded-2xl border border-stone-200/90 p-6 shadow-xs space-y-4">
-                <div className="flex items-center gap-2 pb-3 border-b border-stone-100">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                  <h3 className="font-serif text-base font-bold text-site-text">Sudah Termasuk</h3>
-                </div>
-                <ul className="space-y-2.5 text-xs text-site-text">
-                  {includeItems.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span className="leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Exclude */}
-              <div className="bg-white rounded-2xl border border-stone-200/90 p-6 shadow-xs space-y-4">
-                <div className="flex items-center gap-2 pb-3 border-b border-stone-100">
-                  <XCircle className="w-5 h-5 text-rose-500" />
-                  <h3 className="font-serif text-base font-bold text-site-text">Belum Termasuk</h3>
-                </div>
-                <ul className="space-y-2.5 text-xs text-site-text">
-                  {excludeItems.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5">
-                      <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                      <span className="leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+          {/* Left Column: Details, Facilities, Itinerary (Seamless Cardless Style) */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Featured Image — Seamless (16:9 Aspect Ratio) */}
+            <div className="w-full select-none">
+              <div className="w-full aspect-16/9 rounded-2xl overflow-hidden border border-stone-200/80 bg-stone-100 shadow-2xs relative">
+                {pkg.featuredImageUrl ? (
+                  <img
+                    src={pkg.featuredImageUrl}
+                    alt={pkg.name}
+                    className="w-full h-full object-cover pointer-events-none"
+                  />
+                ) : (
+                  <GeometricPlaceholder name={pkg.name} />
+                )}
               </div>
             </div>
 
-            {/* Rencana Perjalanan (Itinerary) */}
-            <div className="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-xs space-y-4">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-stone-100">
-                <MapPin className="w-5 h-5 text-brand-500" />
-                <h2 className="font-serif text-lg sm:text-xl font-bold text-site-text">
+            {/* Header Info (Judul Paket & Fasilitas Utama — Seamless) */}
+            <div className="space-y-3.5 text-left">
+              <div className="flex flex-wrap items-center justify-between gap-2.5">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-600/10 border border-brand-600/30 text-xs font-bold text-brand-600">
+                  <Clock className="w-3.5 h-3.5 text-brand-500" />
+                  <span>{pkg.duration}</span>
+                </div>
+                <span className="text-xs font-semibold text-site-text-muted">
+                  Diselenggarakan oleh <strong className="text-site-text font-bold">{tenant.name}</strong>
+                </span>
+              </div>
+
+              <h1 className="font-jakarta text-2xl sm:text-3xl font-bold text-site-text tracking-tight leading-snug">
+                {pkg.name}
+              </h1>
+
+              {/* Quick Facility Strip — Compact & Clean */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
+                <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-stone-50/80 border border-stone-200/70 text-xs">
+                  <div className="w-7 h-7 rounded-lg bg-white shadow-2xs flex items-center justify-center text-brand-500 shrink-0">
+                    <Plane className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-site-text-muted block">
+                      Maskapai Penerbangan
+                    </span>
+                    <span className="font-bold text-site-text truncate block">{pkg.airline}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-stone-50/80 border border-stone-200/70 text-xs">
+                  <div className="w-7 h-7 rounded-lg bg-white shadow-2xs flex items-center justify-center text-brand-500 shrink-0">
+                    <Building className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-site-text-muted block">
+                      Hotel Makkah
+                    </span>
+                    <span className="font-bold text-site-text truncate block">{pkg.hotelMakkah}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-stone-50/80 border border-stone-200/70 text-xs">
+                  <div className="w-7 h-7 rounded-lg bg-white shadow-2xs flex items-center justify-center text-brand-500 shrink-0">
+                    <Building className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-site-text-muted block">
+                      Hotel Madinah
+                    </span>
+                    <span className="font-bold text-site-text truncate block">{pkg.hotelMadinah}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Fasilitas Termasuk & Tidak Termasuk — Seamless 2-Column with Thin Divider */}
+            <div className="pt-6 border-t border-stone-200/80">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* Include */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 pb-2 border-b border-stone-100">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <h2 className="font-jakarta text-sm sm:text-base font-bold text-site-text">
+                      Sudah Termasuk
+                    </h2>
+                  </div>
+                  <ul className="space-y-2 text-xs text-site-text">
+                    {includeItems.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                        <span className="leading-relaxed">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Exclude */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 pb-2 border-b border-stone-100">
+                    <XCircle className="w-4 h-4 text-rose-500" />
+                    <h2 className="font-jakarta text-sm sm:text-base font-bold text-site-text">
+                      Belum Termasuk
+                    </h2>
+                  </div>
+                  <ul className="space-y-2 text-xs text-site-text">
+                    {excludeItems.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <XCircle className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
+                        <span className="leading-relaxed">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Rencana Perjalanan (Itinerary — Seamless with Thin Divider) */}
+            <div className="pt-6 border-t border-stone-200/80 space-y-3">
+              <div className="flex items-center gap-2 pb-2 border-b border-stone-100">
+                <MapPin className="w-4 h-4 text-brand-500" />
+                <h2 className="font-jakarta text-sm sm:text-base font-bold text-site-text">
                   Rencana Perjalanan (Itinerary)
                 </h2>
               </div>
-              <div className="prose prose-stone max-w-none text-xs sm:text-sm text-site-text leading-relaxed whitespace-pre-line font-sans">
+              <div className="prose prose-stone max-w-none text-xs sm:text-sm text-site-text leading-relaxed whitespace-pre-line font-inter">
                 {pkg.itinerary}
               </div>
             </div>
           </div>
 
-          {/* Right Column (Sticky Pricing Card & Booking CTA) */}
+          {/* Right Column: Card Harga + Jadwal Keberangkatan */}
           <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
-            <div className="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-xs space-y-6">
+            <div id="pricing-card" className="bg-white rounded-2xl border-2 border-brand-600 p-6 sm:p-7 shadow-xs space-y-5">
+              {/* 1. Heading Harga */}
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block mb-1">
                   Pilihan Tipe Kamar & Harga
                 </span>
-                <h3 className="font-serif text-xl font-bold text-site-text">
-                  {lowestPrice ? `Mulai ${formatRupiah(lowestPrice)}` : 'Daftar Harga'}
+                <h3 className="font-jakarta text-xl font-bold text-site-text">
+                  {lowestPrice ? `Mulai dari ${formatRupiah(lowestPrice)}` : 'Daftar Harga'}
                 </h3>
               </div>
 
-              {/* Room Type Price List (skip nulls) */}
-              <div className="space-y-3 pt-2 border-t border-stone-100">
+              {/* 2. Room Type Price List (skip nulls) */}
+              <div className="space-y-2.5 pt-2 border-t border-stone-100">
                 {pkg.priceQuad && pkg.priceQuad > 0 && (
-                  <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
+                  <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
                     <div>
                       <span className="text-xs font-bold text-site-text block">Kamar Quad</span>
                       <span className="text-[11px] text-site-text-muted">4 orang per kamar</span>
@@ -312,7 +282,7 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
                 )}
 
                 {pkg.priceTriple && pkg.priceTriple > 0 && (
-                  <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
+                  <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
                     <div>
                       <span className="text-xs font-bold text-site-text block">Kamar Triple</span>
                       <span className="text-[11px] text-site-text-muted">3 orang per kamar</span>
@@ -324,7 +294,7 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
                 )}
 
                 {pkg.priceDouble && pkg.priceDouble > 0 && (
-                  <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
+                  <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
                     <div>
                       <span className="text-xs font-bold text-site-text block">Kamar Double</span>
                       <span className="text-[11px] text-site-text-muted">2 orang per kamar</span>
@@ -336,11 +306,29 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
                 )}
               </div>
 
-              {/* Booking CTA Button */}
+              {/* 3. Sub-section Jadwal Keberangkatan */}
+              <div className="pt-4 border-t border-stone-100 space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-site-text">
+                    <Calendar className="w-3.5 h-3.5 text-brand-500" />
+                    <span>Jadwal Keberangkatan</span>
+                  </div>
+                  {departures.length > 0 && (
+                    <span className="text-[11px] font-semibold text-site-text-muted">
+                      {departures.length} jadwal
+                    </span>
+                  )}
+                </div>
+
+                <DepartureChips departures={departures} />
+              </div>
+
+              {/* 4. Booking CTA Button */}
               <div className="pt-2">
                 <BookingButton packageName={pkg.name} />
               </div>
 
+              {/* 5. Disclaimer */}
               <div className="pt-2 border-t border-stone-100 text-center">
                 <p className="text-[11px] text-site-text-muted">
                   Harga dapat berubah sewaktu-waktu sesuai ketersediaan kuota maskapai & hotel.
@@ -361,6 +349,12 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
           </div>
         </div>
       </main>
+
+      {/* Floating Sticky Booking Bar for Mobile (Disappears when #pricing-card is in view) */}
+      <MobileStickyBooking
+        targetElementId="pricing-card"
+        lowestPrice={lowestPrice}
+      />
 
       {/* Footer */}
       <TenantFooter tenantName={tenant.name} />

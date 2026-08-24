@@ -14,7 +14,10 @@ model Tenant {
   phone               String?
   iconUrl             String?
   logoUrl             String?
-  primaryColor        String?   // hex, null = fallback ke oranye Cloudflare default di kode
+  primaryColor        String?   // hex, null = fallback ke #F38020 ("Aksen Utama")
+  secondaryColor      String?   // hex, null = fallback ke #FAAE40 ("Aksen Sekunder")
+  backgroundColor     String?   // hex, null = fallback ke #F7F3EC ("Latar Belakang")
+  darkColor           String?   // hex, null = fallback ke #133433 ("Area Gelap")
   heroHeadline        String?
   heroSubheadline     String?
   heroBackgroundUrl   String?
@@ -107,3 +110,23 @@ model PackageDeparture {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+model Booking {
+  id                          String   @id @default(cuid())
+  tenantId                    String
+  packageId                   String
+  packageDepartureId          String?
+  agentId                     String?
+  jamaahName                  String
+  jamaahPhone                 String
+  jamaahEmail                 String?
+  roomType                    String   // "quad" | "triple" | "double"
+  priceSnapshot                Int
+  commissionAmountSnapshot     Int
+  referralCodeUsed             String?
+  bookingCode                  String   @unique
+  status                        String   @default("pending_payment")
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+}
+

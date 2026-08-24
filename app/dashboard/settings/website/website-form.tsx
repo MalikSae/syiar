@@ -34,6 +34,9 @@ interface WebsiteFormProps {
   initialData: {
     customDomain: string
     primaryColor: string
+    secondaryColor: string
+    backgroundColor: string
+    darkColor: string
     iconUrl: string
     logoUrl: string
     heroHeadline: string
@@ -44,6 +47,11 @@ interface WebsiteFormProps {
     testimonials: TestimonialItem[]
   }
 }
+
+const DEFAULT_PRIMARY = '#F38020'
+const DEFAULT_SECONDARY = '#FAAE40'
+const DEFAULT_BG = '#F7F3EC'
+const DEFAULT_DARK = '#133433'
 
 const FEATURE_FIELDS: ListEditorField[] = [
   {
@@ -129,6 +137,10 @@ function ensureFourFeatures(initialFeatures: FeatureItem[] | null | undefined): 
   return result.slice(0, 4)
 }
 
+function isValidHex(hex: string | null | undefined): hex is string {
+  return typeof hex === 'string' && /^#([0-9a-fA-F]{6})$/.test(hex.trim())
+}
+
 export function WebsiteForm({ initialData }: WebsiteFormProps) {
   const [state, formAction, isPending] = useActionState<WebsiteFormState | null, FormData>(
     updateWebsiteSettings,
@@ -158,13 +170,48 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
   const [isProcessingLogo, setIsProcessingLogo] = useState<boolean>(false)
   const logoInputRef = useRef<HTMLInputElement>(null)
 
-  // 3. Primary Color State (null = default #F38020)
+  // 3. Color Scheme State (4 independent colors: primary, secondary, bg, dark)
   const [primaryColor, setPrimaryColor] = useState<string | null>(
     initialData.primaryColor || null
   )
-  const activeColorHex = primaryColor || '#F38020'
+  const [secondaryColor, setSecondaryColor] = useState<string | null>(
+    initialData.secondaryColor || null
+  )
+  const [backgroundColor, setBackgroundColor] = useState<string | null>(
+    initialData.backgroundColor || null
+  )
+  const [darkColor, setDarkColor] = useState<string | null>(
+    initialData.darkColor || null
+  )
 
-  // 4. Hero Section State
+  const pickerPrimary = isValidHex(primaryColor) ? primaryColor : DEFAULT_PRIMARY
+  const pickerSecondary = isValidHex(secondaryColor) ? secondaryColor : DEFAULT_SECONDARY
+  const pickerBg = isValidHex(backgroundColor) ? backgroundColor : DEFAULT_BG
+  const pickerDark = isValidHex(darkColor) ? darkColor : DEFAULT_DARK
+
+  const previewPrimary = isValidHex(primaryColor) ? primaryColor : DEFAULT_PRIMARY
+  const previewSecondary = isValidHex(secondaryColor) ? secondaryColor : DEFAULT_SECONDARY
+  const previewBg = isValidHex(backgroundColor) ? backgroundColor : DEFAULT_BG
+  const previewDark = isValidHex(darkColor) ? darkColor : DEFAULT_DARK
+
+  const isAnyColorCustom = Boolean(primaryColor || secondaryColor || backgroundColor || darkColor)
+
+  const handleAutoSuggestColors = () => {
+    const base = isValidHex(primaryColor) ? primaryColor : DEFAULT_PRIMARY
+    setPrimaryColor(base)
+    const palette = getSitePalette(base)
+    setSecondaryColor(palette.accentSoft)
+    setBackgroundColor(palette.bg)
+    setDarkColor(palette.dark)
+  }
+
+  const handleResetColorsToDefault = () => {
+    setPrimaryColor(null)
+    setSecondaryColor(null)
+    setBackgroundColor(null)
+    setDarkColor(null)
+  }
+
   const [heroHeadline, setHeroHeadline] = useState(initialData.heroHeadline || '')
   const [heroSubheadline, setHeroSubheadline] = useState(initialData.heroSubheadline || '')
   const [heroBackgroundPreviewUrl, setHeroBackgroundPreviewUrl] = useState<string | null>(
@@ -175,7 +222,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
   const [isProcessingHero, setIsProcessingHero] = useState<boolean>(false)
   const heroInputRef = useRef<HTMLInputElement>(null)
 
-  // 5. Repeatable Sections State (Features WAJIB 4, FAQs, Testimonials)
   const [features, setFeatures] = useState<FeatureItem[]>(() =>
     ensureFourFeatures(initialData.features)
   )
@@ -184,7 +230,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
 
   const [fileError, setFileError] = useState<string | null>(null)
 
-  // Reset file selection state after successful server action submit
   useEffect(() => {
     if (state?.success) {
       setSelectedIconFile(null)
@@ -199,14 +244,12 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
     }
   }, [state])
 
-  // Auto-scroll ke atas begitu ada feedback state (sukses atau gagal)
   useEffect(() => {
     if (state || fileError) {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [state, fileError])
 
-  // Handler Icon Upload (1:1 Square Crop)
   const handleIconChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFileError(null)
     const file = e.target.files?.[0]
@@ -235,7 +278,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
     }
   }
 
-  // Handler Logo Upload (Proportional, Natural Aspect Ratio)
   const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFileError(null)
     const file = e.target.files?.[0]
@@ -264,7 +306,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
     }
   }
 
-  // Handler Hero Background Upload (21:9 Wide Aspect Ratio Crop)
   const handleHeroBackgroundChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFileError(null)
     const file = e.target.files?.[0]
@@ -293,13 +334,14 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
     }
   }
 
-  // Custom Submit Handler to Append All Fields
   const handleFormAction = (formData: FormData) => {
     formData.set('customDomainEnabled', customDomainEnabled ? 'true' : 'false')
     formData.set('customDomain', customDomainEnabled ? customDomain : '')
-    formData.set('primaryColor', primaryColor || 'default')
+    formData.set('primaryColor', isValidHex(primaryColor) ? primaryColor : 'default')
+    formData.set('secondaryColor', isValidHex(secondaryColor) ? secondaryColor : 'default')
+    formData.set('backgroundColor', isValidHex(backgroundColor) ? backgroundColor : 'default')
+    formData.set('darkColor', isValidHex(darkColor) ? darkColor : 'default')
 
-    // Icon
     if (selectedIconFile) {
       formData.set('iconFile', selectedIconFile)
     }
@@ -307,7 +349,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
       formData.set('removeIcon', 'true')
     }
 
-    // Logo
     if (selectedLogoFile) {
       formData.set('logoFile', selectedLogoFile)
     }
@@ -315,7 +356,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
       formData.set('removeLogo', 'true')
     }
 
-    // Hero Section
     formData.set('heroHeadline', heroHeadline)
     formData.set('heroSubheadline', heroSubheadline)
     if (selectedHeroFile) {
@@ -325,7 +365,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
       formData.set('removeHeroBackground', 'true')
     }
 
-    // Repeatable Sections (Features, FAQs, Testimonials)
     formData.set('features', JSON.stringify(features))
     formData.set('faqs', JSON.stringify(faqs))
     formData.set('testimonials', JSON.stringify(testimonials))
@@ -335,7 +374,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
     })
   }
 
-  // Character counter helpers
   const headlineLength = heroHeadline.length
   const isHeadlineIdeal = headlineLength >= 20 && headlineLength <= 60
 
@@ -344,7 +382,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
 
   return (
     <form action={handleFormAction} className="space-y-8">
-      {/* Alert Sukses */}
       {state?.success && (
         <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-start gap-3 animate-in fade-in">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
@@ -352,7 +389,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
         </div>
       )}
 
-      {/* Alert Error */}
       {(fileError || (state && !state.success)) && (
         <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-start gap-3 animate-in fade-in">
           <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
@@ -360,7 +396,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
         </div>
       )}
 
-      {/* SECTION 1: Domain Kustom */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -375,7 +410,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
             </div>
           </div>
 
-          {/* Toggle Switch UI */}
           <div className="flex items-center gap-2.5">
             <span className="text-xs font-semibold text-slate-600">
               {customDomainEnabled ? 'Aktif' : 'Nonaktif'}
@@ -430,7 +464,6 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
         </div>
       </div>
 
-      {/* SECTION 2: Identitas Visual (Icon & Logo) */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
@@ -447,36 +480,35 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
         </div>
 
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* A. Upload Icon Persegi (1:1) */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
+          <div className="space-y-4">
+            <div className="space-y-1">
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Icon Travel (Persegi 1:1)
+                Icon Persegi / Favicon
               </label>
-              <span className="text-[11px] text-slate-400">Favicon / Avatar</span>
+              <p className="text-xs text-slate-500">
+                Format persegi (1:1), otomatis dioptimasi & dikonversi ke WebP 800x800.
+              </p>
             </div>
 
-            <div className="flex items-center gap-4">
-              {/* Preview Box 1:1 */}
-              <div className="w-20 h-20 rounded-2xl bg-slate-100 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden shrink-0 relative group">
-                {iconPreviewUrl ? (
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="w-20 h-20 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 relative group">
+                {isProcessingIcon ? (
+                  <Loader2 className="w-6 h-6 text-brand-600 animate-spin" />
+                ) : iconPreviewUrl ? (
                   <img
                     src={iconPreviewUrl}
                     alt="Icon Preview"
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <Sparkles className="w-6 h-6 text-slate-300" />
-                )}
-                {isProcessingIcon && (
-                  <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                    <Loader2 className="w-5 h-5 text-brand-600 animate-spin" />
+                  <div className="text-center p-2 text-slate-400">
+                    <ImageIcon className="w-6 h-6 mx-auto opacity-50 mb-1" />
+                    <span className="text-[10px] block font-medium">1:1</span>
                   </div>
                 )}
               </div>
 
-              {/* Action Buttons */}
-              <div className="space-y-2">
+              <div className="flex items-center gap-3">
                 <input
                   ref={iconInputRef}
                   type="file"
@@ -505,43 +537,36 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
                 )}
               </div>
             </div>
-            <p className="text-[11px] text-slate-400">
-              Otomatis di-crop 1:1 dan dikonversi ke WebP berkualitas tinggi.
-            </p>
           </div>
 
-          {/* B. Upload Logo Horizontal */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
+          <div className="space-y-4">
+            <div className="space-y-1">
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Logo Horizontal
+                Logo Header Horizontal
               </label>
-              <span className="text-[11px] text-slate-400">Header Navigasi</span>
+              <p className="text-xs text-slate-500">
+                Format transparan direkomendasikan, maksimal lebar 1200px (tinggi 400px).
+              </p>
             </div>
 
-            <div className="space-y-3">
-              {/* Preview Box Horizontal */}
-              <div className="w-full h-20 rounded-2xl bg-slate-100 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden relative p-2">
-                {logoPreviewUrl ? (
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="w-48 h-20 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 relative p-2 group">
+                {isProcessingLogo ? (
+                  <Loader2 className="w-6 h-6 text-brand-600 animate-spin" />
+                ) : logoPreviewUrl ? (
                   <img
                     src={logoPreviewUrl}
                     alt="Logo Preview"
-                    className="max-h-full max-w-full object-contain"
+                    className="max-w-full max-h-full object-contain"
                   />
                 ) : (
-                  <div className="flex items-center gap-2 text-slate-300 text-xs">
-                    <ImageIcon className="w-5 h-5" />
-                    <span>Belum ada logo horizontal</span>
-                  </div>
-                )}
-                {isProcessingLogo && (
-                  <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                    <Loader2 className="w-5 h-5 text-brand-600 animate-spin" />
+                  <div className="text-center p-2 text-slate-400">
+                    <ImageIcon className="w-6 h-6 mx-auto opacity-50 mb-1" />
+                    <span className="text-[10px] block font-medium">Logo Horizontal</span>
                   </div>
                 )}
               </div>
 
-              {/* Action Buttons */}
               <div className="flex items-center gap-3">
                 <input
                   ref={logoInputRef}
@@ -571,159 +596,277 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
                 )}
               </div>
             </div>
-            <p className="text-[11px] text-slate-400">
-              Rasio aspek alami dipertahankan, hanya diskalakan proporsional jika melebihi lebar maksimum.
-            </p>
           </div>
         </div>
       </div>
 
-      {/* SECTION 3: Warna Aksen */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
+        <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
               <Palette className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900">Warna Aksen Brand</h2>
+              <h2 className="text-base font-bold text-slate-900">Skema Warna Brand</h2>
               <p className="text-xs text-slate-500 mt-0.5">
-                Tentukan warna aksen utama yang digunakan untuk tombol CTA dan highlight di microsite Anda.
+                Atur 4 warna utama microsite: aksen utama, aksen sekunder, latar belakang, dan area gelap secara independen.
               </p>
             </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              onClick={handleAutoSuggestColors}
+              className="px-3.5 py-2 bg-brand-50 hover:bg-brand-100/80 text-brand-700 border border-brand-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-brand-600" />
+              <span>Auto-isi dari Aksen Utama</span>
+            </button>
+
+            {isAnyColorCustom && (
+              <button
+                type="button"
+                onClick={handleResetColorsToDefault}
+                className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+                <span>Gunakan Warna Default</span>
+              </button>
+            )}
           </div>
         </div>
 
         <div className="p-6 space-y-6">
-          <div className="flex flex-wrap items-center gap-6">
-            {/* Native Color Picker & Hex Text */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Pilih Warna (Hex)
-              </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
+              <div className="space-y-0.5">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="color-picker-primary" className="block text-xs font-bold text-slate-800">
+                    Aksen Utama
+                  </label>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
+                    {primaryColor ? 'Kustom' : 'Default'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500">Tombol CTA & Highlight</p>
+              </div>
+
               <div className="flex items-center gap-3">
-                <div className="relative w-11 h-11 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
+                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
                   <input
                     type="color"
-                    id="color-picker-input"
-                    value={activeColorHex}
-                    onChange={(e) => setPrimaryColor(e.target.value)}
+                    id="color-picker-primary"
+                    value={pickerPrimary}
+                    onChange={(e) => setPrimaryColor(e.target.value.toUpperCase())}
                     className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
                   />
                 </div>
-                <div className="space-y-0.5">
-                  <span className="font-mono text-sm font-bold text-slate-800 block">
-                    {activeColorHex}
-                  </span>
-                  <span className="text-[11px] text-slate-400">
-                    {primaryColor ? 'Warna Kustom' : 'Warna Default (Cloudflare Orange)'}
-                  </span>
+                <div className="flex-1 min-w-0">
+                  <input
+                    type="text"
+                    id="color-text-primary"
+                    value={primaryColor ?? ''}
+                    onChange={(e) => setPrimaryColor(e.target.value.toUpperCase())}
+                    placeholder={DEFAULT_PRIMARY}
+                    maxLength={7}
+                    className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
+                  />
                 </div>
               </div>
             </div>
 
-            {/* Reset to Default Button */}
-            {primaryColor && (
-              <div className="pt-4">
-                <button
-                  type="button"
-                  onClick={() => setPrimaryColor(null)}
-                  className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                >
-                  <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Gunakan Warna Default</span>
-                </button>
+            <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
+              <div className="space-y-0.5">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="color-picker-secondary" className="block text-xs font-bold text-slate-800">
+                    Aksen Sekunder
+                  </label>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
+                    {secondaryColor ? 'Kustom' : 'Default'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500">Badge, Tag & Aksen Soft</p>
               </div>
-            )}
+
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
+                  <input
+                    type="color"
+                    id="color-picker-secondary"
+                    value={pickerSecondary}
+                    onChange={(e) => setSecondaryColor(e.target.value.toUpperCase())}
+                    className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <input
+                    type="text"
+                    id="color-text-secondary"
+                    value={secondaryColor ?? ''}
+                    onChange={(e) => setSecondaryColor(e.target.value.toUpperCase())}
+                    placeholder={DEFAULT_SECONDARY}
+                    maxLength={7}
+                    className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
+              <div className="space-y-0.5">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="color-picker-bg" className="block text-xs font-bold text-slate-800">
+                    Latar Belakang
+                  </label>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
+                    {backgroundColor ? 'Kustom' : 'Default'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500">Background Utama Halaman</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
+                  <input
+                    type="color"
+                    id="color-picker-bg"
+                    value={pickerBg}
+                    onChange={(e) => setBackgroundColor(e.target.value.toUpperCase())}
+                    className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <input
+                    type="text"
+                    id="color-text-bg"
+                    value={backgroundColor ?? ''}
+                    onChange={(e) => setBackgroundColor(e.target.value.toUpperCase())}
+                    placeholder={DEFAULT_BG}
+                    maxLength={7}
+                    className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
+              <div className="space-y-0.5">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="color-picker-dark" className="block text-xs font-bold text-slate-800">
+                    Area Gelap
+                  </label>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
+                    {darkColor ? 'Kustom' : 'Default'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500">Footer & Banner Gelap</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
+                  <input
+                    type="color"
+                    id="color-picker-dark"
+                    value={pickerDark}
+                    onChange={(e) => setDarkColor(e.target.value.toUpperCase())}
+                    className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <input
+                    type="text"
+                    id="color-text-dark"
+                    value={darkColor ?? ''}
+                    onChange={(e) => setDarkColor(e.target.value.toUpperCase())}
+                    placeholder={DEFAULT_DARK}
+                    maxLength={7}
+                    className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Live Preview Box & Full Palette Derivation */}
-          {(() => {
-            const livePalette = getSitePalette(primaryColor)
-            return (
-              <div className="space-y-3">
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
+                Pratinjau Kombinasi Warna Microsite
+              </span>
+              <span className="text-[11px] text-slate-400">
+                Live preview elemen aktual
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
-                    Pratinjau Palet Harmonik Microsite
-                  </span>
-                  <span className="text-[11px] text-slate-400">
-                    Otomatis diderivasi secara harmonis
-                  </span>
+                  <span className="text-[11px] font-bold text-slate-600">Aksen Utama</span>
+                  <span className="font-mono text-[10px] text-slate-400">{previewPrimary}</span>
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                  {/* 1. Accent Utama */}
-                  <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-slate-600">Aksen Utama</span>
-                      <span className="font-mono text-[10px] text-slate-400">{livePalette.accent}</span>
-                    </div>
-                    <button
-                      type="button"
-                      style={{ backgroundColor: livePalette.accent }}
-                      className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs transition-transform active:scale-95 cursor-default select-none flex items-center justify-center gap-1.5"
-                    >
-                      <span>Tombol CTA</span>
-                    </button>
-                    <span className="text-[10px] text-slate-400 block text-center">Tombol aksi & highlight</span>
-                  </div>
-
-                  {/* 2. Accent Soft */}
-                  <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-slate-600">Aksen Sekunder</span>
-                      <span className="font-mono text-[10px] text-slate-400">{livePalette.accentSoft}</span>
-                    </div>
-                    <div
-                      style={{ backgroundColor: livePalette.accentSoft }}
-                      className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 select-none"
-                    >
-                      <span>Badge / Tag</span>
-                    </div>
-                    <span className="text-[10px] text-slate-400 block text-center">Hover & elemen aksen soft</span>
-                  </div>
-
-                  {/* 3. Site Background */}
-                  <div
-                    style={{ backgroundColor: livePalette.bg }}
-                    className="p-3.5 rounded-xl border border-stone-300/80 shadow-2xs space-y-2"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-slate-800">Latar Belakang</span>
-                      <span className="font-mono text-[10px] text-slate-600">{livePalette.bg}</span>
-                    </div>
-                    <div className="bg-white/90 p-2 rounded-lg border border-stone-200 shadow-2xs text-center">
-                      <span className="text-[11px] font-semibold text-slate-800 block">Kartu Konten</span>
-                    </div>
-                    <span className="text-[10px] text-slate-600 block text-center">Background utama halaman</span>
-                  </div>
-
-                  {/* 4. Site Dark */}
-                  <div
-                    style={{ backgroundColor: livePalette.dark }}
-                    className="p-3.5 rounded-xl border border-slate-800 shadow-2xs space-y-2 text-white"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-slate-200">Area Gelap</span>
-                      <span className="font-mono text-[10px] text-slate-400">{livePalette.dark}</span>
-                    </div>
-                    <div className="bg-white/10 p-2 rounded-lg border border-white/15 text-center">
-                      <span className="text-[11px] font-semibold text-white block">Footer / Banner Gelap</span>
-                    </div>
-                    <span className="text-[10px] text-slate-300 block text-center">Section gelap & footer</span>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  style={{ backgroundColor: previewPrimary }}
+                  className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs transition-transform active:scale-95 cursor-default select-none flex items-center justify-center gap-1.5"
+                >
+                  <span>Tombol CTA</span>
+                </button>
+                <span className="text-[10px] text-slate-400 block text-center">Tombol aksi & highlight</span>
               </div>
-            )
-          })()}
 
-          <p className="text-[11px] text-slate-400">
-            Nilai <code className="text-slate-600 bg-slate-100 px-1 py-0.5 rounded">null</code> pada database akan otomatis fallback ke warna oranye default (<code className="text-slate-600 bg-slate-100 px-1 py-0.5 rounded">#F38020</code>) di microsite.
-          </p>
+              <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-600">Aksen Sekunder</span>
+                  <span className="font-mono text-[10px] text-slate-400">{previewSecondary}</span>
+                </div>
+                <div
+                  style={{ backgroundColor: previewSecondary }}
+                  className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 select-none"
+                >
+                  <span>Badge / Tag</span>
+                </div>
+                <span className="text-[10px] text-slate-400 block text-center">Hover & elemen aksen soft</span>
+              </div>
+
+              <div
+                style={{ backgroundColor: previewBg }}
+                className="p-3.5 rounded-xl border border-stone-300/80 shadow-2xs space-y-2"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-800">Latar Belakang</span>
+                  <span className="font-mono text-[10px] text-slate-600">{previewBg}</span>
+                </div>
+                <div className="bg-white/90 p-2 rounded-lg border border-stone-200 shadow-2xs text-center">
+                  <span className="text-[11px] font-semibold text-slate-800 block">Kartu Konten</span>
+                </div>
+                <span className="text-[10px] text-slate-600 block text-center">Background utama halaman</span>
+              </div>
+
+              <div
+                style={{ backgroundColor: previewDark }}
+                className="p-3.5 rounded-xl border border-slate-800 shadow-2xs space-y-2 text-white"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-200">Area Gelap</span>
+                  <span className="font-mono text-[10px] text-slate-400">{previewDark}</span>
+                </div>
+                <div className="bg-white/10 p-2 rounded-lg border border-white/15 text-center">
+                  <span className="text-[11px] font-semibold text-white block">Footer / Banner Gelap</span>
+                </div>
+                <span className="text-[10px] text-slate-300 block text-center">Section gelap & footer</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 text-xs text-slate-500 flex items-start gap-2.5">
+            <Info className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+            <p className="leading-relaxed">
+              Tombol <strong className="text-slate-700">Auto-isi dari Aksen Utama</strong> memberikan saran turunan warna harmonis sebagai titik awal. Anda bebas menyesuaikan masing-masing warna sebelum menekan tombol simpan di bawah.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* SECTION 4: Hero Section (Banner & Teks Pembuka) */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">

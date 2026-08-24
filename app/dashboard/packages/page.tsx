@@ -141,9 +141,11 @@ export default async function PackagesPage() {
                             className="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-xs"
                           />
                         ) : (
-                          <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400">
-                            <Package className="w-5 h-5" />
-                          </div>
+                          <img
+                            src="/syiarlink-placeholder.png"
+                            alt={pkg.name}
+                            className="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-xs bg-slate-50"
+                          />
                         )}
                       </td>
 

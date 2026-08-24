@@ -50,7 +50,7 @@ export default async function AgentDashboardPage({ params }: AgentDashboardPageP
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans p-6 sm:p-12">
+    <div className="min-h-screen bg-slate-50 font-inter p-6 sm:p-12">
       <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
           <div>

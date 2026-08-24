@@ -14,7 +14,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-jakarta: var(--font-jakarta), sans-serif;
+  --font-inter: var(--font-inter), sans-serif;
   --color-brand-50: #FFF4EC;
   --color-brand-500: var(--site-accent-soft, #FAAE40);
   --color-brand-600: var(--site-accent, #F38020);

@@ -39,7 +39,7 @@ export function TenantNavbar({ tenantName, logoUrl, iconUrl }: TenantNavbarProps
                   )}
                 </div>
                 <div>
-                  <span className="font-serif text-base sm:text-lg font-bold text-site-text tracking-tight block leading-tight">
+                  <span className="font-jakarta text-base sm:text-lg font-bold text-site-text tracking-tight block leading-tight">
                     {tenantName}
                   </span>
                   <span className="text-[10px] font-semibold text-brand-600 tracking-wider uppercase block">

@@ -29,6 +29,36 @@ export function getLowestPrice(pkg: {
 }
 
 /**
+ * Format tanggal untuk chip/pill keberangkatan ringkas
+ * Contoh: "31 Agu", "Senin, 2026"
+ */
+export function formatDepartureChipDate(date: Date | string): {
+  dayMonth: string
+  subtext: string
+  fullDate: string
+} {
+  const d = typeof date === 'string' ? new Date(date) : date
+  const dayMonth = new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'short',
+  }).format(d)
+  const weekday = new Intl.DateTimeFormat('id-ID', { weekday: 'short' }).format(d)
+  const year = d.getFullYear()
+  const fullDate = new Intl.DateTimeFormat('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(d)
+
+  return {
+    dayMonth,
+    subtext: `${weekday}, ${year}`,
+    fullDate,
+  }
+}
+
+/**
  * Format tanggal ke format bahasa Indonesia
  * Contoh: "Kamis, 10 Desember 2026" atau "10 Desember 2026"
  */

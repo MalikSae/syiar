@@ -116,7 +116,7 @@ export default async function PackageListPage({ params, searchParams }: PackageL
   const isFiltered = Boolean(q.trim() || month)
 
   return (
-    <div className="min-h-screen bg-site-bg text-site-text flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+    <div className="min-h-screen bg-site-bg text-site-text flex flex-col font-inter selection:bg-brand-500 selection:text-white">
       {/* Header Navigation */}
       <TenantNavbar
         tenantName={tenant.name}
@@ -134,7 +134,7 @@ export default async function PackageListPage({ params, searchParams }: PackageL
             <span>/</span>
             <span className="text-site-text font-bold">Paket Umroh</span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-4xl font-bold text-site-text tracking-tight">
+          <h1 className="font-jakarta text-2xl sm:text-4xl font-bold text-site-text tracking-tight">
             Pilihan Paket Umroh — {tenant.name}
           </h1>
           <p className="text-xs sm:text-sm text-site-text-muted max-w-2xl leading-relaxed">
@@ -183,7 +183,7 @@ export default async function PackageListPage({ params, searchParams }: PackageL
               {isFiltered ? <SearchX className="w-7 h-7" /> : <PackageOpen className="w-7 h-7" />}
             </div>
             <div className="space-y-2">
-              <h3 className="font-serif text-base sm:text-lg font-bold text-site-text">
+              <h3 className="font-jakarta text-base sm:text-lg font-bold text-site-text">
                 {isFiltered ? 'Tidak ada paket yang cocok' : 'Belum ada paket tersedia'}
               </h3>
               <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed">

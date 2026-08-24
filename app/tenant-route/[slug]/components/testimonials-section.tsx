@@ -172,7 +172,7 @@ function TestimonialCard({ item }: { item: TestimonialItem }) {
         <div className="w-10 h-10 rounded-lg bg-brand-600/10 border border-brand-600/20 text-brand-600 flex items-center justify-center">
           <MessageSquareQuote className="w-5 h-5" />
         </div>
-        <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed italic line-clamp-4 font-sans">
+        <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed italic line-clamp-4 font-inter">
           &quot;{quoteText}&quot;
         </p>
       </div>
@@ -183,7 +183,7 @@ function TestimonialCard({ item }: { item: TestimonialItem }) {
           {initials}
         </div>
         <div className="min-w-0">
-          <h4 className="font-serif text-xs sm:text-sm font-bold text-site-text truncate">
+          <h4 className="font-jakarta text-xs sm:text-sm font-bold text-site-text truncate">
             {item.name}
           </h4>
           <p className="text-[11px] text-site-text-muted truncate font-medium">

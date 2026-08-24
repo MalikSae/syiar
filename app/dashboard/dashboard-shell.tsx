@@ -166,19 +166,15 @@ export default function DashboardShell({
         }`}
       >
         <div className="flex flex-col flex-1 overflow-y-auto">
-          {/* Sidebar Header: Logo + Travel Name */}
-          <div className="h-16 px-5 border-b border-slate-100 flex items-center justify-between">
-            <div className="flex items-center space-x-3 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-base shadow-sm shrink-0">
-                {tenantInitial}
-              </div>
-              <div className="min-w-0">
-                <h2 className="font-bold text-sm text-slate-900 truncate">
-                  {tenantName || 'SyiarLink Travel'}
-                </h2>
-                <p className="text-[11px] text-slate-400 font-medium">Dashboard Travel</p>
-              </div>
-            </div>
+          {/* Sidebar Header: SyiarLink Logo */}
+          <div className="h-18 px-5 border-b border-slate-100 flex items-center justify-between">
+            <Link href="/dashboard" className="flex items-center py-1">
+              <img
+                src="/syiarlink-logo.png"
+                alt="SyiarLink"
+                className="h-9 sm:h-10 w-auto object-contain"
+              />
+            </Link>
 
             {/* Mobile Close Button */}
             <button
@@ -189,6 +185,21 @@ export default function DashboardShell({
               <X className="w-5 h-5" />
             </button>
           </div>
+
+          {/* Tenant Travel Info Card / Context */}
+          {tenantName && (
+            <div className="px-4 pt-3.5 pb-1">
+              <div className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center space-x-2.5">
+                <div className="w-7 h-7 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
+                  {tenantInitial}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-slate-800 truncate">{tenantName}</p>
+                  <p className="text-[10px] text-slate-400 font-medium truncate">Dashboard Travel</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Navigation Menu */}
           <nav className="p-3 space-y-1 mt-2">

@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 async function runTenantIsolationTests() {
   console.log('=================================================================')
   console.log('       AUTOMATED TENANT ISOLATION SECURITY TEST SUITE')
-  console.log('       (Agent, Package, PackageDeparture)')
+  console.log('       (Agent, Package, PackageDeparture, Booking)')
   console.log('=================================================================\n')
 
   let passedAssertions = 0
@@ -26,7 +26,7 @@ async function runTenantIsolationTests() {
   }
 
   // 1. Persiapan Data Tenant A & Tenant B
-  console.log('[1/6] Mempersiapkan 2 tenant uji coba...')
+  console.log('[1/7] Mempersiapkan 2 tenant uji coba...')
 
   // Tenant A: Alhijrah
   let tenantA = await prisma.tenant.findUnique({ where: { slug: 'alhijrah' } })
@@ -206,9 +206,66 @@ async function runTenantIsolationTests() {
   assert(!foreignDepInA && allDepsInA.length > 0, 'PackageDeparture: Scoped Client A findMany() HANYA mengembalikan departure milik Tenant A')
 
   // ---------------------------------------------------------------------------
-  // 5. Test Strict findUnique Rejection pada Semua Model Scoped
+  // 5. Test Isolasi Model BOOKING
   // ---------------------------------------------------------------------------
-  console.log('\n[5/6] Menguji Penolakan Eksplisit findUnique pada Semua Model...')
+  console.log('\n[5/7] Menguji Isolasi Model BOOKING...')
+
+  let bookingA = await scopedClientA.booking.findFirst({ where: { bookingCode: 'BOOKTESTA01' } })
+  if (!bookingA) {
+    bookingA = await scopedClientA.booking.create({
+      data: {
+        tenantId: tenantA.id,
+        packageId: pkgA.id,
+        jamaahName: 'Ahmad Jamaah A',
+        jamaahPhone: '081234567890',
+        roomType: 'quad',
+        priceSnapshot: 28000000,
+        commissionAmountSnapshot: 1500000,
+        bookingCode: 'BOOKTESTA01',
+        status: 'pending_payment',
+      },
+    })
+  }
+
+  let bookingB = await scopedClientB.booking.findFirst({ where: { bookingCode: 'BOOKTESTB01' } })
+  if (!bookingB) {
+    bookingB = await scopedClientB.booking.create({
+      data: {
+        tenantId: tenantB.id,
+        packageId: pkgB.id,
+        jamaahName: 'Budi Jamaah B',
+        jamaahPhone: '081298765432',
+        roomType: 'double',
+        priceSnapshot: 32000000,
+        commissionAmountSnapshot: 2000000,
+        bookingCode: 'BOOKTESTB01',
+        status: 'pending_payment',
+      },
+    })
+  }
+
+  const bookingLeakA = await scopedClientA.booking.findFirst({ where: { id: bookingB.id } })
+  assert(bookingLeakA === null, 'Booking: Scoped Client A mencari Booking B by ID menghasilkan NULL')
+
+  const bookingLeakB = await scopedClientB.booking.findFirst({ where: { id: bookingA.id } })
+  assert(bookingLeakB === null, 'Booking: Scoped Client B mencari Booking A by ID menghasilkan NULL')
+
+  const bookingOwnA = await scopedClientA.booking.findFirst({ where: { id: bookingA.id } })
+  assert(bookingOwnA !== null && bookingOwnA.id === bookingA.id, 'Booking: Scoped Client A mencari Booking A by ID berhasil menemukan data sendiri')
+
+  const allBookingsInA = await scopedClientA.booking.findMany()
+  const foreignBookingInA = allBookingsInA.some((b) => b.tenantId !== tenantA.id)
+  assert(!foreignBookingInA && allBookingsInA.length > 0, 'Booking: Scoped Client A findMany() HANYA mengembalikan booking milik Tenant A')
+
+  const bookingTampered = await scopedClientA.booking.findFirst({
+    where: { id: bookingB.id, tenantId: tenantB.id } as any,
+  })
+  assert(bookingTampered === null, 'Booking: Percobaan override tenantId di query Booking berhasil ditimpa dan tetap NULL')
+
+  // ---------------------------------------------------------------------------
+  // 6. Test Strict findUnique Rejection pada Semua Model Scoped
+  // ---------------------------------------------------------------------------
+  console.log('\n[6/7] Menguji Penolakan Eksplisit findUnique pada Semua Model...')
 
   let agentFindUniqueBlocked = false
   try {
@@ -240,8 +297,18 @@ async function runTenantIsolationTests() {
   }
   assert(depFindUniqueBlocked, 'findUnique PackageDeparture ditolak keras')
 
+  let bookingFindUniqueBlocked = false
+  try {
+    await (scopedClientA.booking as any).findUnique({ where: { id: bookingA.id } })
+  } catch (err: any) {
+    if (err.message.includes('findUnique is intentionally not supported')) {
+      bookingFindUniqueBlocked = true
+    }
+  }
+  assert(bookingFindUniqueBlocked, 'findUnique Booking ditolak keras')
+
   // ---------------------------------------------------------------------------
-  // 6. Summary Report
+  // 7. Summary Report
   // ---------------------------------------------------------------------------
   console.log('\n=================================================================')
   console.log(`HASIL AKHIR: ${passedAssertions} PASSED, ${failedAssertions} FAILED`)
@@ -251,7 +318,7 @@ async function runTenantIsolationTests() {
     console.error('\n🚨 FATAL: Terdeteksi kebocoran isolasi data antar tenant!')
     process.exit(1)
   } else {
-    console.log('\n🛡️ SEMUA GUARDRAIL ISOLASI TENANT (AGENT, PACKAGE, DEPARTURE) TERBUKTI AMAN (EXIT CODE 0).\n')
+    console.log('\n🛡️ SEMUA GUARDRAIL ISOLASI TENANT (AGENT, PACKAGE, DEPARTURE, BOOKING) TERBUKTI AMAN (EXIT CODE 0).\n')
   }
 }
 

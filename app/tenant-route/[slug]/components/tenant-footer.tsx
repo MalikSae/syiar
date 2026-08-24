@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Sparkles, ShieldCheck, Heart } from 'lucide-react'
+import { ShieldCheck, Heart } from 'lucide-react'
 
 interface TenantFooterProps {
   tenantName: string
@@ -12,11 +12,8 @@ export function TenantFooter({ tenantName }: TenantFooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
           {/* Brand Col */}
           <div className="md:col-span-6 lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-lg bg-brand-500 text-white flex items-center justify-center shadow-md shadow-brand-500/20">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <span className="font-serif text-lg font-bold text-white tracking-tight">
+            <div>
+              <span className="font-jakarta text-xl font-bold text-white tracking-tight">
                 {tenantName}
               </span>
             </div>
