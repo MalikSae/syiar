@@ -231,14 +231,11 @@ export function BookingForm({
                 onClick={() => setIsDropdownOpen((prev) => !prev)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 hover:bg-stone-50 text-left flex items-center justify-between gap-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all cursor-pointer shadow-2xs"
               >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <Calendar className="w-4 h-4 text-brand-600 shrink-0" />
-                  <span className="font-semibold text-site-text truncate">
-                    {selectedDeparture
-                      ? formatIndonesianDate(selectedDeparture.date, { includeWeekday: true })
-                      : 'Pilih Jadwal Keberangkatan'}
-                  </span>
-                </div>
+                <span className="font-semibold text-site-text truncate">
+                  {selectedDeparture
+                    ? formatIndonesianDate(selectedDeparture.date, { includeWeekday: true })
+                    : 'Pilih Jadwal Keberangkatan'}
+                </span>
                 <ChevronDown
                   className={`w-4 h-4 text-stone-400 shrink-0 transition-transform duration-200 ${
                     isDropdownOpen ? 'rotate-180 text-brand-600' : ''
@@ -267,10 +264,7 @@ export function BookingForm({
                             : 'text-site-text hover:bg-stone-50 font-medium'
                         }`}
                       >
-                        <div className="flex items-center gap-2.5">
-                          <Calendar className={`w-3.5 h-3.5 ${isSelected ? 'text-brand-600' : 'text-stone-400'}`} />
-                          <span>{dateFormatted}</span>
-                        </div>
+                        <span>{dateFormatted}</span>
                         {isSelected && <Check className="w-4 h-4 text-brand-600 shrink-0" />}
                       </button>
                     )
