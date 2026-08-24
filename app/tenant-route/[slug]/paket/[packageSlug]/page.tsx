@@ -325,7 +325,7 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
 
               {/* 4. Booking CTA Button */}
               <div className="pt-2">
-                <BookingButton packageName={pkg.name} />
+                <BookingButton packageSlug={pkg.slug} packageName={pkg.name} />
               </div>
 
               {/* 5. Disclaimer */}

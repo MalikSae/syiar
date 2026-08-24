@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Sparkles } from 'lucide-react'
 import { formatRupiah } from '@/lib/package-helpers'
 
 interface MobileStickyBookingProps {
@@ -71,7 +70,6 @@ export function MobileStickyBooking({
           onClick={handleScrollToCard}
           className="py-2.5 px-5 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-1.5 transition-all shrink-0 cursor-pointer"
         >
-          <Sparkles className="w-3.5 h-3.5" />
           <span>Booking Sekarang</span>
         </button>
       </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Sparkles, Menu, X, Compass, UserPlus, LogIn } from 'lucide-react'
+import { Menu, X, Compass, UserPlus, LogIn } from 'lucide-react'
 
 interface TenantNavbarProps {
   tenantName: string
@@ -35,7 +35,9 @@ export function TenantNavbar({ tenantName, logoUrl, iconUrl }: TenantNavbarProps
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <Sparkles className="w-5 h-5" />
+                    <span className="font-jakarta font-bold text-lg">
+                      {tenantName.charAt(0)}
+                    </span>
                   )}
                 </div>
                 <div>

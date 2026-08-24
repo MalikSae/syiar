@@ -42,7 +42,6 @@ export function formatDepartureChipDate(date: Date | string): {
     day: 'numeric',
     month: 'short',
   }).format(d)
-  const weekday = new Intl.DateTimeFormat('id-ID', { weekday: 'short' }).format(d)
   const year = d.getFullYear()
   const fullDate = new Intl.DateTimeFormat('id-ID', {
     weekday: 'long',
@@ -53,7 +52,7 @@ export function formatDepartureChipDate(date: Date | string): {
 
   return {
     dayMonth,
-    subtext: `${weekday}, ${year}`,
+    subtext: String(year),
     fullDate,
   }
 }

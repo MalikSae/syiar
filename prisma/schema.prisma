@@ -117,12 +117,19 @@ model Booking {
   packageId                   String
   packageDepartureId          String?
   agentId                     String?
-  jamaahName                  String
+  jamaahName                  String   // label form: "Nama Pemesan"
   jamaahPhone                 String
   jamaahEmail                 String?
-  roomType                    String   // "quad" | "triple" | "double"
-  priceSnapshot                Int
-  commissionAmountSnapshot     Int
+  quadCount                   Int      @default(0)
+  tripleCount                 Int      @default(0)
+  doubleCount                 Int      @default(0)
+  priceQuadSnapshot           Int?
+  priceTripleSnapshot         Int?
+  priceDoubleSnapshot         Int?
+  totalPrice                  Int
+  totalPax                    Int
+  commissionAmountSnapshot    Int
+  totalCommission              Int
   referralCodeUsed             String?
   bookingCode                  String   @unique
   status                        String   @default("pending_payment")
