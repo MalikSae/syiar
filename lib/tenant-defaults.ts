@@ -4,7 +4,7 @@
  */
 
 export const DEFAULT_HERO_SUBHEADLINE =
-  'Menghadirkan perjalanan ibadah ke tanah suci yang nyaman, khusyuk, dan amanah bersama bimbingan tim berpengalaman.'
+  'Perjalanan umroh yang terencana rapi dan dibimbing tim berpengalaman, dari persiapan hingga kepulangan.'
 
 export function getDefaultHeroHeadline(tenantName: string): string {
   return `Wujudkan Ibadah Umroh Bersama ${tenantName}`

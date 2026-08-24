@@ -39,7 +39,7 @@ export function TenantFooter({ tenantName }: TenantFooterProps) {
               </li>
               <li>
                 <Link href="/paket" className="hover:text-white transition-colors">
-                  Daftar Paket Umroh
+                  Lihat Semua Paket
                 </Link>
               </li>
               <li>

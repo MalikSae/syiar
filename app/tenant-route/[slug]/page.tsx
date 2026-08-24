@@ -216,33 +216,33 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
                   {heroSubheadline}
                 </p>
 
-                <div className="pt-2 flex flex-wrap items-center gap-3.5">
+                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <Link
                     href="/paket"
-                    className="px-6 py-3.5 bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white text-xs sm:text-sm font-bold rounded-lg sm:rounded-xl transition-all shadow-xs flex items-center gap-2"
+                    className="w-full sm:w-auto px-6 py-3.5 bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 text-center"
                   >
-                    <Compass className="w-4 h-4" />
-                    <span>Lihat Paket Kami</span>
+                    <Compass className="w-4 h-4 shrink-0" />
+                    <span>Lihat Semua Paket</span>
                   </Link>
                   <Link
                     href="/gabung-agen"
-                    className="px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-xs text-xs sm:text-sm font-bold rounded-lg sm:rounded-xl transition-all shadow-xs"
+                    className="w-full sm:w-auto px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-xs text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs text-center flex items-center justify-center"
                   >
-                    Gabung Jadi Agen
+                    <span>Gabung Jadi Agen</span>
                   </Link>
                 </div>
               </div>
 
               {/* Kanan: Card "Keberangkatan Terdekat" (5 Kolom) */}
               <div className="lg:col-span-5">
-                <div className="bg-white rounded-2xl border border-white/10 p-6 sm:p-7 shadow-xl space-y-5 text-slate-900">
-                  <div className="flex items-center justify-between gap-3 pb-3 border-b border-stone-100">
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-600">
-                      <Calendar className="w-4 h-4 text-brand-500" />
-                      <span>Keberangkatan Terdekat</span>
+                <div className="bg-white rounded-2xl border border-white/10 p-4 sm:p-7 shadow-xl space-y-4 sm:space-y-5 text-slate-900">
+                  <div className="flex items-center justify-between gap-2 pb-3 border-b border-stone-100">
+                    <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold uppercase tracking-normal sm:tracking-wider text-brand-600 min-w-0">
+                      <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-500 shrink-0" />
+                      <span className="truncate">Keberangkatan Terdekat</span>
                     </div>
                     {overallNearestDeparture && daysUntilNearest !== null && (
-                      <span className="px-2.5 py-1 rounded-full bg-brand-600/10 border border-brand-600/30 text-[11px] font-black text-brand-600">
+                      <span className="px-2.5 py-0.5 sm:py-1 rounded-full bg-brand-600/10 border border-brand-600/30 text-[10px] sm:text-[11px] font-black text-brand-600 shrink-0 whitespace-nowrap">
                         {daysUntilNearest === 0 ? 'Hari Ini' : `H-${daysUntilNearest} hari`}
                       </span>
                     )}
@@ -284,7 +284,7 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
                         href={`/paket/${overallNearestDeparture.package.slug}`}
                         className="w-full py-2.5 px-4 bg-site-dark hover:bg-brand-600 text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5"
                       >
-                        <span>Lihat Rincian Paket</span>
+                        <span>Lihat Detail</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
@@ -348,13 +348,10 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
         {/* SECTION PAKET TERSEDIA */}
         <section className="pt-4 sm:pt-6 pb-12 sm:pb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <div className="text-left space-y-1.5">
+            <div className="text-left">
               <h2 className="font-jakarta text-2xl sm:text-4xl font-bold text-site-text tracking-tight">
                 {activePackages.length} Paket Umroh Tersedia
               </h2>
-              <p className="text-xs sm:text-sm text-site-text-muted leading-relaxed max-w-xl">
-                Pilih paket perjalanan ibadah umroh terbaik yang disiapkan dengan fasilitas nyaman dan jadwal terencana.
-              </p>
             </div>
 
             {sortedPackages.length === 0 ? (
@@ -443,7 +440,7 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
                 Siap Mewujudkan Niat Suci ke Baitullah?
               </h3>
               <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
-                Daftarkan diri dan keluarga Anda sekarang untuk mendapatkan kepastian jadwal keberangkatan serta bimbingan ibadah yang khusyuk bersama {tenant.name}.
+                Amankan jadwal keberangkatan Anda dan keluarga sekarang, dengan bimbingan ibadah yang khusyuk bersama {tenant.name}.
               </p>
             </div>
 
@@ -453,7 +450,7 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
                 className="px-6 py-3.5 bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white text-xs sm:text-sm font-bold rounded-lg sm:rounded-xl transition-all shadow-xs flex items-center gap-2"
               >
                 <Compass className="w-4 h-4" />
-                <span>Pilih Paket Umroh</span>
+                <span>Lihat Semua Paket</span>
               </Link>
               <Link
                 href="/gabung-agen"

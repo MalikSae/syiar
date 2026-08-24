@@ -93,7 +93,7 @@ export function PackageCard({ pkg }: PackageCardProps) {
             href={`/paket/${pkg.slug}`}
             className="inline-flex items-center justify-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-site-dark hover:bg-brand-600 text-white text-[11px] sm:text-xs font-bold rounded-lg transition-all shadow-xs group-hover:bg-brand-600 shrink-0"
           >
-            <span>Detail</span>
+            <span>Lihat Detail</span>
             <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </Link>
         </div>

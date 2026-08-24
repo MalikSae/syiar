@@ -149,19 +149,19 @@ export function BookingForm({
         </div>
 
         {/* SECTION 1: Data Pemesan */}
-        <div className="p-4 sm:p-5 space-y-3.5">
-          <div className="flex items-center gap-2 pb-1">
-            <User className="w-4 h-4 text-brand-600" />
-            <h3 className="font-jakarta text-sm font-bold text-site-text">
+        <div className="p-4 sm:p-5 space-y-4">
+          <div className="flex items-center gap-2 pb-0.5">
+            <User className="w-4 h-4 text-brand-600 shrink-0" />
+            <h3 className="font-jakarta text-sm sm:text-base font-bold text-site-text">
               Data Pemesan
             </h3>
           </div>
 
-          <div className="space-y-3 text-xs sm:text-sm">
+          <div className="space-y-3.5 text-sm">
             <div>
               <label
                 htmlFor="jamaahName"
-                className="block font-bold text-site-text mb-1 text-xs"
+                className="block font-bold text-site-text mb-1.5 text-xs sm:text-sm"
               >
                 Nama Pemesan <span className="text-rose-500">*</span>
               </label>
@@ -171,15 +171,15 @@ export function BookingForm({
                 name="jamaahName"
                 required
                 placeholder="Sesuai KTP / Paspor"
-                className="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50/40 text-site-text text-xs sm:text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 text-site-text text-sm sm:text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
                 <label
                   htmlFor="jamaahPhone"
-                  className="block font-bold text-site-text mb-1 text-xs"
+                  className="block font-bold text-site-text mb-1.5 text-xs sm:text-sm"
                 >
                   Nomor WhatsApp / HP <span className="text-rose-500">*</span>
                 </label>
@@ -189,14 +189,14 @@ export function BookingForm({
                   name="jamaahPhone"
                   required
                   placeholder="08123456789 atau +628123456789"
-                  className="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50/40 text-site-text text-xs sm:text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                  className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 text-site-text text-sm sm:text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="jamaahEmail"
-                  className="block font-bold text-site-text mb-1 text-xs"
+                  className="block font-bold text-site-text mb-1.5 text-xs sm:text-sm"
                 >
                   Email <span className="text-stone-400 font-normal">(Opsional)</span>
                 </label>
@@ -205,7 +205,7 @@ export function BookingForm({
                   id="jamaahEmail"
                   name="jamaahEmail"
                   placeholder="nama@email.com"
-                  className="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50/40 text-site-text text-xs sm:text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                  className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 text-site-text text-sm sm:text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -215,15 +215,15 @@ export function BookingForm({
         {/* SECTION 2: Jadwal Keberangkatan (URUTAN KEDUA - Custom Dropdown) */}
         {departures.length > 0 && (
           <div className="p-4 sm:p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-brand-600" />
-                <h3 className="font-jakarta text-sm font-bold text-site-text">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Calendar className="w-4 h-4 text-brand-600 shrink-0" />
+                <h3 className="font-jakarta text-sm sm:text-base font-bold text-site-text truncate">
                   Jadwal Keberangkatan <span className="text-rose-500">*</span>
                 </h3>
               </div>
-              <span className="text-[11px] font-medium text-site-text-muted">
-                {departures.length} tanggal tersedia
+              <span className="text-[11px] sm:text-xs font-medium text-site-text-muted shrink-0 whitespace-nowrap">
+                {departures.length} tanggal
               </span>
             </div>
 
@@ -233,7 +233,7 @@ export function BookingForm({
                 type="button"
                 id="departure-dropdown-trigger"
                 onClick={() => setIsDropdownOpen((prev) => !prev)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 hover:bg-stone-50 text-left flex items-center justify-between gap-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all cursor-pointer shadow-2xs"
+                className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 hover:bg-stone-50 text-left flex items-center justify-between gap-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all cursor-pointer shadow-2xs min-h-[46px]"
               >
                 <span className="font-semibold text-site-text truncate">
                   {selectedDeparture
@@ -241,7 +241,7 @@ export function BookingForm({
                     : 'Pilih Jadwal Keberangkatan'}
                 </span>
                 <ChevronDown
-                  className={`w-4 h-4 text-stone-400 shrink-0 transition-transform duration-200 ${
+                  className={`w-4.5 h-4.5 text-stone-400 shrink-0 transition-transform duration-200 ${
                     isDropdownOpen ? 'rotate-180 text-brand-600' : ''
                   }`}
                 />
@@ -262,7 +262,7 @@ export function BookingForm({
                           setSelectedDepartureId(dep.id)
                           setIsDropdownOpen(false)
                         }}
-                        className={`w-full px-3.5 py-2.5 text-left text-xs sm:text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer ${
+                        className={`w-full px-3.5 py-2.5 text-left text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer ${
                           isSelected
                             ? 'bg-brand-50/80 text-brand-700 font-bold'
                             : 'text-site-text hover:bg-stone-50 font-medium'
@@ -281,58 +281,55 @@ export function BookingForm({
 
         {/* SECTION 3: Pilihan Tipe Kamar & Jumlah Pax (URUTAN KETIGA) */}
         <div className="p-4 sm:p-5 space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-1.5">
-            <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 min-w-0">
               <BedDouble className="w-4 h-4 text-brand-600 shrink-0" />
-              <h3 className="font-jakarta text-sm font-bold text-site-text">
-                Pilih Tipe Kamar & Jumlah Pax <span className="text-rose-500">*</span>
+              <h3 className="font-jakarta text-sm sm:text-base font-bold text-site-text truncate">
+                Tipe Kamar & Pax <span className="text-rose-500">*</span>
               </h3>
             </div>
-            <span className="text-[11px] font-semibold text-site-text-muted shrink-0">
+            <span className="text-[11px] sm:text-xs font-semibold text-site-text-muted shrink-0 whitespace-nowrap">
               {totalPax > 0 ? `${totalPax} pax dipilih` : 'Min 1 pax'}
             </span>
           </div>
 
           {!hasAvailableRooms ? (
-            <p className="text-xs text-rose-600 font-medium">
+            <p className="text-xs sm:text-sm text-rose-600 font-medium">
               Tidak ada tipe kamar yang tersedia untuk paket ini.
             </p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {/* Kamar Quad */}
               {priceQuad && priceQuad > 0 ? (
-                <div className="flex items-center justify-between p-3 rounded-xl border border-stone-200/90 bg-stone-50/50 hover:bg-stone-50 transition-all gap-2">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-xs sm:text-sm text-site-text">Kamar Quad</span>
-                      <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded-md bg-stone-200/70 text-stone-600">
-                        4 pax/kamar
-                      </span>
-                    </div>
-                    <div className="text-xs sm:text-sm font-black text-brand-600 mt-0.5">
+                <div className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl border border-stone-200/90 bg-stone-50/50 hover:bg-stone-50 transition-all gap-2">
+                  <div className="min-w-0 flex-1">
+                    <span className="font-bold text-sm sm:text-base text-site-text block">
+                      Kamar Quad
+                    </span>
+                    <div className="text-xs sm:text-sm font-black text-brand-600 mt-0.5 whitespace-nowrap">
                       {formatRupiah(priceQuad)}{' '}
-                      <span className="text-[10px] font-normal text-site-text-muted">/ pax</span>
+                      <span className="text-[11px] font-normal text-site-text-muted">/ pax</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                     <button
                       type="button"
                       data-testid="stepper-quad-minus"
                       onClick={() => setQuadCount((c) => Math.max(0, c - 1))}
                       disabled={quadCount <= 0}
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white border border-stone-300 hover:bg-stone-100 active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-site-text shadow-2xs transition-all cursor-pointer"
+                      className="w-8 h-8 sm:w-8 sm:h-8 rounded-lg bg-white border border-stone-300 hover:bg-stone-100 active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-site-text shadow-2xs transition-all cursor-pointer"
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </button>
-                    <span data-testid="count-quad" className="w-6 text-center font-bold text-xs sm:text-sm text-site-text">
+                    <span data-testid="count-quad" className="w-5 sm:w-6 text-center font-bold text-sm text-site-text">
                       {quadCount}
                     </span>
                     <button
                       type="button"
                       data-testid="stepper-quad-plus"
                       onClick={() => setQuadCount((c) => c + 1)}
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-brand-600 hover:bg-brand-700 active:scale-95 text-white flex items-center justify-center shadow-xs transition-all cursor-pointer"
+                      className="w-8 h-8 sm:w-8 sm:h-8 rounded-lg bg-brand-600 hover:bg-brand-700 active:scale-95 text-white flex items-center justify-center shadow-xs transition-all cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                     </button>
@@ -342,38 +339,35 @@ export function BookingForm({
 
               {/* Kamar Triple */}
               {priceTriple && priceTriple > 0 ? (
-                <div className="flex items-center justify-between p-3 rounded-xl border border-stone-200/90 bg-stone-50/50 hover:bg-stone-50 transition-all gap-2">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-xs sm:text-sm text-site-text">Kamar Triple</span>
-                      <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded-md bg-stone-200/70 text-stone-600">
-                        3 pax/kamar
-                      </span>
-                    </div>
-                    <div className="text-xs sm:text-sm font-black text-brand-600 mt-0.5">
+                <div className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl border border-stone-200/90 bg-stone-50/50 hover:bg-stone-50 transition-all gap-2">
+                  <div className="min-w-0 flex-1">
+                    <span className="font-bold text-sm sm:text-base text-site-text block">
+                      Kamar Triple
+                    </span>
+                    <div className="text-xs sm:text-sm font-black text-brand-600 mt-0.5 whitespace-nowrap">
                       {formatRupiah(priceTriple)}{' '}
-                      <span className="text-[10px] font-normal text-site-text-muted">/ pax</span>
+                      <span className="text-[11px] font-normal text-site-text-muted">/ pax</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                     <button
                       type="button"
                       data-testid="stepper-triple-minus"
                       onClick={() => setTripleCount((c) => Math.max(0, c - 1))}
                       disabled={tripleCount <= 0}
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white border border-stone-300 hover:bg-stone-100 active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-site-text shadow-2xs transition-all cursor-pointer"
+                      className="w-8 h-8 sm:w-8 sm:h-8 rounded-lg bg-white border border-stone-300 hover:bg-stone-100 active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-site-text shadow-2xs transition-all cursor-pointer"
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </button>
-                    <span data-testid="count-triple" className="w-6 text-center font-bold text-xs sm:text-sm text-site-text">
+                    <span data-testid="count-triple" className="w-5 sm:w-6 text-center font-bold text-sm text-site-text">
                       {tripleCount}
                     </span>
                     <button
                       type="button"
                       data-testid="stepper-triple-plus"
                       onClick={() => setTripleCount((c) => c + 1)}
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-brand-600 hover:bg-brand-700 active:scale-95 text-white flex items-center justify-center shadow-xs transition-all cursor-pointer"
+                      className="w-8 h-8 sm:w-8 sm:h-8 rounded-lg bg-brand-600 hover:bg-brand-700 active:scale-95 text-white flex items-center justify-center shadow-xs transition-all cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                     </button>
@@ -383,38 +377,35 @@ export function BookingForm({
 
               {/* Kamar Double */}
               {priceDouble && priceDouble > 0 ? (
-                <div className="flex items-center justify-between p-3 rounded-xl border border-stone-200/90 bg-stone-50/50 hover:bg-stone-50 transition-all gap-2">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-xs sm:text-sm text-site-text">Kamar Double</span>
-                      <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded-md bg-stone-200/70 text-stone-600">
-                        2 pax/kamar
-                      </span>
-                    </div>
-                    <div className="text-xs sm:text-sm font-black text-brand-600 mt-0.5">
+                <div className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl border border-stone-200/90 bg-stone-50/50 hover:bg-stone-50 transition-all gap-2">
+                  <div className="min-w-0 flex-1">
+                    <span className="font-bold text-sm sm:text-base text-site-text block">
+                      Kamar Double
+                    </span>
+                    <div className="text-xs sm:text-sm font-black text-brand-600 mt-0.5 whitespace-nowrap">
                       {formatRupiah(priceDouble)}{' '}
-                      <span className="text-[10px] font-normal text-site-text-muted">/ pax</span>
+                      <span className="text-[11px] font-normal text-site-text-muted">/ pax</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                     <button
                       type="button"
                       data-testid="stepper-double-minus"
                       onClick={() => setDoubleCount((c) => Math.max(0, c - 1))}
                       disabled={doubleCount <= 0}
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white border border-stone-300 hover:bg-stone-100 active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-site-text shadow-2xs transition-all cursor-pointer"
+                      className="w-8 h-8 sm:w-8 sm:h-8 rounded-lg bg-white border border-stone-300 hover:bg-stone-100 active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-site-text shadow-2xs transition-all cursor-pointer"
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </button>
-                    <span data-testid="count-double" className="w-6 text-center font-bold text-xs sm:text-sm text-site-text">
+                    <span data-testid="count-double" className="w-5 sm:w-6 text-center font-bold text-sm text-site-text">
                       {doubleCount}
                     </span>
                     <button
                       type="button"
                       data-testid="stepper-double-plus"
                       onClick={() => setDoubleCount((c) => c + 1)}
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-brand-600 hover:bg-brand-700 active:scale-95 text-white flex items-center justify-center shadow-xs transition-all cursor-pointer"
+                      className="w-8 h-8 sm:w-8 sm:h-8 rounded-lg bg-brand-600 hover:bg-brand-700 active:scale-95 text-white flex items-center justify-center shadow-xs transition-all cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                     </button>
@@ -431,25 +422,25 @@ export function BookingForm({
             <button
               type="button"
               onClick={() => setShowReferralInput(true)}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors cursor-pointer py-1"
             >
-              <UserCheck className="w-3.5 h-3.5" />
+              <UserCheck className="w-4 h-4" />
               <span>Punya kode referral agen?</span>
             </button>
           ) : (
-            <div className="space-y-2 animate-in fade-in duration-200">
+            <div className="space-y-2.5 animate-in fade-in duration-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <UserCheck className="w-4 h-4 text-brand-600" />
-                  <h3 className="font-jakarta text-sm font-bold text-site-text">
-                    Kode Referral Agen <span className="text-stone-400 font-normal">(Opsional)</span>
+                  <h3 className="font-jakarta text-sm sm:text-base font-bold text-site-text">
+                    Kode Referral Agen <span className="text-stone-400 font-normal text-xs sm:text-sm">(Opsional)</span>
                   </h3>
                 </div>
                 {!initialReferralCode && (
                   <button
                     type="button"
                     onClick={() => setShowReferralInput(false)}
-                    className="text-[11px] font-medium text-site-text-muted hover:text-rose-600 transition-colors cursor-pointer"
+                    className="text-xs font-medium text-site-text-muted hover:text-rose-600 transition-colors cursor-pointer py-1 px-2"
                   >
                     Tutup
                   </button>
@@ -463,9 +454,9 @@ export function BookingForm({
                   name="referralCode"
                   defaultValue={initialReferralCode}
                   placeholder={sampleReferralCode}
-                  className="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50/40 text-site-text font-mono uppercase tracking-wider text-xs sm:text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                  className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 text-site-text font-mono uppercase tracking-wider text-sm sm:text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                 />
-                <p className="text-[11px] text-site-text-muted mt-1">
+                <p className="text-xs text-site-text-muted mt-1.5">
                   Isi jika Anda mendapatkan rekomendasi dari agen travel kami.
                 </p>
               </div>
@@ -503,7 +494,7 @@ export function BookingForm({
           <button
             type="submit"
             disabled={isPending || totalPax === 0}
-            className="w-full py-3.5 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="w-full py-4 sm:py-3.5 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             {isPending ? (
               <>
