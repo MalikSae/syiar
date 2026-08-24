@@ -18,6 +18,7 @@ import {
   DashboardErrorMessage,
   DashboardSubmitButton,
 } from '@/components/dashboard/form'
+import { DashboardSection } from '@/components/dashboard/layout'
 import {
   Globe,
   Palette,
@@ -441,24 +442,17 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
 
       {/* SECTION 1: Domain Kustom */}
       <div className={activeTab === 'domain' ? 'block animate-in fade-in duration-150' : 'hidden'}>
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-                <Globe className="w-4 h-4" />
-              </div>
+        <DashboardSection
+          icon={Globe}
+          title="Domain Kustom"
+          description="Gunakan domain web milik travel Anda sendiri untuk microsite publik."
+        >
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/80">
               <div>
-                <h2 className="text-base font-bold text-slate-900">Domain Kustom</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Gunakan domain web milik travel Anda sendiri untuk microsite publik.
-                </p>
+                <span className="text-xs font-bold text-slate-800 block">Status Domain Kustom</span>
+                <span className="text-xs text-slate-500">{customDomainEnabled ? 'Aktif menggunakan domain sendiri' : 'Nonaktif (menggunakan subdomain SyiarLink)'}</span>
               </div>
-            </div>
-
-            <div className="flex items-center gap-2.5">
-              <span className="text-xs font-semibold text-slate-600">
-                {customDomainEnabled ? 'Aktif' : 'Nonaktif'}
-              </span>
               <button
                 type="button"
                 role="switch"
@@ -475,9 +469,7 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
                 />
               </button>
             </div>
-          </div>
 
-          <div className="p-6 space-y-4">
             {customDomainEnabled ? (
               <div className="space-y-1.5 animate-in fade-in duration-200">
                 <DashboardLabel htmlFor="customDomain">
@@ -506,27 +498,17 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
               </p>
             )}
           </div>
-        </div>
+        </DashboardSection>
       </div>
 
       {/* SECTION 2: Identitas Visual & Branding */}
       <div className={activeTab === 'branding' ? 'block animate-in fade-in duration-150' : 'hidden'}>
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="p-6 border-b border-slate-100">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-                <ImageIcon className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-slate-900">Identitas Visual & Branding</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Upload icon persegi (favicon / avatar) dan logo horizontal untuk header microsite.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <DashboardSection
+          icon={ImageIcon}
+          title="Identitas Visual & Branding"
+          description="Upload icon persegi (favicon / avatar) dan logo horizontal untuk header microsite."
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
               <div className="space-y-1">
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
@@ -645,26 +627,18 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
               </div>
             </div>
           </div>
-        </div>
+        </DashboardSection>
       </div>
 
       {/* SECTION 3: Skema Warna Brand */}
       <div className={activeTab === 'colors' ? 'block animate-in fade-in duration-150' : 'hidden'}>
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-                <Palette className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-slate-900">Skema Warna Brand</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Atur 4 warna utama microsite: aksen utama, aksen sekunder, latar belakang, dan area gelap secara independen.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2.5">
+        <DashboardSection
+          icon={Palette}
+          title="Skema Warna Brand"
+          description="Atur 4 warna utama microsite: aksen utama, aksen sekunder, latar belakang, dan area gelap secara independen."
+        >
+          <div className="space-y-6">
+            <div className="flex flex-wrap items-center justify-end gap-2.5 pb-2">
               <button
                 type="button"
                 onClick={handleAutoSuggestColors}
@@ -685,257 +659,245 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
                 </button>
               )}
             </div>
-          </div>
 
-        <div className="p-6 space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
-              <div className="space-y-0.5">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="color-picker-primary" className="block text-xs font-bold text-slate-800">
-                    Aksen Utama
-                  </label>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
-                    {primaryColor ? 'Kustom' : 'Default'}
-                  </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
+                <div className="space-y-0.5">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="color-picker-primary" className="block text-xs font-bold text-slate-800">
+                      Aksen Utama
+                    </label>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
+                      {primaryColor ? 'Kustom' : 'Default'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">Tombol CTA & Highlight</p>
                 </div>
-                <p className="text-[11px] text-slate-500">Tombol CTA & Highlight</p>
+
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
+                    <input
+                      type="color"
+                      id="color-picker-primary"
+                      value={pickerPrimary}
+                      onChange={(e) => setPrimaryColor(e.target.value.toUpperCase())}
+                      className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <input
+                      type="text"
+                      id="color-text-primary"
+                      value={primaryColor ?? ''}
+                      onChange={(e) => setPrimaryColor(e.target.value.toUpperCase())}
+                      placeholder={DEFAULT_PRIMARY}
+                      maxLength={7}
+                      className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
-                  <input
-                    type="color"
-                    id="color-picker-primary"
-                    value={pickerPrimary}
-                    onChange={(e) => setPrimaryColor(e.target.value.toUpperCase())}
-                    className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
-                  />
+              <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
+                <div className="space-y-0.5">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="color-picker-secondary" className="block text-xs font-bold text-slate-800">
+                      Aksen Sekunder
+                    </label>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
+                      {secondaryColor ? 'Kustom' : 'Default'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">Badge, Tag & Aksen Soft</p>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <input
-                    type="text"
-                    id="color-text-primary"
-                    value={primaryColor ?? ''}
-                    onChange={(e) => setPrimaryColor(e.target.value.toUpperCase())}
-                    placeholder={DEFAULT_PRIMARY}
-                    maxLength={7}
-                    className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
-                  />
+
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
+                    <input
+                      type="color"
+                      id="color-picker-secondary"
+                      value={pickerSecondary}
+                      onChange={(e) => setSecondaryColor(e.target.value.toUpperCase())}
+                      className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <input
+                      type="text"
+                      id="color-text-secondary"
+                      value={secondaryColor ?? ''}
+                      onChange={(e) => setSecondaryColor(e.target.value.toUpperCase())}
+                      placeholder={DEFAULT_SECONDARY}
+                      maxLength={7}
+                      className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
+                <div className="space-y-0.5">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="color-picker-bg" className="block text-xs font-bold text-slate-800">
+                      Latar Belakang
+                    </label>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
+                      {backgroundColor ? 'Kustom' : 'Default'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">Background Utama Halaman</p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
+                    <input
+                      type="color"
+                      id="color-picker-bg"
+                      value={pickerBg}
+                      onChange={(e) => setBackgroundColor(e.target.value.toUpperCase())}
+                      className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <input
+                      type="text"
+                      id="color-text-bg"
+                      value={backgroundColor ?? ''}
+                      onChange={(e) => setBackgroundColor(e.target.value.toUpperCase())}
+                      placeholder={DEFAULT_BG}
+                      maxLength={7}
+                      className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
+                <div className="space-y-0.5">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="color-picker-dark" className="block text-xs font-bold text-slate-800">
+                      Area Gelap
+                    </label>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
+                      {darkColor ? 'Kustom' : 'Default'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">Footer & Banner Gelap</p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
+                    <input
+                      type="color"
+                      id="color-picker-dark"
+                      value={pickerDark}
+                      onChange={(e) => setDarkColor(e.target.value.toUpperCase())}
+                      className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <input
+                      type="text"
+                      id="color-text-dark"
+                      value={darkColor ?? ''}
+                      onChange={(e) => setDarkColor(e.target.value.toUpperCase())}
+                      placeholder={DEFAULT_DARK}
+                      maxLength={7}
+                      className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
-              <div className="space-y-0.5">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="color-picker-secondary" className="block text-xs font-bold text-slate-800">
-                    Aksen Sekunder
-                  </label>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
-                    {secondaryColor ? 'Kustom' : 'Default'}
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500">Badge, Tag & Aksen Soft</p>
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
+                  Pratinjau Kombinasi Warna Microsite
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  Live preview elemen aktual
+                </span>
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
-                  <input
-                    type="color"
-                    id="color-picker-secondary"
-                    value={pickerSecondary}
-                    onChange={(e) => setSecondaryColor(e.target.value.toUpperCase())}
-                    className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
-                  />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-slate-600">Aksen Utama</span>
+                    <span className="font-mono text-[10px] text-slate-400">{previewPrimary}</span>
+                  </div>
+                  <button
+                    type="button"
+                    style={{ backgroundColor: previewPrimary }}
+                    className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs transition-transform active:scale-95 cursor-default select-none flex items-center justify-center gap-1.5"
+                  >
+                    <span>Tombol CTA</span>
+                  </button>
+                  <span className="text-[10px] text-slate-400 block text-center">Tombol aksi & highlight</span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <input
-                    type="text"
-                    id="color-text-secondary"
-                    value={secondaryColor ?? ''}
-                    onChange={(e) => setSecondaryColor(e.target.value.toUpperCase())}
-                    placeholder={DEFAULT_SECONDARY}
-                    maxLength={7}
-                    className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
-                  />
-                </div>
-              </div>
-            </div>
 
-            <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
-              <div className="space-y-0.5">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="color-picker-bg" className="block text-xs font-bold text-slate-800">
-                    Latar Belakang
-                  </label>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
-                    {backgroundColor ? 'Kustom' : 'Default'}
-                  </span>
+                <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-slate-600">Aksen Sekunder</span>
+                    <span className="font-mono text-[10px] text-slate-400">{previewSecondary}</span>
+                  </div>
+                  <div
+                    style={{ backgroundColor: previewSecondary }}
+                    className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 select-none"
+                  >
+                    <span>Badge / Tag</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 block text-center">Hover & elemen aksen soft</span>
                 </div>
-                <p className="text-[11px] text-slate-500">Background Utama Halaman</p>
-              </div>
 
-              <div className="flex items-center gap-3">
-                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
-                  <input
-                    type="color"
-                    id="color-picker-bg"
-                    value={pickerBg}
-                    onChange={(e) => setBackgroundColor(e.target.value.toUpperCase())}
-                    className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <input
-                    type="text"
-                    id="color-text-bg"
-                    value={backgroundColor ?? ''}
-                    onChange={(e) => setBackgroundColor(e.target.value.toUpperCase())}
-                    placeholder={DEFAULT_BG}
-                    maxLength={7}
-                    className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 space-y-3">
-              <div className="space-y-0.5">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="color-picker-dark" className="block text-xs font-bold text-slate-800">
-                    Area Gelap
-                  </label>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-600">
-                    {darkColor ? 'Kustom' : 'Default'}
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500">Footer & Banner Gelap</p>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-300 shadow-2xs shrink-0 cursor-pointer">
-                  <input
-                    type="color"
-                    id="color-picker-dark"
-                    value={pickerDark}
-                    onChange={(e) => setDarkColor(e.target.value.toUpperCase())}
-                    className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer border-0 p-0"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <input
-                    type="text"
-                    id="color-text-dark"
-                    value={darkColor ?? ''}
-                    onChange={(e) => setDarkColor(e.target.value.toUpperCase())}
-                    placeholder={DEFAULT_DARK}
-                    maxLength={7}
-                    className="w-full px-2.5 py-1.5 font-mono text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-3 pt-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
-                Pratinjau Kombinasi Warna Microsite
-              </span>
-              <span className="text-[11px] text-slate-400">
-                Live preview elemen aktual
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-600">Aksen Utama</span>
-                  <span className="font-mono text-[10px] text-slate-400">{previewPrimary}</span>
-                </div>
-                <button
-                  type="button"
-                  style={{ backgroundColor: previewPrimary }}
-                  className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs transition-transform active:scale-95 cursor-default select-none flex items-center justify-center gap-1.5"
-                >
-                  <span>Tombol CTA</span>
-                </button>
-                <span className="text-[10px] text-slate-400 block text-center">Tombol aksi & highlight</span>
-              </div>
-
-              <div className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-600">Aksen Sekunder</span>
-                  <span className="font-mono text-[10px] text-slate-400">{previewSecondary}</span>
-                </div>
                 <div
-                  style={{ backgroundColor: previewSecondary }}
-                  className="w-full py-2 px-3 rounded-lg text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 select-none"
+                  style={{ backgroundColor: previewBg }}
+                  className="p-3.5 rounded-xl border border-stone-300/80 shadow-2xs space-y-2"
                 >
-                  <span>Badge / Tag</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-slate-800">Latar Belakang</span>
+                    <span className="font-mono text-[10px] text-slate-600">{previewBg}</span>
+                  </div>
+                  <div className="bg-white/90 p-2 rounded-lg border border-stone-200 shadow-2xs text-center">
+                    <span className="text-[11px] font-semibold text-slate-800 block">Kartu Konten</span>
+                  </div>
+                  <span className="text-[10px] text-slate-600 block text-center">Background utama halaman</span>
                 </div>
-                <span className="text-[10px] text-slate-400 block text-center">Hover & elemen aksen soft</span>
-              </div>
 
-              <div
-                style={{ backgroundColor: previewBg }}
-                className="p-3.5 rounded-xl border border-stone-300/80 shadow-2xs space-y-2"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-800">Latar Belakang</span>
-                  <span className="font-mono text-[10px] text-slate-600">{previewBg}</span>
+                <div
+                  style={{ backgroundColor: previewDark }}
+                  className="p-3.5 rounded-xl border border-slate-800 shadow-2xs space-y-2 text-white"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-slate-200">Area Gelap</span>
+                    <span className="font-mono text-[10px] text-slate-400">{previewDark}</span>
+                  </div>
+                  <div className="bg-white/10 p-2 rounded-lg border border-white/15 text-center">
+                    <span className="text-[11px] font-semibold text-white block">Footer / Banner Gelap</span>
+                  </div>
+                  <span className="text-[10px] text-slate-300 block text-center">Section gelap & footer</span>
                 </div>
-                <div className="bg-white/90 p-2 rounded-lg border border-stone-200 shadow-2xs text-center">
-                  <span className="text-[11px] font-semibold text-slate-800 block">Kartu Konten</span>
-                </div>
-                <span className="text-[10px] text-slate-600 block text-center">Background utama halaman</span>
-              </div>
-
-              <div
-                style={{ backgroundColor: previewDark }}
-                className="p-3.5 rounded-xl border border-slate-800 shadow-2xs space-y-2 text-white"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-200">Area Gelap</span>
-                  <span className="font-mono text-[10px] text-slate-400">{previewDark}</span>
-                </div>
-                <div className="bg-white/10 p-2 rounded-lg border border-white/15 text-center">
-                  <span className="text-[11px] font-semibold text-white block">Footer / Banner Gelap</span>
-                </div>
-                <span className="text-[10px] text-slate-300 block text-center">Section gelap & footer</span>
               </div>
             </div>
-          </div>
 
-          <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 text-xs text-slate-500 flex items-start gap-2.5">
-            <Info className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-            <p className="leading-relaxed">
-              Tombol <strong className="text-slate-700">Auto-isi dari Aksen Utama</strong> memberikan saran turunan warna harmonis sebagai titik awal. Anda bebas menyesuaikan masing-masing warna sebelum menekan tombol simpan di bawah.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {/* SECTION 4: Hero Section */}
-    <div className={activeTab === 'hero' ? 'block animate-in fade-in duration-150' : 'hidden'}>
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-              <LayoutTemplate className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Hero Section (Banner Pembuka)</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Atur judul headline, subheadline pembuka, dan background banner yang tampil paling atas di microsite.
+            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 text-xs text-slate-500 flex items-start gap-2.5">
+              <Info className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+              <p className="leading-relaxed">
+                Tombol <strong className="text-slate-700">Auto-isi dari Aksen Utama</strong> memberikan saran turunan warna harmonis sebagai titik awal. Anda bebas menyesuaikan masing-masing warna sebelum menekan tombol simpan di bawah.
               </p>
             </div>
           </div>
-        </div>
+        </DashboardSection>
+      </div>
 
-        <div className="p-6 space-y-6">
+      {/* SECTION 4: Hero Section */}
+      <div className={activeTab === 'hero' ? 'block animate-in fade-in duration-150' : 'hidden'}>
+        <DashboardSection
+          icon={LayoutTemplate}
+          title="Hero Section (Banner Pembuka)"
+          description="Atur judul headline, subheadline pembuka, dan background banner yang tampil paling atas di microsite."
+        >
+          <div className="space-y-6">
           {/* A. Headline */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
@@ -1071,93 +1033,59 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
             </p>
           </div>
         </div>
-      </div>
+      </DashboardSection>
     </div>
 
     {/* SECTION 5: Keunggulan Travel (features, WAJIB TEPAT 4) */}
     <div className={activeTab === 'features' ? 'block animate-in fade-in duration-150' : 'hidden'}>
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-              <Award className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Keunggulan & Nilai Lebih Travel</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Wajib 4 poin keunggulan utama travel Anda (mis. hotel dekat masjid, pembimbing sunnah, kepastian jadwal). Keempat slot wajib diisi lengkap.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6">
-          <RepeatableListEditor<FeatureItem>
-            items={features}
-            fields={FEATURE_FIELDS}
-            onChange={setFeatures}
-            maxItems={4}
-            minItems={4}
-            addButtonLabel="Tambah Keunggulan"
-            emptyMessage="Keunggulan wajib memiliki tepat 4 slot."
-            itemTitlePrefix="Keunggulan"
-            idPrefix="features"
-          />
-        </div>
-      </div>
+      <DashboardSection
+        icon={Award}
+        title="Keunggulan & Nilai Lebih Travel"
+        description="Wajib 4 poin keunggulan utama travel Anda (mis. hotel dekat masjid, pembimbing sunnah, kepastian jadwal). Keempat slot wajib diisi lengkap."
+      >
+        <RepeatableListEditor<FeatureItem>
+          items={features}
+          fields={FEATURE_FIELDS}
+          onChange={setFeatures}
+          maxItems={4}
+          minItems={4}
+          addButtonLabel="Tambah Keunggulan"
+          emptyMessage="Keunggulan wajib memiliki tepat 4 slot."
+          itemTitlePrefix="Keunggulan"
+          idPrefix="features"
+        />
+      </DashboardSection>
     </div>
 
     {/* SECTION 6: FAQ (Pertanyaan yang Sering Diajukan, MIN 0, MAX 15) */}
     <div className={activeTab === 'faqs' ? 'block animate-in fade-in duration-150' : 'hidden'}>
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-              <HelpCircle className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Pertanyaan yang Sering Diajukan (FAQ)</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Daftar tanya jawab umum untuk membantu calon jamaah memahami syarat pendaftaran, dokumen, dan fasilitas perjalanan.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6">
-          <RepeatableListEditor<FaqItem>
-            items={faqs}
-            fields={FAQ_FIELDS}
-            onChange={setFaqs}
-            maxItems={15}
-            minItems={0}
-            addButtonLabel="Tambah FAQ"
-            emptyMessage="Belum ada daftar FAQ yang ditambahkan. Tambahkan FAQ untuk memudahkan calon jamaah menemukan jawaban cepat."
-            itemTitlePrefix="FAQ"
-            idPrefix="faqs"
-          />
-        </div>
-      </div>
+      <DashboardSection
+        icon={HelpCircle}
+        title="Pertanyaan yang Sering Diajukan (FAQ)"
+        description="Daftar tanya jawab umum untuk membantu calon jamaah memahami syarat pendaftaran, dokumen, dan fasilitas perjalanan."
+      >
+        <RepeatableListEditor<FaqItem>
+          items={faqs}
+          fields={FAQ_FIELDS}
+          onChange={setFaqs}
+          maxItems={15}
+          minItems={0}
+          addButtonLabel="Tambah FAQ"
+          emptyMessage="Belum ada daftar FAQ yang ditambahkan. Tambahkan FAQ untuk memudahkan calon jamaah menemukan jawaban cepat."
+          itemTitlePrefix="FAQ"
+          idPrefix="faqs"
+        />
+      </DashboardSection>
     </div>
 
     {/* SECTION 7: Testimoni Jamaah (MIN 0, MAX 12) */}
     <div className={activeTab === 'testimonials' ? 'block animate-in fade-in duration-150' : 'hidden'}>
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-              <MessageSquareQuote className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Testimoni Jamaah</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Kutipan pengalaman langsung dari jamaah yang telah berangkat bersama travel Anda.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 space-y-4">
+      <DashboardSection
+        icon={MessageSquareQuote}
+        title="Testimoni Jamaah"
+        description="Kutipan pengalaman langsung dari jamaah yang telah berangkat bersama travel Anda."
+      >
+        <div className="space-y-4">
           {/* Informational Nudge Text */}
           <div className="p-3.5 bg-blue-50/80 rounded-xl border border-blue-200/70 text-xs text-blue-900 flex items-start gap-2.5">
             <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
@@ -1178,11 +1106,11 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
             idPrefix="testimonials"
           />
         </div>
-      </div>
+      </DashboardSection>
     </div>
 
     {/* Sticky Save Action Card / Footer */}
-    <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h3 className="text-sm font-bold text-slate-900">Simpan Seluruh Pengaturan Website</h3>
         <p className="text-xs text-slate-500 mt-0.5">

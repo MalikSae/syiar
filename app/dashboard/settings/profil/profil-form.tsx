@@ -9,6 +9,7 @@ import {
   DashboardErrorMessage,
   DashboardSubmitButton,
 } from '@/components/dashboard/form'
+import { DashboardSection } from '@/components/dashboard/layout'
 import {
   Building2,
   Lock,
@@ -44,7 +45,7 @@ export function ProfilForm({ initialData }: ProfilFormProps) {
   }, [state])
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} className="space-y-8">
       {/* Alert Notifikasi Feedback Sukses */}
       {state?.success && (
         <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-start gap-3 animate-in fade-in">
@@ -61,19 +62,12 @@ export function ProfilForm({ initialData }: ProfilFormProps) {
         />
       )}
 
-      <div className="bg-white rounded-xl border border-slate-200/90 shadow-xs overflow-hidden">
-        {/* Header Kartu */}
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-          <div>
-            <h2 className="text-base font-bold text-slate-900">Informasi Profil Travel</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Identitas dan informasi resmi travel yang ditampilkan kepada agen dan publik.
-            </p>
-          </div>
-        </div>
-
-        {/* Input Fields */}
-        <div className="p-6 space-y-6">
+      <DashboardSection
+        icon={Building2}
+        title="Informasi Profil Travel"
+        description="Identitas dan informasi resmi travel yang ditampilkan kepada agen dan publik."
+      >
+        <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* 1. Nama Brand Travel */}
             <div className="space-y-1.5">
@@ -192,17 +186,17 @@ export function ProfilForm({ initialData }: ProfilFormProps) {
             />
           </div>
         </div>
+      </DashboardSection>
 
-        {/* Footer Aksi */}
-        <div className="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
-          <DashboardSubmitButton
-            isPending={isPending}
-            loadingText="Menyimpan..."
-            icon={Save}
-          >
-            Simpan Profil
-          </DashboardSubmitButton>
-        </div>
+      {/* Footer Aksi */}
+      <div className="pt-6 border-t border-slate-200 flex items-center justify-end">
+        <DashboardSubmitButton
+          isPending={isPending}
+          loadingText="Menyimpan..."
+          icon={Save}
+        >
+          Simpan Profil
+        </DashboardSubmitButton>
       </div>
     </form>
   )

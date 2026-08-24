@@ -185,7 +185,7 @@ export default function DashboardShell({
   const tenantInitial = tenantName ? tenantName.charAt(0).toUpperCase() : 'S'
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex font-sans antialiased">
+    <div className="min-h-screen bg-white text-slate-900 flex font-sans antialiased">
       {/* Backdrop Overlay for Mobile */}
       {isMobileOpen && (
         <div
@@ -356,7 +356,7 @@ export default function DashboardShell({
       </aside>
 
       {/* Main Wrapper Area (Offset by sidebar width on desktop) */}
-      <div className="flex-1 md:pl-64 flex flex-col min-h-screen w-full">
+      <div className="flex-1 md:pl-64 flex flex-col min-h-screen w-full bg-white">
         {/* Topbar */}
         <header className="h-16 bg-white border-b border-slate-200/80 sticky top-0 z-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           {/* Left: Mobile Toggle & Breadcrumbs */}

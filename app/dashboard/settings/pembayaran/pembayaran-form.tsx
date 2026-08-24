@@ -9,6 +9,7 @@ import {
   DashboardErrorMessage,
   DashboardSubmitButton,
 } from '@/components/dashboard/form'
+import { DashboardSection } from '@/components/dashboard/layout'
 import {
   CreditCard,
   Building,
@@ -43,7 +44,7 @@ export function PembayaranForm({ initialData }: PembayaranFormProps) {
   }, [state])
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} className="space-y-10">
       {/* Alert Sukses */}
       {state?.success && (
         <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-start gap-3 animate-in fade-in">
@@ -72,22 +73,12 @@ export function PembayaranForm({ initialData }: PembayaranFormProps) {
       )}
 
       {/* SECTION 1: Info Rekening Bank */}
-      <div className="bg-white rounded-xl border border-slate-200/90 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-              <CreditCard className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Rekening Bank Resmi</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Rekening tujuan transfer manual bagi calon jamaah untuk pembayaran uang muka (DP) dan pelunasan.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 space-y-6">
+      <DashboardSection
+        icon={CreditCard}
+        title="Rekening Bank Resmi"
+        description="Rekening tujuan transfer manual bagi calon jamaah untuk pembayaran uang muka (DP) dan pelunasan."
+      >
+        <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 1. Nama Bank */}
             <div className="space-y-1.5">
@@ -140,25 +131,15 @@ export function PembayaranForm({ initialData }: PembayaranFormProps) {
             </p>
           </div>
         </div>
-      </div>
+      </DashboardSection>
 
       {/* SECTION 2: Syarat & Ketentuan Pembayaran */}
-      <div className="bg-white rounded-xl border border-slate-200/90 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-              <FileText className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Syarat & Ketentuan Pembayaran</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Aturan pembayaran, jadwal termin, kebijakan pembatalan, dan refund yang akan ditampilkan kepada jamaah.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 space-y-3">
+      <DashboardSection
+        icon={FileText}
+        title="Syarat & Ketentuan Pembayaran"
+        description="Aturan pembayaran, jadwal termin, kebijakan pembatalan, dan refund yang akan ditampilkan kepada jamaah."
+      >
+        <div className="space-y-3">
           <DashboardLabel htmlFor="termsAndConditions">
             Teks Syarat & Ketentuan Lengkap
           </DashboardLabel>
@@ -178,17 +159,17 @@ export function PembayaranForm({ initialData }: PembayaranFormProps) {
             helperText="Teks ini akan dibaca oleh calon jamaah pada halaman status booking dan konfirmasi pendaftaran."
           />
         </div>
+      </DashboardSection>
 
-        {/* Footer Aksi */}
-        <div className="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
-          <DashboardSubmitButton
-            isPending={isPending}
-            loadingText="Menyimpan..."
-            icon={Save}
-          >
-            Simpan Pengaturan Pembayaran
-          </DashboardSubmitButton>
-        </div>
+      {/* Footer Aksi */}
+      <div className="pt-6 border-t border-slate-200 flex items-center justify-end">
+        <DashboardSubmitButton
+          isPending={isPending}
+          loadingText="Menyimpan..."
+          icon={Save}
+        >
+          Simpan Pengaturan Pembayaran
+        </DashboardSubmitButton>
       </div>
     </form>
   )
