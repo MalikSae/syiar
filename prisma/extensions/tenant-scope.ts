@@ -75,6 +75,8 @@ export function getTenantScopedClient(tenantId: string) {
       package: modelScope,
       packageDeparture: modelScope,
       booking: modelScope,
+      cashoutRequest: modelScope,
+      cashoutRequestBooking: modelScope,
     },
   })
 }

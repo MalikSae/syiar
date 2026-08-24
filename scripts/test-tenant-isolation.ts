@@ -273,9 +273,70 @@ async function runTenantIsolationTests() {
   assert(bookingTampered === null, 'Booking: Percobaan override tenantId di query Booking berhasil ditimpa dan tetap NULL')
 
   // ---------------------------------------------------------------------------
-  // 6. Test Strict findUnique Rejection pada Semua Model Scoped
+  // 6. Test Isolasi Model CASHOUTREQUEST & CASHOUTREQUESTBOOKING
   // ---------------------------------------------------------------------------
-  console.log('\n[6/7] Menguji Penolakan Eksplisit findUnique pada Semua Model...')
+  console.log('\n[6/8] Menguji Isolasi Model CASHOUTREQUEST & CASHOUTREQUESTBOOKING...')
+
+  let crA = await scopedClientA.cashoutRequest.findFirst({ where: { agentId: agentA.id } })
+  if (!crA) {
+    crA = await scopedClientA.cashoutRequest.create({
+      data: {
+        tenantId: tenantA.id,
+        agentId: agentA.id,
+        status: 'pending',
+      },
+    })
+  }
+
+  let crB = await scopedClientB.cashoutRequest.findFirst({ where: { agentId: agentB.id } })
+  if (!crB) {
+    crB = await scopedClientB.cashoutRequest.create({
+      data: {
+        tenantId: tenantB.id,
+        agentId: agentB.id,
+        status: 'pending',
+      },
+    })
+  }
+
+  const crLeakA = await scopedClientA.cashoutRequest.findFirst({ where: { id: crB.id } })
+  assert(crLeakA === null, 'CashoutRequest: Scoped Client A mencari CashoutRequest B by ID menghasilkan NULL')
+
+  const crLeakB = await scopedClientB.cashoutRequest.findFirst({ where: { id: crA.id } })
+  assert(crLeakB === null, 'CashoutRequest: Scoped Client B mencari CashoutRequest A by ID menghasilkan NULL')
+
+  let crbA = await scopedClientA.cashoutRequestBooking.findFirst({ where: { cashoutRequestId: crA.id } })
+  if (!crbA) {
+    crbA = await scopedClientA.cashoutRequestBooking.create({
+      data: {
+        tenantId: tenantA.id,
+        cashoutRequestId: crA.id,
+        bookingId: bookingA.id,
+      },
+    })
+  }
+
+  let crbB = await scopedClientB.cashoutRequestBooking.findFirst({ where: { cashoutRequestId: crB.id } })
+  if (!crbB) {
+    crbB = await scopedClientB.cashoutRequestBooking.create({
+      data: {
+        tenantId: tenantB.id,
+        cashoutRequestId: crB.id,
+        bookingId: bookingB.id,
+      },
+    })
+  }
+
+  const crbLeakA = await scopedClientA.cashoutRequestBooking.findFirst({ where: { id: crbB.id } })
+  assert(crbLeakA === null, 'CashoutRequestBooking: Scoped Client A mencari CashoutRequestBooking B by ID menghasilkan NULL')
+
+  const crbLeakB = await scopedClientB.cashoutRequestBooking.findFirst({ where: { id: crbA.id } })
+  assert(crbLeakB === null, 'CashoutRequestBooking: Scoped Client B mencari CashoutRequestBooking A by ID menghasilkan NULL')
+
+  // ---------------------------------------------------------------------------
+  // 7. Test Strict findUnique Rejection pada Semua Model Scoped
+  // ---------------------------------------------------------------------------
+  console.log('\n[7/8] Menguji Penolakan Eksplisit findUnique pada Semua Model...')
 
   let agentFindUniqueBlocked = false
   try {
@@ -317,8 +378,28 @@ async function runTenantIsolationTests() {
   }
   assert(bookingFindUniqueBlocked, 'findUnique Booking ditolak keras')
 
+  let crFindUniqueBlocked = false
+  try {
+    await (scopedClientA.cashoutRequest as any).findUnique({ where: { id: crA.id } })
+  } catch (err: any) {
+    if (err.message.includes('findUnique is intentionally not supported')) {
+      crFindUniqueBlocked = true
+    }
+  }
+  assert(crFindUniqueBlocked, 'findUnique CashoutRequest ditolak keras')
+
+  let crbFindUniqueBlocked = false
+  try {
+    await (scopedClientA.cashoutRequestBooking as any).findUnique({ where: { id: crbA.id } })
+  } catch (err: any) {
+    if (err.message.includes('findUnique is intentionally not supported')) {
+      crbFindUniqueBlocked = true
+    }
+  }
+  assert(crbFindUniqueBlocked, 'findUnique CashoutRequestBooking ditolak keras')
+
   // ---------------------------------------------------------------------------
-  // 7. Summary Report
+  // 8. Summary Report
   // ---------------------------------------------------------------------------
   console.log('\n=================================================================')
   console.log(`HASIL AKHIR: ${passedAssertions} PASSED, ${failedAssertions} FAILED`)
