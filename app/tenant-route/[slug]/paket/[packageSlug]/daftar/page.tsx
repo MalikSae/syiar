@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { getTenantScopedClient } from '@/prisma/extensions/tenant-scope'
 import { getBookingReferral } from '@/lib/referral-cookie'
-import { TenantNavbar } from '../../../components/tenant-navbar'
-import { TenantFooter } from '../../../components/tenant-footer'
 import { BookingForm } from './booking-form'
+import { ArrowLeft, ShieldCheck, Lock } from 'lucide-react'
 
 interface BookingPageProps {
   params: Promise<{ slug: string; packageSlug: string }>
@@ -51,17 +51,53 @@ export default async function BookingPage({ params }: BookingPageProps) {
 
   // 4. Ambil kode referral dari cookie jika ada
   const cookieReferral = await getBookingReferral()
+  const currentYear = new Date().getFullYear()
 
   return (
-    <div className="min-h-screen flex flex-col bg-site-bg text-site-text font-inter">
-      {/* Navbar */}
-      <TenantNavbar
-        tenantName={tenant.name}
-        logoUrl={tenant.logoUrl}
-        iconUrl={tenant.iconUrl}
-      />
+    <div className="min-h-screen flex flex-col bg-stone-50 text-site-text font-inter">
+      {/* Distraction-Free Minimalist Header */}
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200/80">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+          {/* Logo / Tenant Brand */}
+          <Link
+            href={`/paket/${pkg.slug}`}
+            className="flex items-center gap-3 group transition-opacity hover:opacity-80"
+          >
+            {tenant.logoUrl ? (
+              <Image
+                src={tenant.logoUrl}
+                alt={tenant.name}
+                width={120}
+                height={36}
+                className="h-8 sm:h-9 w-auto object-contain"
+                priority
+              />
+            ) : (
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-black text-sm">
+                  {tenant.name.charAt(0)}
+                </div>
+                <span className="font-jakarta font-black text-base sm:text-lg text-site-text tracking-tight">
+                  {tenant.name}
+                </span>
+              </div>
+            )}
+          </Link>
 
-      <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-6">
+          {/* Clean Exit / Back Link */}
+          <Link
+            href={`/paket/${pkg.slug}`}
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-site-text-muted hover:text-brand-600 transition-colors py-1.5 px-3 rounded-lg hover:bg-stone-100/80"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="hidden xs:inline">Kembali ke Detail</span>
+            <span className="xs:hidden">Kembali</span>
+          </Link>
+        </div>
+      </header>
+
+      {/* Main Form Content */}
+      <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6">
         {/* Breadcrumb Navigation */}
         <nav
           aria-label="Breadcrumb"
@@ -86,12 +122,16 @@ export default async function BookingPage({ params }: BookingPageProps) {
         </nav>
 
         {/* Heading */}
-        <div className="text-left space-y-1.5 border-b border-stone-200/80 pb-4">
+        <div className="text-left space-y-1 pb-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-semibold mb-1">
+            <Lock className="w-3 h-3 text-emerald-600" />
+            <span>Pendaftaran Aman & Resmi</span>
+          </div>
           <h1 className="font-jakarta text-2xl sm:text-3xl font-bold text-site-text tracking-tight">
             Formulir Pendaftaran Umroh
           </h1>
           <p className="text-xs sm:text-sm text-site-text-muted">
-            Lengkapi data diri calon jamaah di bawah ini untuk memesan kuota paket.
+            Lengkapi data pemesan dan pilih kuota paket untuk melanjutkan.
           </p>
         </div>
 
@@ -109,8 +149,18 @@ export default async function BookingPage({ params }: BookingPageProps) {
         />
       </main>
 
-      {/* Footer */}
-      <TenantFooter tenantName={tenant.name} />
+      {/* Minimalist Distraction-Free Trust Footer */}
+      <footer className="mt-auto border-t border-stone-200 bg-white py-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-xs text-site-text-muted">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-brand-600 shrink-0" />
+            <span>Data pendaftaran Anda terlindungi & diproses langsung oleh {tenant.name}.</span>
+          </div>
+          <div>
+            <span>© {currentYear} {tenant.name}. Powered by <strong className="font-semibold text-site-text">SyiarLink</strong></span>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
