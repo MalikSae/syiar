@@ -216,17 +216,17 @@ export default async function TenantHomePage({ params }: TenantHomePageProps) {
                   {heroSubheadline}
                 </p>
 
-                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div className="pt-2 grid grid-cols-2 gap-2.5 sm:flex sm:items-center sm:gap-3">
                   <Link
                     href="/paket"
-                    className="w-full sm:w-auto px-6 py-3.5 bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 text-center"
+                    className="px-3.5 sm:px-6 py-3.5 bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 sm:gap-2 text-center whitespace-nowrap"
                   >
                     <Compass className="w-4 h-4 shrink-0" />
-                    <span>Lihat Semua Paket</span>
+                    <span>Lihat Paket</span>
                   </Link>
                   <Link
                     href="/gabung-agen"
-                    className="w-full sm:w-auto px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-xs text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs text-center flex items-center justify-center"
+                    className="px-3.5 sm:px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-xs text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs text-center flex items-center justify-center whitespace-nowrap"
                   >
                     <span>Gabung Jadi Agen</span>
                   </Link>
