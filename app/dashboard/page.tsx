@@ -3,6 +3,12 @@ import { prisma } from '@/lib/prisma'
 import { getTenantScopedClient } from '@/prisma/extensions/tenant-scope'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import {
+  LayoutDashboard,
+  Users,
+  BarChart3,
+  ArrowRight,
+} from 'lucide-react'
 
 export default async function DashboardPage() {
   // 1. Guardrail eksplisit: jika session null atau bukan travel_user -> redirect('/login')
@@ -76,30 +82,29 @@ export default async function DashboardPage() {
   const total7DaysCount = chartDays.reduce((acc, d) => acc + d.count, 0)
 
   return (
-    <div className="space-y-6">
-      {/* Header & Strip Info */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-              Dashboard Travel — {tenant.name}
-            </h1>
-            <div className="flex flex-wrap items-center gap-x-2 text-xs text-slate-500 mt-1">
-              <span>{travelUser.email}</span>
-              <span>·</span>
-              <span className="capitalize">{travelUser.role}</span>
-              <span>·</span>
-              <span className="font-mono text-slate-700">{tenant.slug}.syiar.link</span>
-              <span>·</span>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 capitalize">
-                {tenant.status}
-              </span>
-            </div>
+    <div className="space-y-8">
+      {/* 1. Header & Strip Info Seamless */}
+      <div className="border-b border-slate-200 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2.5">
+            <LayoutDashboard className="w-6 h-6 text-brand-600 shrink-0" />
+            <span>Dashboard Travel — {tenant.name}</span>
+          </h1>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 mt-1">
+            <span>{travelUser.email}</span>
+            <span>·</span>
+            <span className="capitalize">{travelUser.role}</span>
+            <span>·</span>
+            <span className="font-mono text-slate-700">{tenant.slug}.syiar.link</span>
+            <span>·</span>
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 capitalize">
+              {tenant.status}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* 3 Stat Cards */}
+      {/* 2. 3 Stat Cards (TETAP CARD) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Total Agen */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
@@ -159,17 +164,22 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* Chart Batang 7 Hari Terakhir */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <div>
-          <h2 className="text-base font-bold text-slate-900">Pendaftaran Agen — 7 Hari Terakhir</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Aktivitas pendaftaran mitra baru dalam 1 minggu terakhir
-          </p>
+      {/* 3. Chart Batang 7 Hari Terakhir (Seamless Header + Thin Border Container) */}
+      <div className="space-y-3">
+        <div className="border-b border-slate-200 pb-3 flex items-center justify-between">
+          <div>
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-brand-600 shrink-0" />
+              <span>Pendaftaran Agen — 7 Hari Terakhir</span>
+            </h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Aktivitas pendaftaran mitra baru dalam 1 minggu terakhir
+            </p>
+          </div>
         </div>
 
         {total7DaysCount === 0 ? (
-          <div className="h-44 flex flex-col items-center justify-center text-center p-6 bg-slate-50/60 rounded-xl border border-dashed border-slate-200">
+          <div className="h-44 flex flex-col items-center justify-center text-center p-6 bg-white rounded-xl border border-slate-200 shadow-2xs">
             <svg className="w-9 h-9 text-slate-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
@@ -184,7 +194,7 @@ export default async function DashboardPage() {
             </p>
           </div>
         ) : (
-          <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-4 sm:p-6">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-2xs p-4 sm:p-6">
             <div className="flex items-end justify-between gap-2 sm:gap-6 h-40 pt-6 pb-2">
               {chartDays.map((day) => {
                 const heightPercent =
@@ -220,23 +230,27 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      {/* Tabel Preview Agen Terbaru */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+      {/* 4. Tabel Preview Agen Terbaru (Seamless Header + Thin Border Table) */}
+      <div className="space-y-3">
+        <div className="border-b border-slate-200 pb-3 flex items-center justify-between">
           <div>
-            <h2 className="text-base font-bold text-slate-900">Agen Terbaru</h2>
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Users className="w-4 h-4 text-brand-600 shrink-0" />
+              <span>Agen Terbaru</span>
+            </h2>
             <p className="text-xs text-slate-500 mt-0.5">5 pendaftaran agen paling baru</p>
           </div>
           <Link
             href="/dashboard/agents"
-            className="text-xs font-semibold text-brand-600 hover:text-brand-500 transition-colors"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-brand-600 hover:text-brand-500 transition-colors"
           >
-            Lihat semua &rarr;
+            <span>Lihat semua</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
         {recentAgents.length === 0 ? (
-          <div className="py-12 text-center p-6">
+          <div className="py-12 text-center p-6 bg-white rounded-xl border border-slate-200 shadow-2xs">
             <svg
               className="mx-auto h-12 w-12 text-slate-300"
               fill="none"
@@ -251,82 +265,85 @@ export default async function DashboardPage() {
               />
             </svg>
             <h3 className="mt-2 text-sm font-semibold text-slate-900">Belum ada agen terdaftar</h3>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-xs text-slate-500">
               Bagikan link pendaftaran ke calon agen kamu.
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-sm">
-              <thead className="bg-slate-50/80">
-                <tr>
-                  <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Nama Agen
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Nomor HP / WA
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Kode Referral
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Tanggal Daftar
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-slate-100">
-                {recentAgents.map((agent) => {
-                  const isPending = agent.status === 'pending'
-                  const isApproved = agent.status === 'approved'
+          <div className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-slate-200 text-sm">
+                <thead className="bg-slate-50/80">
+                  <tr>
+                    <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Nama Agen
+                    </th>
+                    <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Nomor HP / WA
+                    </th>
+                    <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Kode Referral
+                    </th>
+                    <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      Tanggal Daftar
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-slate-100">
+                  {recentAgents.map((agent) => {
+                    const isPending = agent.status === 'pending'
+                    const isApproved = agent.status === 'approved'
 
-                  return (
-                    <tr key={agent.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-semibold text-slate-900">{agent.name}</div>
-                        {agent.email && <div className="text-xs text-slate-500">{agent.email}</div>}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap font-mono text-slate-700 text-xs">
-                        {agent.phone}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap font-mono font-bold text-xs text-slate-800">
-                        <span className="bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
-                          {agent.referralCode}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {isPending && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
-                            Pending
+                    return (
+                      <tr key={agent.id} className="hover:bg-slate-50/60 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="font-semibold text-slate-900">{agent.name}</div>
+                          {agent.email && <div className="text-xs text-slate-500">{agent.email}</div>}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-mono text-slate-700 text-xs">
+                          {agent.phone}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-mono font-bold text-xs text-slate-800">
+                          <span className="bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                            {agent.referralCode}
                           </span>
-                        )}
-                        {isApproved && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
-                            Approved
-                          </span>
-                        )}
-                        {!isPending && !isApproved && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
-                            {agent.status}
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 font-mono">
-                        {new Date(agent.createdAt).toLocaleString('id-ID', {
-                          dateStyle: 'medium',
-                          timeStyle: 'short',
-                        })}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {isPending && (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
+                              Pending
+                            </span>
+                          )}
+                          {isApproved && (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+                              Approved
+                            </span>
+                          )}
+                          {!isPending && !isApproved && (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                              {agent.status}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 font-mono">
+                          {new Date(agent.createdAt).toLocaleString('id-ID', {
+                            dateStyle: 'medium',
+                            timeStyle: 'short',
+                          })}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
     </div>
   )
 }
+
