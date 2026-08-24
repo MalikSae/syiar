@@ -5,6 +5,7 @@ import { TenantNavbar } from '../components/tenant-navbar'
 import { TenantFooter } from '../components/tenant-footer'
 import { PackageSearchBar } from '../components/package-search-bar'
 import { PackageCard } from '../components/package-card'
+import { InfinitePackageList } from './infinite-package-list'
 import { getAvailableDepartureMonths } from '@/lib/package-helpers'
 import { SearchX, RotateCcw, PackageOpen } from 'lucide-react'
 
@@ -57,38 +58,51 @@ export default async function PackageListPage({ params, searchParams }: PackageL
     matchingPackageIds = Array.from(new Set(departuresInMonth.map((d) => d.packageId)))
   }
 
-  // 4. Query semua paket aktif yang match filter (STRICT: JANGAN select commissionAmount)
-  const packages = await prisma.package.findMany({
-    where: {
-      tenantId: tenant.id,
-      status: 'active',
-      ...(q.trim() ? { name: { contains: q.trim() } } : {}),
-      ...(matchingPackageIds !== undefined ? { id: { in: matchingPackageIds } } : {}),
-    },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      duration: true,
-      airline: true,
-      hotelMakkah: true,
-      hotelMadinah: true,
-      priceQuad: true,
-      priceTriple: true,
-      priceDouble: true,
-      featuredImageUrl: true,
-      createdAt: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
+  // 4. Query total count & initial batch (take 6 + 1)
+  const PAGE_SIZE = 6
+  const packageWhere = {
+    tenantId: tenant.id,
+    status: 'active',
+    ...(q.trim() ? { name: { contains: q.trim() } } : {}),
+    ...(matchingPackageIds !== undefined ? { id: { in: matchingPackageIds } } : {}),
+  }
+
+  const [totalCount, initialPackagesRaw] = await Promise.all([
+    prisma.package.count({ where: packageWhere }),
+    prisma.package.findMany({
+      where: packageWhere,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        duration: true,
+        airline: true,
+        hotelMakkah: true,
+        hotelMadinah: true,
+        priceQuad: true,
+        priceTriple: true,
+        priceDouble: true,
+        featuredImageUrl: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: PAGE_SIZE + 1,
+    }),
+  ])
+
+  const initialHasMore = initialPackagesRaw.length > PAGE_SIZE
+  const initialPackages = initialHasMore
+    ? initialPackagesRaw.slice(0, PAGE_SIZE)
+    : initialPackagesRaw
 
   // 5. Query jadwal keberangkatan aktif terdekat per paket
   const today = new Date(new Date().setHours(0, 0, 0, 0))
   const activeDepartures = await prisma.packageDeparture.findMany({
     where: {
       tenantId: tenant.id,
+      packageId: { in: initialPackages.map((p) => p.id) },
       isActive: true,
       date: { gte: today },
     },
@@ -108,7 +122,7 @@ export default async function PackageListPage({ params, searchParams }: PackageL
     }
   }
 
-  const packagesWithDates = packages.map((pkg) => ({
+  const packagesWithDates = initialPackages.map((pkg) => ({
     ...pkg,
     nearestDepartureDate: packageNearestDateMap.get(pkg.id) || null,
   }))
@@ -164,7 +178,7 @@ export default async function PackageListPage({ params, searchParams }: PackageL
                   Bulan: {availableMonths.find((m) => m.value === month)?.label || month}
                 </span>
               )}
-              <span className="text-site-text-muted">({packages.length} paket ditemukan)</span>
+              <span className="text-site-text-muted">({totalCount} paket ditemukan)</span>
             </div>
             <Link
               href="/paket"
@@ -176,7 +190,7 @@ export default async function PackageListPage({ params, searchParams }: PackageL
           </div>
         )}
 
-        {/* Packages Grid / Empty State */}
+        {/* Packages Grid / Infinite Scroll / Empty State */}
         {packagesWithDates.length === 0 ? (
           <div className="bg-white p-10 sm:p-16 rounded-2xl border border-stone-200 text-center shadow-xs space-y-4 max-w-lg mx-auto my-12">
             <div className="w-14 h-14 rounded-xl bg-stone-100 text-stone-400 mx-auto flex items-center justify-center">
@@ -205,11 +219,14 @@ export default async function PackageListPage({ params, searchParams }: PackageL
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {packagesWithDates.map((pkg) => (
-              <PackageCard key={pkg.id} pkg={pkg} />
-            ))}
-          </div>
+          <InfinitePackageList
+            tenantId={tenant.id}
+            initialPackages={packagesWithDates}
+            initialHasMore={initialHasMore}
+            q={q}
+            month={month}
+            pageSize={PAGE_SIZE}
+          />
         )}
       </main>
 
