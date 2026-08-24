@@ -16,6 +16,7 @@ import {
   DashboardErrorMessage,
   DashboardSubmitButton,
 } from '@/components/dashboard/form'
+import { DashboardSection } from '@/components/dashboard/layout'
 import {
   Calendar,
   Plus,
@@ -27,6 +28,9 @@ import {
   CheckCircle2,
   CircleOff,
   FileText,
+  Package,
+  Coins,
+  ClipboardList,
 } from 'lucide-react'
 
 interface DepartureItem {
@@ -283,11 +287,11 @@ export default function PackageForm({
             <input type="hidden" name="packageId" defaultValue={initialData?.id || ''} />
 
             {/* Section 1: Informasi Utama */}
-            <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-5">
-              <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">
-                1. Informasi Utama Paket
-              </h2>
-
+            <DashboardSection
+              icon={Package}
+              title="1. Informasi Utama Paket"
+              description="Nama paket, durasi program, maskapai penerbangan, dan hotel penginapan di Makkah & Madinah."
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2 space-y-1.5">
                   <DashboardLabel htmlFor="name" required>
@@ -354,368 +358,366 @@ export default function PackageForm({
                   />
                 </div>
               </div>
-            </div>
+            </DashboardSection>
 
             {/* Section 2: Skema Harga & Komisi Agen */}
-            <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-5">
-              <div>
-                <h2 className="text-base font-bold text-slate-900">
-                  2. Pilihan Harga & Komisi Agen
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Minimal salah satu pilihan tipe kamar wajib diisi. Format titik ribuan akan muncul otomatis saat mengetik.
-                </p>
-              </div>
+            <DashboardSection
+              icon={Coins}
+              title="2. Pilihan Harga & Komisi Agen"
+              description="Minimal salah satu pilihan tipe kamar wajib diisi. Format titik ribuan akan muncul otomatis saat mengetik."
+            >
+              <div className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  <div className="space-y-1.5">
+                    <DashboardLabel htmlFor="priceQuad">
+                      Harga Quad (Sekamar 4)
+                    </DashboardLabel>
+                    <DashboardInput
+                      id="priceQuad"
+                      name="priceQuad"
+                      inputMode="numeric"
+                      prefixText="Rp"
+                      value={priceQuad}
+                      onChange={(e) => setPriceQuad(formatThousand(e.target.value))}
+                      placeholder="28.000.000"
+                      className="font-mono"
+                    />
+                  </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div className="space-y-1.5">
-                  <DashboardLabel htmlFor="priceQuad">
-                    Harga Quad (Sekamar 4)
-                  </DashboardLabel>
-                  <DashboardInput
-                    id="priceQuad"
-                    name="priceQuad"
-                    inputMode="numeric"
-                    prefixText="Rp"
-                    value={priceQuad}
-                    onChange={(e) => setPriceQuad(formatThousand(e.target.value))}
-                    placeholder="28.000.000"
-                    className="font-mono"
-                  />
+                  <div className="space-y-1.5">
+                    <DashboardLabel htmlFor="priceTriple">
+                      Harga Triple (Sekamar 3)
+                    </DashboardLabel>
+                    <DashboardInput
+                      id="priceTriple"
+                      name="priceTriple"
+                      inputMode="numeric"
+                      prefixText="Rp"
+                      value={priceTriple}
+                      onChange={(e) => setPriceTriple(formatThousand(e.target.value))}
+                      placeholder="30.000.000"
+                      className="font-mono"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <DashboardLabel htmlFor="priceDouble">
+                      Harga Double (Sekamar 2)
+                    </DashboardLabel>
+                    <DashboardInput
+                      id="priceDouble"
+                      name="priceDouble"
+                      inputMode="numeric"
+                      prefixText="Rp"
+                      value={priceDouble}
+                      onChange={(e) => setPriceDouble(formatThousand(e.target.value))}
+                      placeholder="33.000.000"
+                      className="font-mono"
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <DashboardLabel htmlFor="priceTriple">
-                    Harga Triple (Sekamar 3)
+                <div className="pt-4 border-t border-slate-200/80 space-y-1.5">
+                  <DashboardLabel htmlFor="commissionAmount" required>
+                    Komisi Agen (Flat Per Jamaah)
                   </DashboardLabel>
-                  <DashboardInput
-                    id="priceTriple"
-                    name="priceTriple"
-                    inputMode="numeric"
-                    prefixText="Rp"
-                    value={priceTriple}
-                    onChange={(e) => setPriceTriple(formatThousand(e.target.value))}
-                    placeholder="30.000.000"
-                    className="font-mono"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <DashboardLabel htmlFor="priceDouble">
-                    Harga Double (Sekamar 2)
-                  </DashboardLabel>
-                  <DashboardInput
-                    id="priceDouble"
-                    name="priceDouble"
-                    inputMode="numeric"
-                    prefixText="Rp"
-                    value={priceDouble}
-                    onChange={(e) => setPriceDouble(formatThousand(e.target.value))}
-                    placeholder="33.000.000"
-                    className="font-mono"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-slate-100 space-y-1.5">
-                <DashboardLabel htmlFor="commissionAmount" required>
-                  Komisi Agen (Flat Per Jamaah)
-                </DashboardLabel>
-                <div className="max-w-xs">
-                  <DashboardInput
-                    id="commissionAmount"
-                    name="commissionAmount"
-                    inputMode="numeric"
-                    required
-                    prefixText="Rp"
-                    value={commissionAmount}
-                    onChange={(e) => setCommissionAmount(formatThousand(e.target.value))}
-                    placeholder="1.500.000"
-                    className="font-mono font-bold text-slate-900"
-                    helperText="Nominal komisi tetap yang akan diterima agen untuk setiap jamaah yang mendaftar pada paket ini."
-                  />
+                  <div className="max-w-xs">
+                    <DashboardInput
+                      id="commissionAmount"
+                      name="commissionAmount"
+                      inputMode="numeric"
+                      required
+                      prefixText="Rp"
+                      value={commissionAmount}
+                      onChange={(e) => setCommissionAmount(formatThousand(e.target.value))}
+                      placeholder="1.500.000"
+                      className="font-mono font-bold text-slate-900"
+                      helperText="Nominal komisi tetap yang akan diterima agen untuk setiap jamaah yang mendaftar pada paket ini."
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </DashboardSection>
 
             {/* Section 3: Fasilitas & Rencana Perjalanan */}
-            <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-5">
-              <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">
-                3. Fasilitas & Rencana Perjalanan
-              </h2>
+            <DashboardSection
+              icon={ClipboardList}
+              title="3. Fasilitas & Rencana Perjalanan"
+              description="Rincian fasilitas include, exclude, dan jadwal rencana perjalanan hari demi hari."
+            >
+              <div className="space-y-5">
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="include" required>
+                    Fasilitas Sudah Termasuk (Include)
+                  </DashboardLabel>
+                  <DashboardTextarea
+                    id="include"
+                    name="include"
+                    required
+                    rows={3}
+                    defaultValue={initialData?.include || ''}
+                    placeholder="Contoh: Tiket Pesawat PP, Visa Umroh, Hotel Makkah & Madinah, Makan 3x Sehari, Handling & Muthawwif, Air Zamzam 5L"
+                  />
+                </div>
 
-              <div className="space-y-1.5">
-                <DashboardLabel htmlFor="include" required>
-                  Fasilitas Sudah Termasuk (Include)
-                </DashboardLabel>
-                <DashboardTextarea
-                  id="include"
-                  name="include"
-                  required
-                  rows={3}
-                  defaultValue={initialData?.include || ''}
-                  placeholder="Contoh: Tiket Pesawat PP, Visa Umroh, Hotel Makkah & Madinah, Makan 3x Sehari, Handling & Muthawwif, Air Zamzam 5L"
-                />
-              </div>
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="exclude" required>
+                    Fasilitas Belum Termasuk (Exclude)
+                  </DashboardLabel>
+                  <DashboardTextarea
+                    id="exclude"
+                    name="exclude"
+                    required
+                    rows={3}
+                    defaultValue={initialData?.exclude || ''}
+                    placeholder="Contoh: Pembuatan Paspor, Suntik Meningitis, Pengeluaran Pribadi, Kelebihan Bagasi"
+                  />
+                </div>
 
-              <div className="space-y-1.5">
-                <DashboardLabel htmlFor="exclude" required>
-                  Fasilitas Belum Termasuk (Exclude)
-                </DashboardLabel>
-                <DashboardTextarea
-                  id="exclude"
-                  name="exclude"
-                  required
-                  rows={3}
-                  defaultValue={initialData?.exclude || ''}
-                  placeholder="Contoh: Pembuatan Paspor, Suntik Meningitis, Pengeluaran Pribadi, Kelebihan Bagasi"
-                />
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="itinerary" required>
+                    Rencana Perjalanan (Itinerary)
+                  </DashboardLabel>
+                  <DashboardTextarea
+                    id="itinerary"
+                    name="itinerary"
+                    required
+                    rows={4}
+                    defaultValue={initialData?.itinerary || ''}
+                    placeholder="Contoh: Hari 1: Jakarta - Jeddah - Madinah; Hari 2-4: Ziarah Madinah & Raudhah; Hari 5: Madinah - Makkah (Umroh 1); Hari 6-8: Ibadah Makkah & City Tour; Hari 9: Jeddah - Jakarta"
+                  />
+                </div>
               </div>
-
-              <div className="space-y-1.5">
-                <DashboardLabel htmlFor="itinerary" required>
-                  Rencana Perjalanan (Itinerary)
-                </DashboardLabel>
-                <DashboardTextarea
-                  id="itinerary"
-                  name="itinerary"
-                  required
-                  rows={4}
-                  defaultValue={initialData?.itinerary || ''}
-                  placeholder="Contoh: Hari 1: Jakarta - Jeddah - Madinah; Hari 2-4: Ziarah Madinah & Raudhah; Hari 5: Madinah - Makkah (Umroh 1); Hari 6-8: Ibadah Makkah & City Tour; Hari 9: Jeddah - Jakarta"
-                />
-              </div>
-            </div>
+            </DashboardSection>
           </form>
 
           {/* ===================================================================
               SECTION 4: JADWAL KEBERANGKATAN
              =================================================================== */}
-          <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-5">
-            <div>
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h2 className="text-base font-bold text-slate-900">
-                  4. Jadwal Tanggal Keberangkatan
-                </h2>
-                <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
-                  {isEdit ? `${existingDepartures.length} Jadwal Terdaftar` : 'Opsional'}
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-2">
-                {isEdit
-                  ? 'Kelola tanggal keberangkatan yang tersedia untuk paket ini. Anda dapat menonaktifkan tanggal yang kuotanya sudah penuh.'
-                  : 'Tambahkan tanggal keberangkatan yang tersedia untuk paket ini. Anda juga bisa mengelola atau menambahkan tanggal baru nanti di halaman edit.'}
-              </p>
-            </div>
+          <DashboardSection
+            icon={Calendar}
+            title="4. Jadwal Tanggal Keberangkatan"
+            description={
+              isEdit
+                ? 'Kelola tanggal keberangkatan yang tersedia untuk paket ini. Anda dapat menonaktifkan tanggal yang kuotanya sudah penuh.'
+                : 'Tambahkan tanggal keberangkatan yang tersedia untuk paket ini. Anda juga bisa mengelola atau menambahkan tanggal baru nanti di halaman edit.'
+            }
+          >
+            <div className="space-y-5">
+              {/* --- KONDISI A: MODE CREATE (Daftar Lokal Batch) --- */}
+              {!isEdit && (
+                <>
+                  <div className="bg-slate-50/70 p-4 sm:p-5 rounded-xl border border-slate-200/80 space-y-3">
+                    <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      + Tambah Tanggal ke Daftar
+                    </h3>
 
-            {/* --- KONDISI A: MODE CREATE (Daftar Lokal Batch) --- */}
-            {!isEdit && (
-              <>
-                <div className="bg-slate-50/70 p-4 sm:p-5 rounded-xl border border-slate-200/80 space-y-3">
-                  <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    + Tambah Tanggal ke Daftar
-                  </h3>
+                    {dateInputError && (
+                      <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center space-x-2">
+                        <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+                        <span>{dateInputError}</span>
+                      </div>
+                    )}
 
-                  {dateInputError && (
-                    <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center space-x-2">
-                      <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
-                      <span>{dateInputError}</span>
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      <div className="flex-1 max-w-sm">
+                        <input
+                          type="date"
+                          value={currentDateInput}
+                          onChange={(e) => {
+                            setCurrentDateInput(e.target.value)
+                            setDateInputError(null)
+                          }}
+                          className="w-full px-4 py-2.5 text-sm text-slate-800 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-w-[200px]"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleAddDateToList}
+                        className="inline-flex items-center justify-center space-x-1.5 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors shrink-0 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Tambah ke Daftar</span>
+                      </button>
                     </div>
-                  )}
-
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                    <div className="flex-1 max-w-sm">
-                      <input
-                        type="date"
-                        value={currentDateInput}
-                        onChange={(e) => {
-                          setCurrentDateInput(e.target.value)
-                          setDateInputError(null)
-                        }}
-                        className="w-full px-4 py-2.5 text-sm text-slate-800 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-w-[200px]"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleAddDateToList}
-                      className="inline-flex items-center justify-center space-x-1.5 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors shrink-0 cursor-pointer"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>Tambah ke Daftar</span>
-                    </button>
                   </div>
-                </div>
 
-                <div className="space-y-2.5">
-                  <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    Daftar Tanggal yang Akan Dibuat ({newDepartures.length})
-                  </h4>
+                  <div className="space-y-2.5">
+                    <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Daftar Tanggal yang Akan Dibuat ({newDepartures.length})
+                    </h4>
 
-                  {newDepartures.length === 0 ? (
-                    <div className="py-6 text-center bg-slate-50/40 rounded-xl border border-dashed border-slate-200 p-4">
-                      <p className="text-xs text-slate-400">
-                        Belum ada tanggal keberangkatan di daftar. Paket tetap bisa disimpan tanpa tanggal keberangkatan awal.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {newDepartures.map((dateStr) => {
-                        const dateObj = new Date(dateStr)
-                        const formatted = !isNaN(dateObj.getTime())
-                          ? dateObj.toLocaleDateString('id-ID', {
-                              weekday: 'short',
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                            })
-                          : dateStr
+                    {newDepartures.length === 0 ? (
+                      <div className="py-6 text-center bg-slate-50/40 rounded-xl border border-dashed border-slate-200 p-4">
+                        <p className="text-xs text-slate-400">
+                          Belum ada tanggal keberangkatan di daftar. Paket tetap bisa disimpan tanpa tanggal keberangkatan awal.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {newDepartures.map((dateStr) => {
+                          const dateObj = new Date(dateStr)
+                          const formatted = !isNaN(dateObj.getTime())
+                            ? dateObj.toLocaleDateString('id-ID', {
+                                weekday: 'short',
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                              })
+                            : dateStr
 
-                        return (
-                          <div
-                            key={dateStr}
-                            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-xs"
-                          >
-                            <div className="flex items-center space-x-2.5 min-w-0">
-                              <Calendar className="w-4 h-4 text-brand-600 shrink-0" />
-                              <span className="font-semibold text-slate-900 truncate">{formatted}</span>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveDateFromList(dateStr)}
-                              className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer shrink-0 ml-2"
-                              title="Hapus dari daftar"
+                          return (
+                            <div
+                              key={dateStr}
+                              className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-xs"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-
-            {/* --- KONDISI B: MODE EDIT (Direct Server Action & Live Toggle) --- */}
-            {isEdit && initialData?.id && (
-              <>
-                {/* Form Tambah Tanggal Baru Langsung ke Server */}
-                <form
-                  onSubmit={handleDirectAddDeparture}
-                  className="bg-slate-50/70 p-4 sm:p-5 rounded-xl border border-slate-200/80 space-y-3"
-                >
-                  <input type="hidden" name="packageId" value={initialData.id} />
-
-                  <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    + Tambah Tanggal Keberangkatan Baru
-                  </h3>
-
-                  {editDepError && (
-                    <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center space-x-2">
-                      <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
-                      <span>{editDepError}</span>
-                    </div>
-                  )}
-
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                    <div className="flex-1 max-w-sm">
-                      <input
-                        id="edit-departure-date-input"
-                        type="date"
-                        name="date"
-                        required
-                        className="w-full px-4 py-2.5 text-sm text-slate-800 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-w-[200px]"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={isAddingDeparture}
-                      className="inline-flex items-center justify-center space-x-1.5 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors disabled:opacity-50 shrink-0 cursor-pointer"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>{isAddingDeparture ? 'Menambahkan...' : 'Tambah Jadwal'}</span>
-                    </button>
-                  </div>
-                </form>
-
-                {/* List Jadwal Keberangkatan Terdaftar dengan Toggle */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    Daftar Tanggal Terdaftar ({existingDepartures.length})
-                  </h4>
-
-                  {existingDepartures.length === 0 ? (
-                    <div className="py-8 text-center bg-slate-50/40 rounded-xl border border-dashed border-slate-200 p-4">
-                      <p className="text-xs font-medium text-slate-400">
-                        Belum ada tanggal keberangkatan yang didaftarkan. Gunakan form di atas untuk menambahkan jadwal.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-                      {existingDepartures.map((dep) => {
-                        const dateObj = new Date(dep.date)
-                        const formattedDate = !isNaN(dateObj.getTime())
-                          ? dateObj.toLocaleDateString('id-ID', {
-                              weekday: 'long',
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            })
-                          : String(dep.date)
-
-                        const isToggling = isTogglingId === dep.id
-
-                        return (
-                          <div
-                            key={dep.id}
-                            className="p-4 bg-white hover:bg-slate-50/60 flex items-center justify-between gap-4 transition-colors"
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
-                                <Calendar className="w-4 h-4" />
+                              <div className="flex items-center space-x-2.5 min-w-0">
+                                <Calendar className="w-4 h-4 text-brand-600 shrink-0" />
+                                <span className="font-semibold text-slate-900 truncate">{formatted}</span>
                               </div>
-                              <div>
-                                <p className="text-sm font-semibold text-slate-900">{formattedDate}</p>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center space-x-3">
-                              <span
-                                className={`text-xs font-semibold select-none ${
-                                  dep.isActive ? 'text-emerald-700' : 'text-slate-400'
-                                }`}
-                              >
-                                {isToggling ? 'Menyimpan...' : dep.isActive ? 'Aktif' : 'Nonaktif'}
-                              </span>
-
                               <button
                                 type="button"
-                                role="switch"
-                                aria-checked={dep.isActive}
-                                onClick={() => handleToggleDeparture(dep.id)}
-                                disabled={isToggling}
-                                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 ${
-                                  dep.isActive ? 'bg-emerald-500' : 'bg-slate-200'
-                                }`}
-                                title={dep.isActive ? 'Klik untuk menonaktifkan' : 'Klik untuk mengaktifkan'}
+                                onClick={() => handleRemoveDateFromList(dateStr)}
+                                className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer shrink-0 ml-2"
+                                title="Hapus dari daftar"
                               >
-                                <span className="sr-only">Toggle status jadwal keberangkatan</span>
-                                <span
-                                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
-                                    dep.isActive ? 'translate-x-5' : 'translate-x-0'
-                                  }`}
-                                />
+                                <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             </div>
-                          </div>
-                        )
-                      })}
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {/* --- KONDISI B: MODE EDIT (Direct Server Action & Live Toggle) --- */}
+              {isEdit && initialData?.id && (
+                <>
+                  {/* Form Tambah Tanggal Baru Langsung ke Server */}
+                  <form
+                    onSubmit={handleDirectAddDeparture}
+                    className="bg-slate-50/70 p-4 sm:p-5 rounded-xl border border-slate-200/80 space-y-3"
+                  >
+                    <input type="hidden" name="packageId" value={initialData.id} />
+
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                        + Tambah Tanggal Keberangkatan Baru
+                      </h3>
+                      <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
+                        {existingDepartures.length} Jadwal Terdaftar
+                      </span>
                     </div>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
+
+                    {editDepError && (
+                      <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center space-x-2">
+                        <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+                        <span>{editDepError}</span>
+                      </div>
+                    )}
+
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      <div className="flex-1 max-w-sm">
+                        <input
+                          id="edit-departure-date-input"
+                          type="date"
+                          name="date"
+                          required
+                          className="w-full px-4 py-2.5 text-sm text-slate-800 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-w-[200px]"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={isAddingDeparture}
+                        className="inline-flex items-center justify-center space-x-1.5 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors disabled:opacity-50 shrink-0 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>{isAddingDeparture ? 'Menambahkan...' : 'Tambah Jadwal'}</span>
+                      </button>
+                    </div>
+                  </form>
+
+                  {/* List Jadwal Keberangkatan Terdaftar dengan Toggle */}
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Daftar Tanggal Terdaftar ({existingDepartures.length})
+                    </h4>
+
+                    {existingDepartures.length === 0 ? (
+                      <div className="py-8 text-center bg-slate-50/40 rounded-xl border border-dashed border-slate-200 p-4">
+                        <p className="text-xs font-medium text-slate-400">
+                          Belum ada tanggal keberangkatan yang didaftarkan. Gunakan form di atas untuk menambahkan jadwal.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+                        {existingDepartures.map((dep) => {
+                          const dateObj = new Date(dep.date)
+                          const formattedDate = !isNaN(dateObj.getTime())
+                            ? dateObj.toLocaleDateString('id-ID', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                              })
+                            : String(dep.date)
+
+                          const isToggling = isTogglingId === dep.id
+
+                          return (
+                            <div
+                              key={dep.id}
+                              className="p-4 bg-white hover:bg-slate-50/60 flex items-center justify-between gap-4 transition-colors"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                                  <Calendar className="w-4 h-4" />
+                                </div>
+                                <div>
+                                  <p className="text-sm font-semibold text-slate-900">{formattedDate}</p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center space-x-3">
+                                <span
+                                  className={`text-xs font-semibold select-none ${
+                                    dep.isActive ? 'text-emerald-700' : 'text-slate-400'
+                                  }`}
+                                >
+                                  {isToggling ? 'Menyimpan...' : dep.isActive ? 'Aktif' : 'Nonaktif'}
+                                </span>
+
+                                <button
+                                  type="button"
+                                  role="switch"
+                                  aria-checked={dep.isActive}
+                                  onClick={() => handleToggleDeparture(dep.id)}
+                                  disabled={isToggling}
+                                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 ${
+                                    dep.isActive ? 'bg-emerald-500' : 'bg-slate-200'
+                                  }`}
+                                  title={dep.isActive ? 'Klik untuk menonaktifkan' : 'Klik untuk mengaktifkan'}
+                                >
+                                  <span className="sr-only">Toggle status jadwal keberangkatan</span>
+                                  <span
+                                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                                      dep.isActive ? 'translate-x-5' : 'translate-x-0'
+                                    }`}
+                                  />
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          </DashboardSection>
         </div>
 
         {/* ===================================================================
