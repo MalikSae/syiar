@@ -10,6 +10,13 @@ import {
 import { processSquareImage } from '@/lib/image-processing'
 import Link from 'next/link'
 import {
+  DashboardInput,
+  DashboardTextarea,
+  DashboardLabel,
+  DashboardErrorMessage,
+  DashboardSubmitButton,
+} from '@/components/dashboard/form'
+import {
   Calendar,
   Plus,
   Trash2,
@@ -259,10 +266,10 @@ export default function PackageForm({
     <div className="space-y-6">
       {/* Alert Error Utama */}
       {error && (
-        <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-start space-x-2.5">
-          <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-          <span className="font-medium">{error}</span>
-        </div>
+        <DashboardErrorMessage
+          title="Gagal Menyimpan Paket"
+          message={error}
+        />
       )}
 
       {/* Grid 2 Kolom: Kolom Utama (Kiri ~70%) + Sidebar (Kanan ~30%) */}
@@ -276,86 +283,81 @@ export default function PackageForm({
             <input type="hidden" name="packageId" defaultValue={initialData?.id || ''} />
 
             {/* Section 1: Informasi Utama */}
-            <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+            <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-5">
               <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">
                 1. Informasi Utama Paket
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Nama Paket Umroh <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
+                <div className="md:col-span-2 space-y-1.5">
+                  <DashboardLabel htmlFor="name" required>
+                    Nama Paket Umroh
+                  </DashboardLabel>
+                  <DashboardInput
+                    id="name"
                     name="name"
                     required
                     defaultValue={initialData?.name || ''}
                     placeholder="Contoh: Paket Umroh Reguler Awal Musim"
-                    className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Durasi Program <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="duration" required>
+                    Durasi Program
+                  </DashboardLabel>
+                  <DashboardInput
+                    id="duration"
                     name="duration"
                     required
                     defaultValue={initialData?.duration || ''}
                     placeholder="Contoh: 9 Hari / 12 Hari"
-                    className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Maskapai Penerbangan <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="airline" required>
+                    Maskapai Penerbangan
+                  </DashboardLabel>
+                  <DashboardInput
+                    id="airline"
                     name="airline"
                     required
                     defaultValue={initialData?.airline || ''}
                     placeholder="Contoh: Garuda Indonesia / Saudia Airlines"
-                    className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Hotel Makkah <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="hotelMakkah" required>
+                    Hotel Makkah
+                  </DashboardLabel>
+                  <DashboardInput
+                    id="hotelMakkah"
                     name="hotelMakkah"
                     required
                     defaultValue={initialData?.hotelMakkah || ''}
                     placeholder="Contoh: Pullman Zamzam / Swissotel Makkah"
-                    className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Hotel Madinah <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="hotelMadinah" required>
+                    Hotel Madinah
+                  </DashboardLabel>
+                  <DashboardInput
+                    id="hotelMadinah"
                     name="hotelMadinah"
                     required
                     defaultValue={initialData?.hotelMadinah || ''}
                     placeholder="Contoh: Dallah Taibah / Madinah Hilton"
-                    className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                   />
                 </div>
               </div>
             </div>
 
             {/* Section 2: Skema Harga & Komisi Agen */}
-            <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+            <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-5">
               <div>
                 <h2 className="text-base font-bold text-slate-900">
                   2. Pilihan Harga & Komisi Agen
@@ -366,137 +368,121 @@ export default function PackageForm({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="priceQuad">
                     Harga Quad (Sekamar 4)
-                  </label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-xs font-semibold text-slate-400">
-                      Rp
-                    </span>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      name="priceQuad"
-                      value={priceQuad}
-                      onChange={(e) => setPriceQuad(formatThousand(e.target.value))}
-                      placeholder="28.000.000"
-                      className="w-full pl-10 pr-4 py-2.5 text-sm font-mono rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
-                    />
-                  </div>
+                  </DashboardLabel>
+                  <DashboardInput
+                    id="priceQuad"
+                    name="priceQuad"
+                    inputMode="numeric"
+                    prefixText="Rp"
+                    value={priceQuad}
+                    onChange={(e) => setPriceQuad(formatThousand(e.target.value))}
+                    placeholder="28.000.000"
+                    className="font-mono"
+                  />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="priceTriple">
                     Harga Triple (Sekamar 3)
-                  </label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-xs font-semibold text-slate-400">
-                      Rp
-                    </span>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      name="priceTriple"
-                      value={priceTriple}
-                      onChange={(e) => setPriceTriple(formatThousand(e.target.value))}
-                      placeholder="30.000.000"
-                      className="w-full pl-10 pr-4 py-2.5 text-sm font-mono rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
-                    />
-                  </div>
+                  </DashboardLabel>
+                  <DashboardInput
+                    id="priceTriple"
+                    name="priceTriple"
+                    inputMode="numeric"
+                    prefixText="Rp"
+                    value={priceTriple}
+                    onChange={(e) => setPriceTriple(formatThousand(e.target.value))}
+                    placeholder="30.000.000"
+                    className="font-mono"
+                  />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                <div className="space-y-1.5">
+                  <DashboardLabel htmlFor="priceDouble">
                     Harga Double (Sekamar 2)
-                  </label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-xs font-semibold text-slate-400">
-                      Rp
-                    </span>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      name="priceDouble"
-                      value={priceDouble}
-                      onChange={(e) => setPriceDouble(formatThousand(e.target.value))}
-                      placeholder="33.000.000"
-                      className="w-full pl-10 pr-4 py-2.5 text-sm font-mono rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
-                    />
-                  </div>
+                  </DashboardLabel>
+                  <DashboardInput
+                    id="priceDouble"
+                    name="priceDouble"
+                    inputMode="numeric"
+                    prefixText="Rp"
+                    value={priceDouble}
+                    onChange={(e) => setPriceDouble(formatThousand(e.target.value))}
+                    placeholder="33.000.000"
+                    className="font-mono"
+                  />
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-100">
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Komisi Agen (Flat Per Jamaah) <span className="text-red-500">*</span>
-                </label>
-                <div className="relative max-w-xs">
-                  <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-xs font-semibold text-slate-400">
-                    Rp
-                  </span>
-                  <input
-                    type="text"
-                    inputMode="numeric"
+              <div className="pt-3 border-t border-slate-100 space-y-1.5">
+                <DashboardLabel htmlFor="commissionAmount" required>
+                  Komisi Agen (Flat Per Jamaah)
+                </DashboardLabel>
+                <div className="max-w-xs">
+                  <DashboardInput
+                    id="commissionAmount"
                     name="commissionAmount"
+                    inputMode="numeric"
                     required
+                    prefixText="Rp"
                     value={commissionAmount}
                     onChange={(e) => setCommissionAmount(formatThousand(e.target.value))}
                     placeholder="1.500.000"
-                    className="w-full pl-10 pr-4 py-2.5 text-sm font-mono font-bold text-slate-900 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
+                    className="font-mono font-bold text-slate-900"
+                    helperText="Nominal komisi tetap yang akan diterima agen untuk setiap jamaah yang mendaftar pada paket ini."
                   />
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
-                  Nominal komisi tetap yang akan diterima agen untuk setiap jamaah yang mendaftar pada paket ini.
-                </p>
               </div>
             </div>
 
             {/* Section 3: Fasilitas & Rencana Perjalanan */}
-            <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+            <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-5">
               <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">
                 3. Fasilitas & Rencana Perjalanan
               </h2>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Fasilitas Sudah Termasuk (Include) <span className="text-red-500">*</span>
-                </label>
-                <textarea
+              <div className="space-y-1.5">
+                <DashboardLabel htmlFor="include" required>
+                  Fasilitas Sudah Termasuk (Include)
+                </DashboardLabel>
+                <DashboardTextarea
+                  id="include"
                   name="include"
                   required
                   rows={3}
                   defaultValue={initialData?.include || ''}
                   placeholder="Contoh: Tiket Pesawat PP, Visa Umroh, Hotel Makkah & Madinah, Makan 3x Sehari, Handling & Muthawwif, Air Zamzam 5L"
-                  className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Fasilitas Belum Termasuk (Exclude) <span className="text-red-500">*</span>
-                </label>
-                <textarea
+              <div className="space-y-1.5">
+                <DashboardLabel htmlFor="exclude" required>
+                  Fasilitas Belum Termasuk (Exclude)
+                </DashboardLabel>
+                <DashboardTextarea
+                  id="exclude"
                   name="exclude"
                   required
                   rows={3}
                   defaultValue={initialData?.exclude || ''}
                   placeholder="Contoh: Pembuatan Paspor, Suntik Meningitis, Pengeluaran Pribadi, Kelebihan Bagasi"
-                  className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Rencana Perjalanan (Itinerary) <span className="text-red-500">*</span>
-                </label>
-                <textarea
+              <div className="space-y-1.5">
+                <DashboardLabel htmlFor="itinerary" required>
+                  Rencana Perjalanan (Itinerary)
+                </DashboardLabel>
+                <DashboardTextarea
+                  id="itinerary"
                   name="itinerary"
                   required
                   rows={4}
                   defaultValue={initialData?.itinerary || ''}
                   placeholder="Contoh: Hari 1: Jakarta - Jeddah - Madinah; Hari 2-4: Ziarah Madinah & Raudhah; Hari 5: Madinah - Makkah (Umroh 1); Hari 6-8: Ibadah Makkah & City Tour; Hari 9: Jeddah - Jakarta"
-                  className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                 />
               </div>
             </div>
@@ -505,7 +491,7 @@ export default function PackageForm({
           {/* ===================================================================
               SECTION 4: JADWAL KEBERANGKATAN
              =================================================================== */}
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-5">
             <div>
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h2 className="text-base font-bold text-slate-900">
@@ -546,7 +532,7 @@ export default function PackageForm({
                           setCurrentDateInput(e.target.value)
                           setDateInputError(null)
                         }}
-                        className="w-full px-4 py-2.5 text-sm text-slate-800 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 min-w-[200px]"
+                        className="w-full px-4 py-2.5 text-sm text-slate-800 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-w-[200px]"
                       />
                     </div>
                     <button
@@ -638,7 +624,7 @@ export default function PackageForm({
                         type="date"
                         name="date"
                         required
-                        className="w-full px-4 py-2.5 text-sm text-slate-800 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 min-w-[200px]"
+                        className="w-full px-4 py-2.5 text-sm text-slate-800 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-w-[200px]"
                       />
                     </div>
                     <button
@@ -737,7 +723,7 @@ export default function PackageForm({
            =================================================================== */}
         <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-6 order-1 lg:order-2">
           {/* Card 1: Status & Tombol Publikasi Utama */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-5">
             <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center justify-between">
               <span>Status & Publikasi</span>
               <FileText className="w-4 h-4 text-slate-400" />
@@ -810,18 +796,18 @@ export default function PackageForm({
 
             {/* Tombol Simpan Utama & Batal */}
             <div className="space-y-2.5 pt-2 border-t border-slate-100">
-              <button
-                type="submit"
+              <DashboardSubmitButton
                 form="package-main-form"
-                disabled={isPending || isProcessingImage}
-                className="w-full py-3 px-4 bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold rounded-xl shadow-sm hover:shadow transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center space-x-2"
+                isPending={isPending || isProcessingImage}
+                loadingText="Menyimpan..."
+                fullWidth
               >
-                <span>{getSubmitButtonLabel()}</span>
-              </button>
+                {getSubmitButtonLabel()}
+              </DashboardSubmitButton>
 
               <Link
                 href="/dashboard/packages"
-                className="w-full py-2.5 px-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition-colors flex items-center justify-center"
+                className="w-full py-2.5 px-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition-colors flex items-center justify-center min-h-[46px] sm:min-h-[40px]"
               >
                 Batal
               </Link>
@@ -829,7 +815,7 @@ export default function PackageForm({
           </div>
 
           {/* Card 2: Gambar Unggulan (1:1 Ratio Canvas Crop) */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-sm font-bold text-slate-900">Gambar Unggulan</h3>
               <span className="text-[10px] font-mono text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
@@ -847,7 +833,7 @@ export default function PackageForm({
             />
 
             {/* Preview Box 1:1 */}
-            <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-3 transition-colors">
+            <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-3 transition-colors">
               {isProcessingImage ? (
                 <div className="text-center space-y-2">
                   <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto" />
@@ -858,7 +844,7 @@ export default function PackageForm({
                   <img
                     src={imagePreviewUrl}
                     alt="Featured preview"
-                    className="w-full h-full object-cover rounded-xl"
+                    className="w-full h-full object-cover rounded-lg"
                   />
                   <button
                     type="button"
@@ -871,7 +857,7 @@ export default function PackageForm({
                 </>
               ) : (
                 <div className="text-center space-y-2.5 p-4">
-                  <div className="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto">
+                  <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto">
                     <ImagePlus className="w-6 h-6" />
                   </div>
                   <div>
@@ -890,7 +876,7 @@ export default function PackageForm({
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isProcessingImage}
-                className="flex-1 py-2.5 px-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors flex items-center justify-center space-x-1.5 cursor-pointer disabled:opacity-50"
+                className="flex-1 py-2.5 px-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center space-x-1.5 cursor-pointer disabled:opacity-50"
               >
                 <UploadCloud className="w-4 h-4 text-slate-500" />
                 <span>{imagePreviewUrl ? 'Ganti Foto' : 'Pilih Foto'}</span>
@@ -900,7 +886,7 @@ export default function PackageForm({
                 <button
                   type="button"
                   onClick={handleRemoveImage}
-                  className="py-2.5 px-3 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                  className="py-2.5 px-3 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                   title="Hapus foto"
                 >
                   <Trash2 className="w-4 h-4" />

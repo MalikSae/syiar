@@ -727,7 +727,6 @@ export default function DesignTravelShowcasePage() {
             </button>
             <SiteSubmitButton
               fullWidth={false}
-              size="md"
               onClick={() => {
                 alert('Pilihan fasilitas dikonfirmasi!')
                 setIsModalOpen(false)

@@ -12,6 +12,13 @@ import { processSquareImage, processLogoImage, processHeroImage } from '@/lib/im
 import { RepeatableListEditor, ListEditorField } from '@/components/repeatable-list-editor'
 import { getSitePalette } from '@/lib/color-utils'
 import {
+  DashboardInput,
+  DashboardTextarea,
+  DashboardLabel,
+  DashboardErrorMessage,
+  DashboardSubmitButton,
+} from '@/components/dashboard/form'
+import {
   Globe,
   Palette,
   Image as ImageIcon,
@@ -383,20 +390,20 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
   return (
     <form action={handleFormAction} className="space-y-8">
       {state?.success && (
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-start gap-3 animate-in fade-in">
+        <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-start gap-3 animate-in fade-in">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
           <div className="font-medium">{state.message}</div>
         </div>
       )}
 
       {(fileError || (state && !state.success)) && (
-        <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-start gap-3 animate-in fade-in">
-          <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-          <div className="font-semibold">{fileError || state?.message}</div>
-        </div>
+        <DashboardErrorMessage
+          title="Gagal Menyimpan Pengaturan Website"
+          message={fileError || state?.message || ''}
+        />
       )}
 
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
@@ -434,19 +441,18 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
 
         <div className="p-6 space-y-4">
           {customDomainEnabled ? (
-            <div className="space-y-3 animate-in fade-in duration-200">
-              <label htmlFor="customDomain" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+            <div className="space-y-1.5 animate-in fade-in duration-200">
+              <DashboardLabel htmlFor="customDomain">
                 Nama Domain Anda
-              </label>
-              <div className="relative max-w-md">
-                <input
-                  type="text"
+              </DashboardLabel>
+              <div className="max-w-md">
+                <DashboardInput
                   id="customDomain"
                   name="customDomain"
                   value={customDomain}
                   onChange={(e) => setCustomDomain(e.target.value)}
                   placeholder="Contoh: alhijrah.com atau umroh.alhijrah.id"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all font-mono"
+                  className="font-mono"
                 />
               </div>
               <div className="p-3.5 bg-brand-50/70 rounded-xl border border-brand-200/60 text-xs text-slate-600 flex items-start gap-2.5">
@@ -867,7 +873,7 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
@@ -886,9 +892,9 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
           {/* A. Headline */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label htmlFor="heroHeadline" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <DashboardLabel htmlFor="heroHeadline">
                 Judul Headline Utama
-              </label>
+              </DashboardLabel>
               <span
                 id="headline-char-counter"
                 className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border transition-colors ${
@@ -900,26 +906,22 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
                 {headlineLength}/60 karakter
               </span>
             </div>
-            <input
-              type="text"
+            <DashboardInput
               id="heroHeadline"
               name="heroHeadline"
               value={heroHeadline}
               onChange={(e) => setHeroHeadline(e.target.value)}
               placeholder="Contoh: Wujudkan Ibadah Umroh Nyaman & Khusyuk Bersama Alhijrah"
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all font-sans"
+              helperText="Ideal: 20–60 karakter. Teks headline berukuran besar yang menarik perhatian calon jamaah."
             />
-            <p className="text-[11px] text-slate-400">
-              Ideal: 20–60 karakter. Teks headline berukuran besar yang menarik perhatian calon jamaah.
-            </p>
           </div>
 
           {/* B. Subheadline */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label htmlFor="heroSubheadline" className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <DashboardLabel htmlFor="heroSubheadline">
                 Teks Subheadline
-              </label>
+              </DashboardLabel>
               <span
                 id="subheadline-char-counter"
                 className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border transition-colors ${
@@ -931,18 +933,15 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
                 {subheadlineLength}/160 karakter
               </span>
             </div>
-            <textarea
+            <DashboardTextarea
               id="heroSubheadline"
               name="heroSubheadline"
               rows={3}
               value={heroSubheadline}
               onChange={(e) => setHeroSubheadline(e.target.value)}
               placeholder="Contoh: Layanan perjalanan ibadah umroh terbaik dengan bimbingan sesuai sunnah, hotel bintang 5 dekat masjid, dan kepastian jadwal keberangkatan."
-              className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all resize-y leading-relaxed font-sans"
+              helperText="Ideal: 80–160 karakter. Penjelasan ringkas keunggulan travel Anda."
             />
-            <p className="text-[11px] text-slate-400">
-              Ideal: 80–160 karakter. Penjelasan ringkas keunggulan travel Anda.
-            </p>
           </div>
 
           {/* C. Background Banner Image (21:9) */}
@@ -957,18 +956,18 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
             </div>
 
             {/* Preview Box 21:9 */}
-            <div className="relative aspect-[21/9] w-full rounded-2xl overflow-hidden bg-slate-100 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-3 transition-colors">
+            <div className="relative aspect-[21/9] w-full rounded-xl overflow-hidden bg-slate-100 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-3 transition-colors">
               {heroBackgroundPreviewUrl ? (
                 <>
                   <img
                     src={heroBackgroundPreviewUrl}
                     alt="Hero Background Preview"
-                    className="w-full h-full object-cover rounded-xl"
+                    className="w-full h-full object-cover rounded-lg"
                   />
                   <button
                     type="button"
                     onClick={handleRemoveHeroBackground}
-                    className="absolute top-3 right-3 p-2 bg-slate-900/70 hover:bg-red-600 text-white rounded-xl backdrop-blur-xs transition-colors cursor-pointer shadow-sm"
+                    className="absolute top-3 right-3 p-2 bg-slate-900/70 hover:bg-red-600 text-white rounded-lg backdrop-blur-xs transition-colors cursor-pointer shadow-sm"
                     title="Hapus gambar background"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -1004,7 +1003,7 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
               <button
                 type="button"
                 onClick={() => heroInputRef.current?.click()}
-                className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
               >
                 <Upload className="w-3.5 h-3.5 text-slate-500" />
                 <span>{heroBackgroundPreviewUrl ? 'Ganti Background Hero' : 'Pilih Background Hero'}</span>
@@ -1013,7 +1012,7 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
                 <button
                   type="button"
                   onClick={handleRemoveHeroBackground}
-                  className="px-3 py-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer"
+                  className="px-3 py-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Hapus Background</span>
@@ -1028,7 +1027,7 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
       </div>
 
       {/* SECTION 5: Keunggulan Travel (features, WAJIB TEPAT 4) */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
@@ -1059,7 +1058,7 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
       </div>
 
       {/* SECTION 6: FAQ (Pertanyaan yang Sering Diajukan, MIN 0, MAX 15) */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
@@ -1090,7 +1089,7 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
       </div>
 
       {/* SECTION 7: Testimoni Jamaah (MIN 0, MAX 12) */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
@@ -1129,7 +1128,7 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
       </div>
 
       {/* Sticky Save Action Card / Footer */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="text-sm font-bold text-slate-900">Simpan Seluruh Pengaturan Website</h3>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -1137,23 +1136,13 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
           </p>
         </div>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="px-6 py-3 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer shrink-0"
+        <DashboardSubmitButton
+          isPending={isPending}
+          loadingText="Menyimpan Semua Data..."
+          icon={Save}
         >
-          {isPending ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Menyimpan Semua Data...</span>
-            </>
-          ) : (
-            <>
-              <Save className="w-4 h-4" />
-              <span>Simpan Pengaturan Website</span>
-            </>
-          )}
-        </button>
+          Simpan Pengaturan Website
+        </DashboardSubmitButton>
       </div>
     </form>
   )
