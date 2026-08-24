@@ -148,7 +148,20 @@ function isValidHex(hex: string | null | undefined): hex is string {
   return typeof hex === 'string' && /^#([0-9a-fA-F]{6})$/.test(hex.trim())
 }
 
+type TabType = 'domain' | 'branding' | 'colors' | 'hero' | 'features' | 'faqs' | 'testimonials'
+
+const TABS = [
+  { id: 'domain' as const, label: 'Domain', icon: Globe },
+  { id: 'branding' as const, label: 'Logo & Icon', icon: ImageIcon },
+  { id: 'colors' as const, label: 'Warna Brand', icon: Palette },
+  { id: 'hero' as const, label: 'Hero Banner', icon: LayoutTemplate },
+  { id: 'features' as const, label: 'Keunggulan', icon: Award },
+  { id: 'faqs' as const, label: 'FAQ', icon: HelpCircle },
+  { id: 'testimonials' as const, label: 'Testimoni', icon: MessageSquareQuote },
+]
+
 export function WebsiteForm({ initialData }: WebsiteFormProps) {
+  const [activeTab, setActiveTab] = useState<TabType>('domain')
   const [state, formAction, isPending] = useActionState<WebsiteFormState | null, FormData>(
     updateWebsiteSettings,
     null
@@ -388,7 +401,7 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
   const isSubheadlineIdeal = subheadlineLength >= 80 && subheadlineLength <= 160
 
   return (
-    <form action={handleFormAction} className="space-y-8">
+    <form action={handleFormAction} className="space-y-6">
       {state?.success && (
         <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-start gap-3 animate-in fade-in">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
@@ -403,245 +416,276 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
         />
       )}
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-              <Globe className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Domain Kustom</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Gunakan domain web milik travel Anda sendiri untuk microsite publik.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            <span className="text-xs font-semibold text-slate-600">
-              {customDomainEnabled ? 'Aktif' : 'Nonaktif'}
-            </span>
+      {/* Menu Tab Bar */}
+      <div className="flex items-center gap-1.5 p-1.5 bg-slate-100/90 rounded-xl border border-slate-200/80 overflow-x-auto no-scrollbar shadow-2xs">
+        {TABS.map((tab) => {
+          const Icon = tab.icon
+          const isActive = activeTab === tab.id
+          return (
             <button
+              key={tab.id}
               type="button"
-              role="switch"
-              aria-checked={customDomainEnabled}
-              onClick={() => setCustomDomainEnabled(!customDomainEnabled)}
-              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                customDomainEnabled ? 'bg-brand-600' : 'bg-slate-200'
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                isActive
+                  ? 'bg-white text-brand-600 shadow-xs border border-slate-200/90 font-bold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60 border border-transparent'
               }`}
             >
-              <span
-                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
-                  customDomainEnabled ? 'translate-x-5' : 'translate-x-0'
-                }`}
-              />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-brand-600' : 'text-slate-400'}`} />
+              <span>{tab.label}</span>
             </button>
-          </div>
-        </div>
+          )
+        })}
+      </div>
 
-        <div className="p-6 space-y-4">
-          {customDomainEnabled ? (
-            <div className="space-y-1.5 animate-in fade-in duration-200">
-              <DashboardLabel htmlFor="customDomain">
-                Nama Domain Anda
-              </DashboardLabel>
-              <div className="max-w-md">
-                <DashboardInput
-                  id="customDomain"
-                  name="customDomain"
-                  value={customDomain}
-                  onChange={(e) => setCustomDomain(e.target.value)}
-                  placeholder="Contoh: alhijrah.com atau umroh.alhijrah.id"
-                  className="font-mono"
-                />
+      {/* SECTION 1: Domain Kustom */}
+      <div className={activeTab === 'domain' ? 'block animate-in fade-in duration-150' : 'hidden'}>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+          <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+                <Globe className="w-4 h-4" />
               </div>
-              <div className="p-3.5 bg-brand-50/70 rounded-xl border border-brand-200/60 text-xs text-slate-600 flex items-start gap-2.5">
-                <Info className="w-4 h-4 text-brand-600 shrink-0 mt-0.5" />
-                <p className="leading-relaxed">
-                  Fitur custom domain otomatis (verifikasi DNS & SSL) akan aktif di rilis mendatang. Domain yang kamu simpan di sini akan diproses otomatis begitu fitur ini tersedia — kamu tidak perlu mengisi ulang.
+              <div>
+                <h2 className="text-base font-bold text-slate-900">Domain Kustom</h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Gunakan domain web milik travel Anda sendiri untuk microsite publik.
                 </p>
               </div>
             </div>
-          ) : (
-            <p className="text-xs text-slate-400 italic">
-              Microsite publik Anda saat ini menggunakan subdomain bawaan SyiarLink. Aktifkan toggle di atas jika Anda ingin menggunakan domain Anda sendiri.
-            </p>
-          )}
-        </div>
-      </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-              <ImageIcon className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Identitas Visual & Branding</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Upload icon persegi (favicon / avatar) dan logo horizontal untuk header microsite.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Icon Persegi / Favicon
-              </label>
-              <p className="text-xs text-slate-500">
-                Format persegi (1:1), otomatis dioptimasi & dikonversi ke WebP 800x800.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="w-20 h-20 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 relative group">
-                {isProcessingIcon ? (
-                  <Loader2 className="w-6 h-6 text-brand-600 animate-spin" />
-                ) : iconPreviewUrl ? (
-                  <img
-                    src={iconPreviewUrl}
-                    alt="Icon Preview"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="text-center p-2 text-slate-400">
-                    <ImageIcon className="w-6 h-6 mx-auto opacity-50 mb-1" />
-                    <span className="text-[10px] block font-medium">1:1</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center gap-3">
-                <input
-                  ref={iconInputRef}
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp"
-                  onChange={handleIconChange}
-                  className="hidden"
-                  id="icon-upload-input"
-                />
-                <button
-                  type="button"
-                  onClick={() => iconInputRef.current?.click()}
-                  className="px-3.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                >
-                  <Upload className="w-3.5 h-3.5 text-slate-500" />
-                  <span>{iconPreviewUrl ? 'Ganti Icon' : 'Pilih Icon'}</span>
-                </button>
-                {iconPreviewUrl && (
-                  <button
-                    type="button"
-                    onClick={handleRemoveIcon}
-                    className="px-3 py-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                    <span>Hapus</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Logo Header Horizontal
-              </label>
-              <p className="text-xs text-slate-500">
-                Format transparan direkomendasikan, maksimal lebar 1200px (tinggi 400px).
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="w-48 h-20 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 relative p-2 group">
-                {isProcessingLogo ? (
-                  <Loader2 className="w-6 h-6 text-brand-600 animate-spin" />
-                ) : logoPreviewUrl ? (
-                  <img
-                    src={logoPreviewUrl}
-                    alt="Logo Preview"
-                    className="max-w-full max-h-full object-contain"
-                  />
-                ) : (
-                  <div className="text-center p-2 text-slate-400">
-                    <ImageIcon className="w-6 h-6 mx-auto opacity-50 mb-1" />
-                    <span className="text-[10px] block font-medium">Logo Horizontal</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center gap-3">
-                <input
-                  ref={logoInputRef}
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp"
-                  onChange={handleLogoChange}
-                  className="hidden"
-                  id="logo-upload-input"
-                />
-                <button
-                  type="button"
-                  onClick={() => logoInputRef.current?.click()}
-                  className="px-3.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                >
-                  <Upload className="w-3.5 h-3.5 text-slate-500" />
-                  <span>{logoPreviewUrl ? 'Ganti Logo' : 'Pilih Logo'}</span>
-                </button>
-                {logoPreviewUrl && (
-                  <button
-                    type="button"
-                    onClick={handleRemoveLogo}
-                    className="px-3 py-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                    <span>Hapus</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
-              <Palette className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Skema Warna Brand</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Atur 4 warna utama microsite: aksen utama, aksen sekunder, latar belakang, dan area gelap secara independen.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2.5">
-            <button
-              type="button"
-              onClick={handleAutoSuggestColors}
-              className="px-3.5 py-2 bg-brand-50 hover:bg-brand-100/80 text-brand-700 border border-brand-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-brand-600" />
-              <span>Auto-isi dari Aksen Utama</span>
-            </button>
-
-            {isAnyColorCustom && (
+            <div className="flex items-center gap-2.5">
+              <span className="text-xs font-semibold text-slate-600">
+                {customDomainEnabled ? 'Aktif' : 'Nonaktif'}
+              </span>
               <button
                 type="button"
-                onClick={handleResetColorsToDefault}
-                className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
+                role="switch"
+                aria-checked={customDomainEnabled}
+                onClick={() => setCustomDomainEnabled(!customDomainEnabled)}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                  customDomainEnabled ? 'bg-brand-600' : 'bg-slate-200'
+                }`}
               >
-                <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-                <span>Gunakan Warna Default</span>
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
+                    customDomainEnabled ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
               </button>
+            </div>
+          </div>
+
+          <div className="p-6 space-y-4">
+            {customDomainEnabled ? (
+              <div className="space-y-1.5 animate-in fade-in duration-200">
+                <DashboardLabel htmlFor="customDomain">
+                  Nama Domain Anda
+                </DashboardLabel>
+                <div className="max-w-md">
+                  <DashboardInput
+                    id="customDomain"
+                    name="customDomain"
+                    value={customDomain}
+                    onChange={(e) => setCustomDomain(e.target.value)}
+                    placeholder="Contoh: alhijrah.com atau umroh.alhijrah.id"
+                    className="font-mono"
+                  />
+                </div>
+                <div className="p-3.5 bg-brand-50/70 rounded-xl border border-brand-200/60 text-xs text-slate-600 flex items-start gap-2.5">
+                  <Info className="w-4 h-4 text-brand-600 shrink-0 mt-0.5" />
+                  <p className="leading-relaxed">
+                    Fitur custom domain otomatis (verifikasi DNS & SSL) akan aktif di rilis mendatang. Domain yang kamu simpan di sini akan diproses otomatis begitu fitur ini tersedia — kamu tidak perlu mengisi ulang.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-slate-400 italic">
+                Microsite publik Anda saat ini menggunakan subdomain bawaan SyiarLink. Aktifkan toggle di atas jika Anda ingin menggunakan domain Anda sendiri.
+              </p>
             )}
           </div>
         </div>
+      </div>
+
+      {/* SECTION 2: Identitas Visual & Branding */}
+      <div className={activeTab === 'branding' ? 'block animate-in fade-in duration-150' : 'hidden'}>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+          <div className="p-6 border-b border-slate-100">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+                <ImageIcon className="w-4 h-4" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-slate-900">Identitas Visual & Branding</h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Upload icon persegi (favicon / avatar) dan logo horizontal untuk header microsite.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Icon Persegi / Favicon
+                </label>
+                <p className="text-xs text-slate-500">
+                  Format persegi (1:1), otomatis dioptimasi & dikonversi ke WebP 800x800.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="w-20 h-20 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 relative group">
+                  {isProcessingIcon ? (
+                    <Loader2 className="w-6 h-6 text-brand-600 animate-spin" />
+                  ) : iconPreviewUrl ? (
+                    <img
+                      src={iconPreviewUrl}
+                      alt="Icon Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-center p-2 text-slate-400">
+                      <ImageIcon className="w-6 h-6 mx-auto opacity-50 mb-1" />
+                      <span className="text-[10px] block font-medium">1:1</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <input
+                    ref={iconInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    onChange={handleIconChange}
+                    className="hidden"
+                    id="icon-upload-input"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => iconInputRef.current?.click()}
+                    className="px-3.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  >
+                    <Upload className="w-3.5 h-3.5 text-slate-500" />
+                    <span>{iconPreviewUrl ? 'Ganti Icon' : 'Pilih Icon'}</span>
+                  </button>
+                  {iconPreviewUrl && (
+                    <button
+                      type="button"
+                      onClick={handleRemoveIcon}
+                      className="px-3 py-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Hapus</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Logo Header Horizontal
+                </label>
+                <p className="text-xs text-slate-500">
+                  Format transparan direkomendasikan, maksimal lebar 1200px (tinggi 400px).
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="w-48 h-20 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 relative p-2 group">
+                  {isProcessingLogo ? (
+                    <Loader2 className="w-6 h-6 text-brand-600 animate-spin" />
+                  ) : logoPreviewUrl ? (
+                    <img
+                      src={logoPreviewUrl}
+                      alt="Logo Preview"
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  ) : (
+                    <div className="text-center p-2 text-slate-400">
+                      <ImageIcon className="w-6 h-6 mx-auto opacity-50 mb-1" />
+                      <span className="text-[10px] block font-medium">Logo Horizontal</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <input
+                    ref={logoInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    onChange={handleLogoChange}
+                    className="hidden"
+                    id="logo-upload-input"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => logoInputRef.current?.click()}
+                    className="px-3.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  >
+                    <Upload className="w-3.5 h-3.5 text-slate-500" />
+                    <span>{logoPreviewUrl ? 'Ganti Logo' : 'Pilih Logo'}</span>
+                  </button>
+                  {logoPreviewUrl && (
+                    <button
+                      type="button"
+                      onClick={handleRemoveLogo}
+                      className="px-3 py-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Hapus</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION 3: Skema Warna Brand */}
+      <div className={activeTab === 'colors' ? 'block animate-in fade-in duration-150' : 'hidden'}>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+          <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+                <Palette className="w-4 h-4" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-slate-900">Skema Warna Brand</h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Atur 4 warna utama microsite: aksen utama, aksen sekunder, latar belakang, dan area gelap secara independen.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5">
+              <button
+                type="button"
+                onClick={handleAutoSuggestColors}
+                className="px-3.5 py-2 bg-brand-50 hover:bg-brand-100/80 text-brand-700 border border-brand-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-brand-600" />
+                <span>Auto-isi dari Aksen Utama</span>
+              </button>
+
+              {isAnyColorCustom && (
+                <button
+                  type="button"
+                  onClick={handleResetColorsToDefault}
+                  className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Gunakan Warna Default</span>
+                </button>
+              )}
+            </div>
+          </div>
 
         <div className="p-6 space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -872,7 +916,10 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
           </div>
         </div>
       </div>
+    </div>
 
+    {/* SECTION 4: Hero Section */}
+    <div className={activeTab === 'hero' ? 'block animate-in fade-in duration-150' : 'hidden'}>
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
@@ -1025,8 +1072,10 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
           </div>
         </div>
       </div>
+    </div>
 
-      {/* SECTION 5: Keunggulan Travel (features, WAJIB TEPAT 4) */}
+    {/* SECTION 5: Keunggulan Travel (features, WAJIB TEPAT 4) */}
+    <div className={activeTab === 'features' ? 'block animate-in fade-in duration-150' : 'hidden'}>
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
@@ -1056,8 +1105,10 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
           />
         </div>
       </div>
+    </div>
 
-      {/* SECTION 6: FAQ (Pertanyaan yang Sering Diajukan, MIN 0, MAX 15) */}
+    {/* SECTION 6: FAQ (Pertanyaan yang Sering Diajukan, MIN 0, MAX 15) */}
+    <div className={activeTab === 'faqs' ? 'block animate-in fade-in duration-150' : 'hidden'}>
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
@@ -1087,8 +1138,10 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
           />
         </div>
       </div>
+    </div>
 
-      {/* SECTION 7: Testimoni Jamaah (MIN 0, MAX 12) */}
+    {/* SECTION 7: Testimoni Jamaah (MIN 0, MAX 12) */}
+    <div className={activeTab === 'testimonials' ? 'block animate-in fade-in duration-150' : 'hidden'}>
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
@@ -1126,24 +1179,25 @@ export function WebsiteForm({ initialData }: WebsiteFormProps) {
           />
         </div>
       </div>
+    </div>
 
-      {/* Sticky Save Action Card / Footer */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h3 className="text-sm font-bold text-slate-900">Simpan Seluruh Pengaturan Website</h3>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Menyimpan domain, identitas visual, warna, hero banner, keunggulan, FAQ, dan testimoni sekaligus.
-          </p>
-        </div>
-
-        <DashboardSubmitButton
-          isPending={isPending}
-          loadingText="Menyimpan Semua Data..."
-          icon={Save}
-        >
-          Simpan Pengaturan Website
-        </DashboardSubmitButton>
+    {/* Sticky Save Action Card / Footer */}
+    <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h3 className="text-sm font-bold text-slate-900">Simpan Seluruh Pengaturan Website</h3>
+        <p className="text-xs text-slate-500 mt-0.5">
+          Menyimpan domain, identitas visual, warna, hero banner, keunggulan, FAQ, dan testimoni sekaligus.
+        </p>
       </div>
-    </form>
-  )
+
+      <DashboardSubmitButton
+        isPending={isPending}
+        loadingText="Menyimpan Semua Data..."
+        icon={Save}
+      >
+        Simpan Pengaturan Website
+      </DashboardSubmitButton>
+    </div>
+  </form>
+)
 }
