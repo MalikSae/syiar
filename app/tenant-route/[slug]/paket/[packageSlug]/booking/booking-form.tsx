@@ -474,19 +474,27 @@ export function BookingForm({
         </div>
 
         {/* SECTION 5: Ringkasan Total & Tombol Submit */}
-        <div className="p-4 sm:p-5 bg-stone-50/60 rounded-b-2xl space-y-3.5">
-          {/* Live Running Total Bar */}
-          <div className="p-3 rounded-xl bg-brand-50/80 border border-brand-200/70 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-site-text">
-              <Users className="w-4 h-4 text-brand-600 shrink-0" />
-              <span>Total:</span>
-              <span className="font-bold text-brand-700">{totalPax} pax</span>
+        <div className="p-4 sm:p-5 bg-stone-50/60 rounded-b-2xl space-y-4">
+          {/* Seamless Running Total Summary */}
+          <div className="flex items-center justify-between gap-3 pt-0.5 pb-0.5">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-stone-200/70 flex items-center justify-center text-site-text-muted shrink-0">
+                <Users className="w-4 h-4 text-site-text" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block leading-tight">
+                  Jumlah Pax
+                </span>
+                <span className="text-xs sm:text-sm font-bold text-site-text">
+                  {totalPax > 0 ? `${totalPax} pax` : '0 pax'}
+                </span>
+              </div>
             </div>
             <div className="text-right">
-              <span className="text-[10px] text-site-text-muted block leading-none mb-0.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block leading-tight">
                 Total Biaya
               </span>
-              <span className="font-jakarta text-sm sm:text-base font-black text-brand-700 leading-tight">
+              <span className="font-jakarta text-base sm:text-xl font-black text-brand-600 leading-tight">
                 {formatRupiah(totalPrice)}
               </span>
             </div>
