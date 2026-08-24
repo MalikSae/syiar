@@ -192,12 +192,12 @@ export default async function PackageListPage({ params, searchParams }: PackageL
       </section>
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 space-y-8 relative z-20">
-        {/* Search & Filter Bar (Full Width Overlapping Header) */}
+        {/* Search & Filter Bar (Full Width Overlapping Header with Bottom Shadow) */}
         <PackageSearchBar
           months={availableMonths}
           initialQuery={q}
           initialMonth={month}
-          className="-mt-9 sm:-mt-14 shadow-xl border-stone-200"
+          className="-mt-9 sm:-mt-14 shadow-[0_16px_36px_-10px_rgba(0,0,0,0.15),0_6px_12px_-4px_rgba(0,0,0,0.06)] border-stone-200/90"
         />
 
         {/* Filter Indicator / Active Tags */}

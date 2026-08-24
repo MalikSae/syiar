@@ -58,7 +58,7 @@ export function PackageSearchBar({
 
   return (
     <div
-      className={`bg-white rounded-xl sm:rounded-2xl border border-stone-200/90 p-4 sm:p-5 shadow-xs relative ${className}`}
+      className={`bg-white rounded-xl sm:rounded-2xl border border-stone-200/90 p-4 sm:p-5 relative ${className ? className : 'shadow-xs'}`}
     >
       <form action="/paket" method="GET" className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-center">
         {/* Hidden input untuk menyertakan nilai bulan ke query string GET */}
