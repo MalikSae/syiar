@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Package,
   ClipboardList,
+  Coins,
   Users,
   Settings,
   ChevronDown,
@@ -65,6 +66,12 @@ export default function DashboardShell({
       href: '/dashboard/bookings',
       exact: false,
       icon: <ClipboardList className="w-5 h-5" />,
+    },
+    {
+      label: 'Pencairan Komisi',
+      href: '/dashboard/cashouts',
+      exact: false,
+      icon: <Coins className="w-5 h-5" />,
     },
     {
       label: 'Kelola Agen',
@@ -125,6 +132,17 @@ export default function DashboardShell({
           </Link>
           <span className="text-slate-300">/</span>
           <span className="font-semibold text-slate-800">Booking</span>
+        </div>
+      )
+    }
+    if (pathname.startsWith('/dashboard/cashouts')) {
+      return (
+        <div className="flex items-center space-x-1.5 text-xs sm:text-sm">
+          <Link href="/dashboard" className="text-slate-400 hover:text-slate-700 transition-colors">
+            Dashboard
+          </Link>
+          <span className="text-slate-300">/</span>
+          <span className="font-semibold text-slate-800">Pencairan Komisi</span>
         </div>
       )
     }

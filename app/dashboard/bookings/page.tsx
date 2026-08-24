@@ -17,6 +17,7 @@ import {
   PackageOpen,
   DollarSign,
   AlertCircle,
+  Coins,
 } from 'lucide-react'
 
 function formatDateTime(date: Date | string) {
@@ -97,6 +98,14 @@ export default async function DashboardBookingsPage() {
             <span className="font-semibold text-slate-700">{tenant.name}</span>.
           </p>
         </div>
+
+        <Link
+          href="/dashboard/cashouts"
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 shadow-2xs transition-colors shrink-0"
+        >
+          <Coins className="w-3.5 h-3.5 text-brand-600" />
+          <span>Pencairan Komisi</span>
+        </Link>
       </div>
 
       {/* Summary Cards */}
