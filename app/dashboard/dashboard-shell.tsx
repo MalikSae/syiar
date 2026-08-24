@@ -7,6 +7,7 @@ import { logoutTravelUser } from './actions'
 import {
   LayoutDashboard,
   Package,
+  ClipboardList,
   Users,
   Settings,
   ChevronDown,
@@ -60,6 +61,12 @@ export default function DashboardShell({
       icon: <Package className="w-5 h-5" />,
     },
     {
+      label: 'Booking',
+      href: '/dashboard/bookings',
+      exact: false,
+      icon: <ClipboardList className="w-5 h-5" />,
+    },
+    {
       label: 'Kelola Agen',
       href: '/dashboard/agents',
       exact: false,
@@ -107,6 +114,17 @@ export default function DashboardShell({
               </span>
             </>
           )}
+        </div>
+      )
+    }
+    if (pathname.startsWith('/dashboard/bookings')) {
+      return (
+        <div className="flex items-center space-x-1.5 text-xs sm:text-sm">
+          <Link href="/dashboard" className="text-slate-400 hover:text-slate-700 transition-colors">
+            Dashboard
+          </Link>
+          <span className="text-slate-300">/</span>
+          <span className="font-semibold text-slate-800">Booking</span>
         </div>
       )
     }

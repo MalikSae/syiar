@@ -133,6 +133,8 @@ model Booking {
   referralCodeUsed             String?
   bookingCode                  String   @unique
   status                        String   @default("pending_payment")
+  paymentStatus                String   @default("pending") // "pending" | "lunas"
+  commissionStatus             String   @default("not_eligible") // "not_eligible" | "ready_to_cashout" | "redeem_requested" | "paid"
   createdAt                    DateTime @default(now())
   updatedAt                    DateTime @updatedAt
 }
