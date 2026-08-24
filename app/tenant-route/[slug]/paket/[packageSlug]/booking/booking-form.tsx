@@ -1,17 +1,21 @@
 'use client'
 
-import { useActionState, useEffect, useTransition, useState, useRef } from 'react'
+import { useActionState, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createBooking, CreateBookingState } from './actions'
 import { formatRupiah, formatIndonesianDate } from '@/lib/package-helpers'
 import {
+  SiteInput,
+  SiteLabel,
+  SiteErrorMessage,
+  SiteSubmitButton,
+} from '@/components/site/form'
+import {
   User,
   BedDouble,
   Calendar,
   UserCheck,
-  AlertCircle,
-  Loader2,
   ArrowLeft,
   Plus,
   Minus,
@@ -52,7 +56,6 @@ export function BookingForm({
   sampleReferralCode = 'ABCD1234',
 }: BookingFormProps) {
   const router = useRouter()
-  const [isPending] = useTransition()
 
   // Stepper quantity per tipe kamar
   const [quadCount, setQuadCount] = useState(0)
@@ -81,7 +84,7 @@ export function BookingForm({
   }, [])
 
   const initialState: CreateBookingState = {}
-  const [state, formAction] = useActionState(
+  const [state, formAction, isPending] = useActionState(
     createBooking.bind(null, slug, packageSlug),
     initialState
   )
@@ -99,9 +102,9 @@ export function BookingForm({
   // Hitung running total pax & harga
   const totalPax = quadCount + tripleCount + doubleCount
   const totalPrice =
-    quadCount * (priceQuad ?? 0) +
-    tripleCount * (priceTriple ?? 0) +
-    doubleCount * (priceDouble ?? 0)
+    quadCount * (priceQuad || 0) +
+    tripleCount * (priceTriple || 0) +
+    doubleCount * (priceDouble || 0)
 
   const hasAvailableRooms =
     (priceQuad && priceQuad > 0) ||
@@ -111,7 +114,7 @@ export function BookingForm({
   const selectedDeparture = departures.find((d) => d.id === selectedDepartureId)
 
   return (
-    <form action={formAction} className="space-y-4 text-left">
+    <form action={formAction} className="space-y-4 sm:space-y-6">
       {/* Hidden inputs untuk quantity pax & selected departure */}
       <input type="hidden" name="quadCount" value={quadCount} />
       <input type="hidden" name="tripleCount" value={tripleCount} />
@@ -120,92 +123,69 @@ export function BookingForm({
         <input type="hidden" name="packageDepartureId" value={selectedDepartureId} />
       )}
 
-      {/* Alert Error */}
+      {/* Alert Error dari Server Action */}
       {state.error && (
-        <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-2.5 text-rose-800 text-xs sm:text-sm animate-in fade-in">
-          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-          <div>
-            <p className="font-bold">Gagal Booking</p>
-            <p className="mt-0.5 text-rose-700 leading-relaxed">{state.error}</p>
-          </div>
-        </div>
+        <SiteErrorMessage
+          title="Gagal Memproses Booking"
+          message={state.error}
+        />
       )}
 
-      {/* Unified Seamless Container */}
-      <div className="bg-white rounded-2xl border border-stone-200/80 shadow-xs divide-y divide-stone-100">
-        {/* Header Paket Compact */}
-        <div className="p-4 sm:p-5 bg-stone-50/70 rounded-t-2xl flex flex-wrap items-center justify-between gap-2">
-          <div className="min-w-0">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-site-text-muted block">
-              Paket yang Dipilih
-            </span>
-            <h2 className="font-jakarta text-base sm:text-lg font-bold text-site-text truncate mt-0.5">
-              {packageName}
-            </h2>
-          </div>
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-brand-600/10 border border-brand-600/25 text-xs font-bold text-brand-600 shrink-0">
-            {duration}
-          </span>
-        </div>
-
-        {/* SECTION 1: Data Pemesan */}
+      {/* CARD UTAMA BOOKING FORM */}
+      <div className="bg-white rounded-2xl border border-stone-200 shadow-sm divide-y divide-stone-100 overflow-hidden">
+        {/* SECTION 1: Identitas Kontak Jamaah (URUTAN PERTAMA) */}
         <div className="p-4 sm:p-5 space-y-4">
-          <div className="flex items-center gap-2 pb-0.5">
-            <User className="w-4 h-4 text-brand-600 shrink-0" />
-            <h3 className="font-jakarta text-sm sm:text-base font-bold text-site-text">
-              Data Pemesan
-            </h3>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-stone-100 flex items-center justify-center text-brand-600 shrink-0">
+              <User className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="font-jakarta text-sm sm:text-base font-bold text-site-text">
+                Kontak Pemesan / Penanggung Jawab
+              </h3>
+              <p className="text-xs text-site-text-muted mt-0.5">
+                Data untuk konfirmasi status booking dan komunikasi pihak travel.
+              </p>
+            </div>
           </div>
 
-          <div className="space-y-3.5 text-sm">
+          <div className="space-y-3.5 pt-1">
             <div>
-              <label
-                htmlFor="jamaahName"
-                className="block font-bold text-site-text mb-1.5 text-xs sm:text-sm"
-              >
-                Nama Pemesan <span className="text-rose-500">*</span>
-              </label>
-              <input
+              <SiteLabel htmlFor="jamaahName" required>
+                Nama Lengkap
+              </SiteLabel>
+              <SiteInput
                 type="text"
                 id="jamaahName"
                 name="jamaahName"
                 required
                 placeholder="Sesuai KTP / Paspor"
-                className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 text-site-text text-sm sm:text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label
-                  htmlFor="jamaahPhone"
-                  className="block font-bold text-site-text mb-1.5 text-xs sm:text-sm"
-                >
-                  Nomor WhatsApp / HP <span className="text-rose-500">*</span>
-                </label>
-                <input
+                <SiteLabel htmlFor="jamaahPhone" required>
+                  Nomor WhatsApp / HP
+                </SiteLabel>
+                <SiteInput
                   type="tel"
                   id="jamaahPhone"
                   name="jamaahPhone"
                   required
                   placeholder="08123456789 atau +628123456789"
-                  className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 text-site-text text-sm sm:text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="jamaahEmail"
-                  className="block font-bold text-site-text mb-1.5 text-xs sm:text-sm"
-                >
-                  Email <span className="text-stone-400 font-normal">(Opsional)</span>
-                </label>
-                <input
+                <SiteLabel htmlFor="jamaahEmail" optional>
+                  Email
+                </SiteLabel>
+                <SiteInput
                   type="email"
                   id="jamaahEmail"
                   name="jamaahEmail"
                   placeholder="nama@email.com"
-                  className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 text-site-text text-sm sm:text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -448,17 +428,15 @@ export function BookingForm({
               </div>
 
               <div>
-                <input
+                <SiteInput
                   type="text"
                   id="referralCode"
                   name="referralCode"
                   defaultValue={initialReferralCode}
                   placeholder={sampleReferralCode}
-                  className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-stone-200 bg-stone-50/40 text-site-text font-mono uppercase tracking-wider text-sm sm:text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                  className="font-mono uppercase tracking-wider"
+                  helperText="Isi jika Anda mendapatkan rekomendasi dari agen travel kami."
                 />
-                <p className="text-xs text-site-text-muted mt-1.5">
-                  Isi jika Anda mendapatkan rekomendasi dari agen travel kami.
-                </p>
               </div>
             </div>
           )}
@@ -491,20 +469,15 @@ export function BookingForm({
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isPending || totalPax === 0}
-            className="w-full py-4 sm:py-3.5 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
+          <SiteSubmitButton
+            disabled={totalPax === 0}
+            isPending={isPending}
+            loadingText="Memproses Booking..."
+            fullWidth
+            className="py-4 sm:py-3.5 text-base shadow-md"
           >
-            {isPending ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Memproses Booking...</span>
-              </>
-            ) : (
-              <span>Booking Sekarang</span>
-            )}
-          </button>
+            Booking Sekarang
+          </SiteSubmitButton>
 
           {/* Micro-copy Penenang */}
           <div className="flex items-center justify-center gap-1.5 text-[11px] text-site-text-muted text-center pt-0.5">

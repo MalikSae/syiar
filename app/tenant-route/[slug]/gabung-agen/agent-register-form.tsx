@@ -3,6 +3,13 @@
 import { useActionState, useEffect } from 'react'
 import Link from 'next/link'
 import { registerAgent, AgentRegisterState } from './actions'
+import {
+  SiteInput,
+  SiteLabel,
+  SiteErrorMessage,
+  SiteSubmitButton,
+} from '@/components/site/form'
+import { User, Phone, Mail, Lock, Ticket, UserPlus, CheckCircle2 } from 'lucide-react'
 
 interface AgentRegisterFormProps {
   tenantSlug: string
@@ -31,18 +38,9 @@ export default function AgentRegisterForm({
     return (
       <div className="bg-white py-8 px-6 shadow-xl rounded-2xl sm:px-10 border border-brand-500/30 text-center">
         <div className="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-brand-600/10 border border-brand-600/20 mb-4">
-          <svg
-            className="h-8 w-8 text-brand-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
+          <CheckCircle2 className="h-8 w-8 text-brand-600" />
         </div>
-        <h3 className="text-xl font-bold text-slate-900">Pendaftaran Berhasil!</h3>
+        <h3 className="text-xl font-bold text-slate-900 font-jakarta">Pendaftaran Berhasil!</h3>
         <p className="mt-3 text-sm text-slate-600 leading-relaxed font-medium">
           Pendaftaran berhasil, akun kamu menunggu persetujuan dari travel{' '}
           <strong className="text-slate-900">{tenantName}</strong>.
@@ -53,7 +51,7 @@ export default function AgentRegisterForm({
         <div className="mt-6 pt-5 border-t border-slate-100">
           <Link
             href="/login"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-lg text-brand-600 bg-brand-50 hover:bg-brand-500/10 transition-colors w-full"
+            className="inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-bold rounded-lg text-brand-600 bg-brand-50 hover:bg-brand-500/10 transition-colors w-full font-jakarta"
           >
             Kembali ke Halaman Login Agen
           </Link>
@@ -63,122 +61,112 @@ export default function AgentRegisterForm({
   }
 
   return (
-    <div className="bg-white py-8 px-6 shadow-xl rounded-2xl sm:px-10 border border-slate-200/80">
+    <div className="bg-white py-8 px-6 shadow-xl rounded-2xl sm:px-10 border border-slate-200/80 space-y-6">
       {state?.error && (
-        <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-md">
-          <div className="text-sm text-red-700 font-medium">{state.error}</div>
-        </div>
+        <SiteErrorMessage
+          title="Gagal Mendaftar Agen"
+          message={state.error}
+        />
       )}
 
-      <form action={formAction} className="space-y-5">
+      <form action={formAction} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-slate-700">
-            Nama Lengkap <span className="text-red-500">*</span>
-          </label>
-          <div className="mt-1">
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              placeholder="Contoh: Fulan bin Fulan"
-              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
-            />
-          </div>
-          {state?.fieldErrors?.name && (
-            <p className="mt-1 text-xs text-red-600 font-medium">{state.fieldErrors.name}</p>
-          )}
+          <SiteLabel htmlFor="name" required>
+            Nama Lengkap
+          </SiteLabel>
+          <SiteInput
+            id="name"
+            name="name"
+            type="text"
+            required
+            icon={User}
+            placeholder="Contoh: Fulan bin Fulan"
+            hasError={Boolean(state?.fieldErrors?.name)}
+            errorMessage={state?.fieldErrors?.name}
+          />
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-slate-700">
-            Nomor WhatsApp / HP <span className="text-red-500">*</span>
-          </label>
-          <div className="mt-1">
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              required
-              placeholder="Contoh: 081234567890"
-              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm font-mono"
-            />
-          </div>
-          {state?.fieldErrors?.phone && (
-            <p className="mt-1 text-xs text-red-600 font-medium">{state.fieldErrors.phone}</p>
-          )}
+          <SiteLabel htmlFor="phone" required>
+            Nomor WhatsApp / HP
+          </SiteLabel>
+          <SiteInput
+            id="phone"
+            name="phone"
+            type="tel"
+            required
+            icon={Phone}
+            placeholder="Contoh: 081234567890"
+            className="font-mono"
+            hasError={Boolean(state?.fieldErrors?.phone)}
+            errorMessage={state?.fieldErrors?.phone}
+          />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-700">
-            Email <span className="text-xs text-slate-400 font-normal">(opsional)</span>
-          </label>
-          <div className="mt-1">
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="agen@email.com"
-              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
-            />
-          </div>
-          {state?.fieldErrors?.email && (
-            <p className="mt-1 text-xs text-red-600 font-medium">{state.fieldErrors.email}</p>
-          )}
+          <SiteLabel htmlFor="email" optional>
+            Email
+          </SiteLabel>
+          <SiteInput
+            id="email"
+            name="email"
+            type="email"
+            icon={Mail}
+            placeholder="agen@email.com"
+            hasError={Boolean(state?.fieldErrors?.email)}
+            errorMessage={state?.fieldErrors?.email}
+          />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-slate-700">
-            Password <span className="text-red-500">*</span>
-          </label>
-          <div className="mt-1">
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              placeholder="Minimal 8 karakter"
-              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
-            />
-          </div>
-          {state?.fieldErrors?.password && (
-            <p className="mt-1 text-xs text-red-600 font-medium">{state.fieldErrors.password}</p>
-          )}
+          <SiteLabel htmlFor="password" required>
+            Password
+          </SiteLabel>
+          <SiteInput
+            id="password"
+            name="password"
+            type="password"
+            required
+            icon={Lock}
+            placeholder="Minimal 8 karakter"
+            hasError={Boolean(state?.fieldErrors?.password)}
+            errorMessage={state?.fieldErrors?.password}
+          />
         </div>
 
         <div>
-          <label htmlFor="referralCode" className="block text-sm font-medium text-slate-700">
-            Kode Referral Pengajak <span className="text-xs text-slate-400 font-normal">(opsional)</span>
-          </label>
-          <div className="mt-1">
-            <input
-              id="referralCode"
-              name="referralCode"
-              type="text"
-              defaultValue={initialReferralCode}
-              placeholder="Contoh: AGEN1234"
-              className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm font-mono uppercase"
-            />
-          </div>
+          <SiteLabel htmlFor="referralCode" optional>
+            Kode Referral Pengajak
+          </SiteLabel>
+          <SiteInput
+            id="referralCode"
+            name="referralCode"
+            type="text"
+            icon={Ticket}
+            defaultValue={initialReferralCode}
+            placeholder="Contoh: AGEN1234"
+            className="font-mono uppercase"
+          />
         </div>
 
         <div className="pt-2">
-          <button
-            type="submit"
-            disabled={isPending}
-            className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          <SiteSubmitButton
+            isPending={isPending}
+            loadingText="Mendaftarkan..."
+            icon={UserPlus}
+            fullWidth
           >
-            {isPending ? 'Mendaftarkan...' : 'Daftar Sebagai Agen'}
-          </button>
+            Daftar Sebagai Agen
+          </SiteSubmitButton>
         </div>
       </form>
 
-      <div className="mt-6 text-center">
+      <div className="text-center pt-2 border-t border-slate-100">
         <p className="text-sm text-slate-600">
           Sudah terdaftar sebagai agen?{' '}
           <Link
             href="/login"
-            className="font-medium text-brand-600 hover:text-brand-500 underline"
+            className="font-semibold text-brand-600 hover:underline"
           >
             Login di sini
           </Link>
@@ -187,3 +175,4 @@ export default function AgentRegisterForm({
     </div>
   )
 }
+
