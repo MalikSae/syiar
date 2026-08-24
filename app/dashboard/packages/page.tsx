@@ -43,17 +43,20 @@ export default async function PackagesPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header & Tombol Tambah */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      {/* Header Halaman Seamless */}
+      <div className="border-b border-slate-200 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Paket Umroh</h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2.5">
+            <Package className="w-6 h-6 text-brand-600 shrink-0" />
+            <span>Paket Umroh</span>
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
             Kelola katalog paket umroh, skema komisi agen, dan jadwal keberangkatan.
           </p>
         </div>
         <Link
           href="/dashboard/packages/new"
-          className="inline-flex items-center space-x-1.5 px-4 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors shrink-0"
+          className="inline-flex items-center space-x-1.5 px-4 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-2xs transition-colors shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Tambah Paket</span>
@@ -61,7 +64,7 @@ export default async function PackagesPage() {
       </div>
 
       {/* Tabel Daftar Paket */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
         {packages.length === 0 ? (
           <div className="py-16 text-center p-6">
             <div className="w-16 h-16 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-4">

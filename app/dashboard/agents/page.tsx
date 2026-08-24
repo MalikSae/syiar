@@ -38,40 +38,32 @@ export default async function AgentsManagementPage() {
   const pendingCount = sortedAgents.filter((a) => a.status === 'pending').length
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans p-6 sm:p-12">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* Header Navigation */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-          <div>
-            <div className="flex items-center space-x-2 mb-2">
-              <Link
-                href="/dashboard"
-                className="text-xs font-semibold text-brand-600 hover:text-brand-500 transition-colors inline-flex items-center space-x-1"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Dashboard Travel</span>
-              </Link>
-              <span className="text-slate-300">/</span>
-              <span className="text-xs font-medium text-slate-500">Kelola Agen</span>
-            </div>
-            <h1 className="text-2xl font-bold text-slate-900">Daftar Mitra Agen Umroh</h1>
-            <p className="text-sm text-slate-500 mt-0.5">
-              Travel: <span className="font-semibold text-slate-800">{tenant.name}</span>
-            </p>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-              {pendingCount} Menunggu Persetujuan
-            </span>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
-              Total {sortedAgents.length} Agen
-            </span>
-          </div>
+    <div className="space-y-6">
+      {/* Header Halaman Seamless */}
+      <div className="border-b border-slate-200 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2.5">
+            <Users className="w-6 h-6 text-brand-600 shrink-0" />
+            <span>Daftar Mitra Agen Umroh</span>
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Kelola data pendaftaran mitra agen, persetujuan akun, dan monitoring referral travel{' '}
+            <span className="font-semibold text-slate-700">{tenant.name}</span>.
+          </p>
         </div>
 
-        {/* Table of Agents */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="flex items-center space-x-2.5 shrink-0">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+            {pendingCount} Menunggu Persetujuan
+          </span>
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+            Total {sortedAgents.length} Agen
+          </span>
+        </div>
+      </div>
+
+      {/* Table of Agents */}
+      <div className="bg-white rounded-xl shadow-2xs border border-slate-200 overflow-hidden">
           {sortedAgents.length === 0 ? (
             <div className="py-12 text-center">
               <svg
@@ -184,6 +176,5 @@ export default async function AgentsManagementPage() {
           )}
         </div>
       </div>
-    </div>
-  )
+    )
 }
