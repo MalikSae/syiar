@@ -7,8 +7,6 @@ import { createBooking, CreateBookingState } from './actions'
 import { formatRupiah, formatIndonesianDate } from '@/lib/package-helpers'
 import {
   User,
-  Phone,
-  Mail,
   BedDouble,
   Calendar,
   UserCheck,
@@ -38,6 +36,7 @@ interface BookingFormProps {
   priceDouble: number | null
   departures: DepartureOption[]
   initialReferralCode?: string
+  sampleReferralCode?: string
 }
 
 export function BookingForm({
@@ -50,9 +49,10 @@ export function BookingForm({
   priceDouble,
   departures,
   initialReferralCode = '',
+  sampleReferralCode = 'ABCD1234',
 }: BookingFormProps) {
   const router = useRouter()
-  const [isPending, startTransition] = useTransition()
+  const [isPending] = useTransition()
 
   // Stepper quantity per tipe kamar
   const [quadCount, setQuadCount] = useState(0)
@@ -125,7 +125,7 @@ export function BookingForm({
         <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-2.5 text-rose-800 text-xs sm:text-sm animate-in fade-in">
           <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold">Gagal Mendaftar</p>
+            <p className="font-bold">Gagal Booking</p>
             <p className="mt-0.5 text-rose-700 leading-relaxed">{state.error}</p>
           </div>
         </div>
@@ -279,13 +279,13 @@ export function BookingForm({
           </div>
         )}
 
-        {/* SECTION 3: Pilihan Tipe Kamar & Jumlah Jamaah (URUTAN KETIGA) */}
+        {/* SECTION 3: Pilihan Tipe Kamar & Jumlah Pax (URUTAN KETIGA) */}
         <div className="p-4 sm:p-5 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-1.5">
             <div className="flex items-center gap-2 min-w-0">
               <BedDouble className="w-4 h-4 text-brand-600 shrink-0" />
               <h3 className="font-jakarta text-sm font-bold text-site-text">
-                Pilih Tipe Kamar & Jumlah Jamaah <span className="text-rose-500">*</span>
+                Pilih Tipe Kamar & Jumlah Pax <span className="text-rose-500">*</span>
               </h3>
             </div>
             <span className="text-[11px] font-semibold text-site-text-muted shrink-0">
@@ -306,12 +306,12 @@ export function BookingForm({
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-bold text-xs sm:text-sm text-site-text">Kamar Quad</span>
                       <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded-md bg-stone-200/70 text-stone-600">
-                        4 org/kamar
+                        4 pax/kamar
                       </span>
                     </div>
                     <div className="text-xs sm:text-sm font-black text-brand-600 mt-0.5">
                       {formatRupiah(priceQuad)}{' '}
-                      <span className="text-[10px] font-normal text-site-text-muted">/ org</span>
+                      <span className="text-[10px] font-normal text-site-text-muted">/ pax</span>
                     </div>
                   </div>
 
@@ -347,12 +347,12 @@ export function BookingForm({
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-bold text-xs sm:text-sm text-site-text">Kamar Triple</span>
                       <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded-md bg-stone-200/70 text-stone-600">
-                        3 org/kamar
+                        3 pax/kamar
                       </span>
                     </div>
                     <div className="text-xs sm:text-sm font-black text-brand-600 mt-0.5">
                       {formatRupiah(priceTriple)}{' '}
-                      <span className="text-[10px] font-normal text-site-text-muted">/ org</span>
+                      <span className="text-[10px] font-normal text-site-text-muted">/ pax</span>
                     </div>
                   </div>
 
@@ -388,12 +388,12 @@ export function BookingForm({
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-bold text-xs sm:text-sm text-site-text">Kamar Double</span>
                       <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded-md bg-stone-200/70 text-stone-600">
-                        2 org/kamar
+                        2 pax/kamar
                       </span>
                     </div>
                     <div className="text-xs sm:text-sm font-black text-brand-600 mt-0.5">
                       {formatRupiah(priceDouble)}{' '}
-                      <span className="text-[10px] font-normal text-site-text-muted">/ org</span>
+                      <span className="text-[10px] font-normal text-site-text-muted">/ pax</span>
                     </div>
                   </div>
 
@@ -442,7 +442,7 @@ export function BookingForm({
                 <div className="flex items-center gap-2">
                   <UserCheck className="w-4 h-4 text-brand-600" />
                   <h3 className="font-jakarta text-sm font-bold text-site-text">
-                    Kode Referral Agen
+                    Kode Referral Agen <span className="text-stone-400 font-normal">(Opsional)</span>
                   </h3>
                 </div>
                 {!initialReferralCode && (
@@ -451,7 +451,7 @@ export function BookingForm({
                     onClick={() => setShowReferralInput(false)}
                     className="text-[11px] font-medium text-site-text-muted hover:text-rose-600 transition-colors cursor-pointer"
                   >
-                    Batal
+                    Tutup
                   </button>
                 )}
               </div>
@@ -462,7 +462,7 @@ export function BookingForm({
                   id="referralCode"
                   name="referralCode"
                   defaultValue={initialReferralCode}
-                  placeholder="CONTOH: AHMA1344 (Opsional)"
+                  placeholder={sampleReferralCode}
                   className="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50/40 text-site-text font-mono uppercase tracking-wider text-xs sm:text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                 />
                 <p className="text-[11px] text-site-text-muted mt-1">
@@ -479,12 +479,12 @@ export function BookingForm({
           <div className="p-3 rounded-xl bg-brand-50/80 border border-brand-200/70 flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-site-text">
               <Users className="w-4 h-4 text-brand-600 shrink-0" />
-              <span>Total Jamaah:</span>
+              <span>Total:</span>
               <span className="font-bold text-brand-700">{totalPax} pax</span>
             </div>
             <div className="text-right">
               <span className="text-[10px] text-site-text-muted block leading-none mb-0.5">
-                Estimasi Total Biaya
+                Total Biaya
               </span>
               <span className="font-jakarta text-sm sm:text-base font-black text-brand-700 leading-tight">
                 {formatRupiah(totalPrice)}
@@ -503,14 +503,14 @@ export function BookingForm({
                 <span>Memproses Booking...</span>
               </>
             ) : (
-              <span>Konfirmasi & Buat Booking</span>
+              <span>Booking Sekarang</span>
             )}
           </button>
 
           {/* Micro-copy Penenang */}
           <div className="flex items-center justify-center gap-1.5 text-[11px] text-site-text-muted text-center pt-0.5">
             <Lock className="w-3 h-3 text-emerald-600 shrink-0" />
-            <span>Pemesanan aman & terhubung langsung ke travel resmi</span>
+            <span>Booking aman & terhubung langsung ke travel resmi</span>
           </div>
 
           <div className="text-center pt-1">

@@ -49,7 +49,14 @@ export default async function BookingPage({ params }: BookingPageProps) {
     },
   })
 
-  // 4. Ambil kode referral dari cookie jika ada
+  // 4. Ambil kode referral contoh dinamis milik tenant ini (jika ada agent approved)
+  const sampleAgent = await scopedClient.agent.findFirst({
+    where: { status: 'approved' },
+    select: { referralCode: true },
+  })
+  const sampleReferralCode = sampleAgent?.referralCode || 'ABCD1234'
+
+  // 5. Ambil kode referral dari cookie jika ada
   const cookieReferral = await getBookingReferral()
   const currentYear = new Date().getFullYear()
 
@@ -118,24 +125,24 @@ export default async function BookingPage({ params }: BookingPageProps) {
             {pkg.name}
           </Link>
           <span className="text-stone-300 shrink-0">/</span>
-          <span className="text-site-text font-bold shrink-0">Form Pendaftaran</span>
+          <span className="text-site-text font-bold shrink-0">Form Booking</span>
         </nav>
 
         {/* Heading */}
         <div className="text-left space-y-1 pb-1">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-semibold mb-1">
             <Lock className="w-3 h-3 text-emerald-600" />
-            <span>Pendaftaran Aman & Resmi</span>
+            <span>Booking Aman & Resmi</span>
           </div>
           <h1 className="font-jakarta text-2xl sm:text-3xl font-bold text-site-text tracking-tight">
-            Formulir Pendaftaran Umroh
+            Formulir Booking Umroh
           </h1>
           <p className="text-xs sm:text-sm text-site-text-muted">
-            Lengkapi data pemesan dan pilih kuota paket untuk melanjutkan.
+            Lengkapi data pemesan dan pilih jumlah jamaah untuk melanjutkan.
           </p>
         </div>
 
-        {/* Form Pendaftaran */}
+        {/* Form Booking */}
         <BookingForm
           slug={tenant.slug}
           packageSlug={pkg.slug}
@@ -146,6 +153,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
           priceDouble={pkg.priceDouble}
           departures={departures}
           initialReferralCode={cookieReferral || ''}
+          sampleReferralCode={sampleReferralCode}
         />
       </main>
 
@@ -154,7 +162,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-xs text-site-text-muted">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-brand-600 shrink-0" />
-            <span>Data pendaftaran Anda terlindungi & diproses langsung oleh {tenant.name}.</span>
+            <span>Data booking Anda terlindungi & diproses langsung oleh {tenant.name}.</span>
           </div>
           <div>
             <span>© {currentYear} {tenant.name}. Powered by <strong className="font-semibold text-site-text">SyiarLink</strong></span>

@@ -98,44 +98,43 @@ export async function createBooking(
       tripleCount * (pkg.priceTriple ?? 0) +
       doubleCount * (pkg.priceDouble ?? 0)
 
-    // Snapshot komisi flat & total komisi
+    // Snapshot flat komisi per pax & total komisi
     const commissionAmountSnapshot = pkg.commissionAmount
     const totalCommission = commissionAmountSnapshot * totalPax
 
-    // 4. Validasi Tanggal Keberangkatan
-    const activeDepartures = await scopedClient.packageDeparture.findMany({
-      where: {
-        packageId: pkg.id,
-        isActive: true,
-      },
-    })
-
-    let validatedDepartureId: string | null = null
-    if (activeDepartures.length > 0) {
-      if (!rawDepartureId) {
-        return { success: false, error: 'Silakan pilih jadwal keberangkatan yang tersedia' }
-      }
-      const matchedDeparture = activeDepartures.find((d) => d.id === rawDepartureId)
-      if (!matchedDeparture) {
-        return { success: false, error: 'Jadwal keberangkatan tidak valid atau tidak aktif' }
-      }
-      validatedDepartureId = matchedDeparture.id
-    } else {
-      // Paket tanpa jadwal aktif: packageDepartureId boleh null
-      validatedDepartureId = null
-    }
-
-    // 5. Normalisasi nomor HP
+    // Validasi & normalisasi nomor HP
     const normalizedPhone = normalizePhoneNumber(rawJamaahPhone)
-    if (!normalizedPhone || normalizedPhone.length < 8) {
+    if (!normalizedPhone) {
       return { success: false, error: 'Format nomor WhatsApp / HP tidak valid' }
     }
 
-    // 6. Resolusi Atributor (Urutan Prioritas Ketat)
+    // Validasi Tanggal Keberangkatan jika paket punya jadwal aktif
+    let packageDepartureId: string | null = null
+    const activeDeparturesCount = await scopedClient.packageDeparture.count({
+      where: { packageId: pkg.id, isActive: true },
+    })
+
+    if (activeDeparturesCount > 0) {
+      if (!rawDepartureId) {
+        return { success: false, error: 'Jadwal keberangkatan wajib dipilih' }
+      }
+
+      const departure = await scopedClient.packageDeparture.findFirst({
+        where: { id: rawDepartureId, packageId: pkg.id, isActive: true },
+      })
+
+      if (!departure) {
+        return { success: false, error: 'Jadwal keberangkatan yang dipilih tidak valid' }
+      }
+
+      packageDepartureId = departure.id
+    }
+
+    // 4. Resolusi Atribusi Komisi (Strict Priority Logic)
     let agentId: string | null = null
     let referralCodeUsed: string | null = null
 
-    // a & b. Cek kode referral eksplisit dari form
+    // Prioritas 1: Kode Referral Eksplisit dari form
     if (rawReferralCode) {
       if (isValidReferralCodeFormat(rawReferralCode)) {
         const agent = await scopedClient.agent.findFirst({
@@ -147,13 +146,12 @@ export async function createBooking(
 
         if (agent) {
           agentId = agent.id
-          referralCodeUsed = agent.referralCode
+          referralCodeUsed = rawReferralCode
         }
       }
     }
 
-    // c. Kalau kode kosong ATAU kode diisi tapi tidak valid/tidak ketemu di tenant ini:
-    // Fallback ke riwayat booking terbaru dengan jamaahPhone sama persis & punya agentId
+    // Prioritas 2: Fallback Riwayat Booking Berdasarkan Nomor HP
     if (!agentId) {
       const previousBooking = await scopedClient.booking.findFirst({
         where: {
@@ -161,46 +159,44 @@ export async function createBooking(
           agentId: { not: null },
         },
         orderBy: { createdAt: 'desc' },
+        select: { agentId: true },
       })
 
       if (previousBooking && previousBooking.agentId) {
         agentId = previousBooking.agentId
-        referralCodeUsed = null // Hasil fallback riwayat nomor HP, bukan kode eksplisit
+        referralCodeUsed = null // Sesuai PRD: null saat diatribusikan lewat riwayat HP
       }
     }
 
-    // d. Kalau dua-duanya tidak ketemu apa pun -> agentId = null, referralCodeUsed = null
+    // Prioritas 3: Tanpa Atribusi (agentId = null, referralCodeUsed = null)
 
-    // 7. Generate bookingCode unik dengan retry loop
-    let uniqueBookingCode = ''
+    // 5. Generate Booking Code Unik & Simpan Booking
+    let bookingCode = generateBookingCode()
+    let isCodeUnique = false
     let attempts = 0
-    const maxAttempts = 5
 
-    while (attempts < maxAttempts) {
-      const candidateCode = generateBookingCode(8)
+    while (!isCodeUnique && attempts < 10) {
       const existing = await scopedClient.booking.findFirst({
-        where: { bookingCode: candidateCode },
+        where: { bookingCode },
       })
       if (!existing) {
-        uniqueBookingCode = candidateCode
-        break
-      }
-      attempts++
-    }
-
-    if (!uniqueBookingCode) {
-      return {
-        success: false,
-        error: 'Gagal membuat kode booking unik. Silakan coba submit kembali.',
+        isCodeUnique = true
+      } else {
+        bookingCode = generateBookingCode()
+        attempts++
       }
     }
 
-    // 8. Create Booking via scopedClient
-    await scopedClient.booking.create({
+    if (!isCodeUnique) {
+      return { success: false, error: 'Gagal membuat kode booking unik. Silakan coba lagi.' }
+    }
+
+    // Simpan Booking via Tenant-Scoped Client
+    const newBooking = await scopedClient.booking.create({
       data: {
         tenantId: tenant.id,
         packageId: pkg.id,
-        packageDepartureId: validatedDepartureId,
+        packageDepartureId,
         agentId,
         jamaahName,
         jamaahPhone: normalizedPhone,
@@ -216,22 +212,21 @@ export async function createBooking(
         commissionAmountSnapshot,
         totalCommission,
         referralCodeUsed,
-        bookingCode: uniqueBookingCode,
+        bookingCode,
         status: 'pending_payment',
       },
     })
 
-    // 9. Return success & redirect URL
     return {
       success: true,
-      bookingCode: uniqueBookingCode,
-      redirectUrl: `/cek-booking/${uniqueBookingCode}`,
+      bookingCode: newBooking.bookingCode,
+      redirectUrl: `/cek-booking/${newBooking.bookingCode}`,
     }
-  } catch (error: any) {
-    console.error('Error saat membuat booking:', error)
+  } catch (error) {
+    console.error('Error creating booking:', error)
     return {
       success: false,
-      error: error.message || 'Terjadi kesalahan sistem saat memproses pendaftaran booking.',
+      error: 'Terjadi kesalahan sistem saat membuat booking. Silakan coba lagi.',
     }
   }
 }

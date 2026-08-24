@@ -74,10 +74,10 @@ export default async function CekBookingPage({ params }: CekBookingPageProps) {
 
           <div className="space-y-1.5">
             <h1 className="font-jakarta text-2xl sm:text-3xl font-bold text-site-text tracking-tight">
-              Pendaftaran Berhasil!
+              Booking Berhasil!
             </h1>
             <p className="text-xs sm:text-sm text-site-text-muted">
-              Terima kasih telah mendaftar. Simpan kode booking Anda untuk pengecekan status dan instruksi pembayaran.
+              Terima kasih telah melakukan booking. Simpan kode booking Anda untuk pengecekan status dan instruksi pembayaran.
             </p>
           </div>
 
@@ -131,12 +131,12 @@ export default async function CekBookingPage({ params }: CekBookingPageProps) {
             <div className="py-2 border-b border-stone-100 space-y-2">
               <span className="text-site-text-muted flex items-center gap-1.5 font-medium">
                 <BedDouble className="w-3.5 h-3.5 text-stone-400" />
-                <span>Rincian Kamar & Jamaah</span>
+                <span>Rincian Kamar & Pax</span>
               </span>
               <div className="pl-5 space-y-1.5 text-xs">
                 {booking.quadCount > 0 && (
                   <div className="flex items-center justify-between text-site-text">
-                    <span>Kamar Quad ({booking.quadCount} orang)</span>
+                    <span>Kamar Quad ({booking.quadCount} pax)</span>
                     <span className="font-semibold">
                       {formatRupiah((booking.priceQuadSnapshot ?? 0) * booking.quadCount)}
                     </span>
@@ -144,7 +144,7 @@ export default async function CekBookingPage({ params }: CekBookingPageProps) {
                 )}
                 {booking.tripleCount > 0 && (
                   <div className="flex items-center justify-between text-site-text">
-                    <span>Kamar Triple ({booking.tripleCount} orang)</span>
+                    <span>Kamar Triple ({booking.tripleCount} pax)</span>
                     <span className="font-semibold">
                       {formatRupiah((booking.priceTripleSnapshot ?? 0) * booking.tripleCount)}
                     </span>
@@ -152,7 +152,7 @@ export default async function CekBookingPage({ params }: CekBookingPageProps) {
                 )}
                 {booking.doubleCount > 0 && (
                   <div className="flex items-center justify-between text-site-text">
-                    <span>Kamar Double ({booking.doubleCount} orang)</span>
+                    <span>Kamar Double ({booking.doubleCount} pax)</span>
                     <span className="font-semibold">
                       {formatRupiah((booking.priceDoubleSnapshot ?? 0) * booking.doubleCount)}
                     </span>
@@ -164,9 +164,9 @@ export default async function CekBookingPage({ params }: CekBookingPageProps) {
             <div className="flex items-center justify-between py-2 border-b border-stone-100">
               <span className="text-site-text-muted flex items-center gap-1.5 font-medium">
                 <Users className="w-3.5 h-3.5 text-stone-400" />
-                <span>Total Jamaah</span>
+                <span>Total Pax</span>
               </span>
-              <span className="font-bold text-site-text">{booking.totalPax} orang</span>
+              <span className="font-bold text-site-text">{booking.totalPax} pax</span>
             </div>
 
             <div className="flex items-center justify-between py-2 border-b border-stone-100">

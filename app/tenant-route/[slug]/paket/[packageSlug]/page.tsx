@@ -273,7 +273,7 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
                   <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
                     <div>
                       <span className="text-xs font-bold text-site-text block">Kamar Quad</span>
-                      <span className="text-[11px] text-site-text-muted">4 orang per kamar</span>
+                      <span className="text-[11px] text-site-text-muted">4 pax per kamar</span>
                     </div>
                     <span className="text-sm font-black text-brand-600">
                       {formatRupiah(pkg.priceQuad)}
@@ -285,7 +285,7 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
                   <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
                     <div>
                       <span className="text-xs font-bold text-site-text block">Kamar Triple</span>
-                      <span className="text-[11px] text-site-text-muted">3 orang per kamar</span>
+                      <span className="text-[11px] text-site-text-muted">3 pax per kamar</span>
                     </div>
                     <span className="text-sm font-black text-brand-600">
                       {formatRupiah(pkg.priceTriple)}
@@ -297,7 +297,7 @@ export default async function PackageDetailPage({ params }: PackageDetailPagePro
                   <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
                     <div>
                       <span className="text-xs font-bold text-site-text block">Kamar Double</span>
-                      <span className="text-[11px] text-site-text-muted">2 orang per kamar</span>
+                      <span className="text-[11px] text-site-text-muted">2 pax per kamar</span>
                     </div>
                     <span className="text-sm font-black text-brand-600">
                       {formatRupiah(pkg.priceDouble)}
